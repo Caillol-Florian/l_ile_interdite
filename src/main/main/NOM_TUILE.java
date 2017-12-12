@@ -10,6 +10,7 @@ package main.main;
  * @author souliern
  */
 public enum NOM_TUILE {
+    EAU("Eau"),
     LE_PONT_DES_ABIMES ("Le Pont des Abimes"),
     LA_PORTE_DE_BRONZE ("La Porte de Bronze"),
     LA_CAVERNE_DES_OMBRES ("La Caverne des Ombres"),
@@ -35,7 +36,7 @@ public enum NOM_TUILE {
     LA_TOUR_DU_GUET("La Tour du Guet"),
     LE_JARDIN_DES_MURMURES("Le Jardin des Murmures");
     
-    private String name ;
+    private final String name ;
 
     NOM_TUILE(String name) {
         this.name = name ;

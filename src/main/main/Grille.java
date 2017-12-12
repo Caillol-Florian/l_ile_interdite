@@ -37,16 +37,16 @@ public class Grille {
         
         for (int i=0; i<6; i++){
             for (int j=0; j<6; j++){
-                if (i ==0 && j || i == 1 || i ==4 || i ==5 || i == 6 || i ==11 || i ==24 || i ==29 || i ==30 || i == 31 || i ==34 || i ==35){
+               /* if (i ==0 && j || i == 1 || i ==4 || i ==5 || i == 6 || i ==11 || i ==24 || i ==29 || i ==30 || i == 31 || i ==34 || i ==35){
                     case i
                             
                     default:
-                        
+                        */
                                 
                 }
             }
         }
-    }
+
 
     /**
      * @return the tuiles

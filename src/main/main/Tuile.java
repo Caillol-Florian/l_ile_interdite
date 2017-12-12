@@ -10,5 +10,13 @@ package main.main;
  * @author souliern
  */
 public class Tuile {
+    NOM_TUILE nom;
     
+    public Tuile(NOM_TUILE nom){
+        setNom(nom);
+    }
+    
+    public void setNom(NOM_TUILE nom){
+        this.nom = nom;
+    }
 }
