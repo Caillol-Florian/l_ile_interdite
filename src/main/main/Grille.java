@@ -14,8 +14,9 @@ public class Grille {
     private Tuile tuiles[][] = new Tuile[6][6];
     
     public Grille() {
-
-        /*for(int i = 0; i<36; i++){
+        int j = 0;
+        int indexEnum = 1;
+        for(int i = 0; i<36; i++){
             // Cases d'eau pour ces valeurs de i
             if (i ==0 || i == 1 || i ==4 || i ==5 || i == 6 || i ==11 || i ==24 || i ==29 || i ==30 || i == 31 || i ==34 || i ==35){
                 tuiles[i%6][j] = new Tuile (NOM_TUILE.EAU); // On créé une case d'eau
@@ -33,11 +34,11 @@ public class Grille {
                 j++; // On incrémente le numéro de colonne de 1
             }  
             
-        }*/
+        }
         
-        for (int i=0; i<6; i++){
+     /*   for (int i=0; i<6; i++){
             for (int j=0; j<6; j++){
-               /* if (i ==0 && j || i == 1 || i ==4 || i ==5 || i == 6 || i ==11 || i ==24 || i ==29 || i ==30 || i == 31 || i ==34 || i ==35){
+             if (i ==0 && j || i == 1 || i ==4 || i ==5 || i == 6 || i ==11 || i ==24 || i ==29 || i ==30 || i == 31 || i ==34 || i ==35){
                     case i
                             
                     default:

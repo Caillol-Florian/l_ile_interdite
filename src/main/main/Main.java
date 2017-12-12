@@ -6,5 +6,7 @@ public class Main {
 	// write your code here
         VueDeplacement vueDep = new VueDeplacement();
         vueDep.setVisible();
+
+        Grille grille = new Grille();
     }
 }
