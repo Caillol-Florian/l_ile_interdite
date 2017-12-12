@@ -35,15 +35,15 @@ public enum NOM_TUILE {
     LE_VAL_DU_CREPUSCULE("Le Val du Crepuscule"),
     LA_TOUR_DU_GUET("La Tour du Guet"),
     LE_JARDIN_DES_MURMURES("Le Jardin des Murmures");
-    
+
     private final String name ;
 
     NOM_TUILE(String name) {
         this.name = name ;
     }
-    
+
     @Override
     public String toString() {
         return this.name ;
-    }  
+    }
 }
