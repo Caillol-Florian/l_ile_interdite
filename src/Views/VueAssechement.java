@@ -1,11 +1,13 @@
 package Views;
 
 import main.main.Messages;
-
+import main.main.Tuile;
 import javax.swing.*;
+import javax.swing.JComboBox;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Observable;
 
 public class VueAssechement extends Observable {
@@ -13,7 +15,7 @@ public class VueAssechement extends Observable {
         private final JPanel mainPanel;
         private final JPanel accepterPanel;
         private final JPanel retourPanel;
-        private final JComboBox possibilite;
+        private  JComboBox possibilite;
         private final JLabel Assechement = new JLabel("Assechement");
         private final JButton accepter;
         private final JButton retour;
@@ -22,7 +24,7 @@ public class VueAssechement extends Observable {
             // Création de la fenètre
             window = new JFrame();
             window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-            window.setSize(240, 120);
+            window.setSize(480, 240);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
 
@@ -30,7 +32,7 @@ public class VueAssechement extends Observable {
             mainPanel = new JPanel(new GridLayout(3, 3));
             window.add(mainPanel);
             possibilite = new JComboBox();
-            //Initialisation de boutton et de son listner
+            //Initialisation de boutton accepter et de son listner
             accepter = new JButton("Accepter");
             accepter.addActionListener(new ActionListener() {
                 @Override
@@ -97,6 +99,17 @@ public class VueAssechement extends Observable {
         }
         public void setVisible(){
             window.setVisible(true);
+        }
+
+        public Tuile getSelection(){
+           // return possibilite.getSelectedItem();
+            return null;
+        }
+
+        public void setAvailableTuile(ArrayList<Tuile> arTuile){
+
+            possibilite.setModel(new DefaultComboBoxModel(arTuile.toArray()));
+
         }
 
 }

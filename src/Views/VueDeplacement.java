@@ -1,14 +1,14 @@
 package Views;
 import main.main.Messages;
+import main.main.Tuile;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Observable;
 
 public class VueDeplacement extends Observable {
@@ -101,5 +101,17 @@ public class VueDeplacement extends Observable {
     public void setVisible(){
         window.setVisible(true);
     }
+
+    public Tuile getSelection(){
+        // return possibilite.getSelectedItem();
+        return null;
+    }
+
+    public void setAvailableTuile(ArrayList<Tuile> arTuile){
+
+        possibilite.setModel(new DefaultComboBoxModel(arTuile.toArray()));
+
+    }
+
 
 }
