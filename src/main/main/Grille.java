@@ -30,26 +30,23 @@ public class Grille {
          }
     }
 
-    public Tuile[][] getTuiles() {
-        return tuiles;
-    }
-
     public ArrayList getTuilesAdjacentes(Tuile tuile){
-        ArrayList<Tuile> tuilesAdjacentes = new ArrayList<Tuile>();
-        int[] coordonnes = new int[2];
-        coordonnes = this.getCordonneesTuiles(tuile);
 
+        /*
+        // /!\ Cette méthode n'est pas aboutie /!\
+        */
+
+        ArrayList<Tuile> tuilesAdjacentes = new ArrayList<>();
+        int[] coordonnes = this.getCordonneesTuiles(tuile);
 
         return null;
-
-
     }
 
     public Tuile getTuile(NOM_TUILE nomTuile){
         Tuile tuile = new Tuile();
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
             for (int j = 0; j < tuiles.length; j++) { // Colonnes
-                if (nomTuile.toString() == tuiles[i][j].toString()){
+                if (nomTuile.toString().equals(tuiles[i][j].toString())){
                     tuile = tuiles[i][j];
                 }
             }
@@ -58,15 +55,20 @@ public class Grille {
     }
 
     public int[] getCordonneesTuiles(Tuile tuile){
-       int[] coordonnes = new int[2];
+       int[] coordonnees = new int[2];
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
             for (int j = 0; j < tuiles.length; j++) { // Colonnes
-                if (tuile.toString() == tuiles[i][j].toString()){
-                    coordonnes[0] = i;
-                    coordonnes[1] = j;
+                if (tuile.toString().equals(tuiles[i][j].toString())){
+                    coordonnees[0] = i;
+                    coordonnees[1] = j;
                 }
             }
         }
-        return coordonnes;
+        return coordonnees;
     }
+
+    public Tuile[][] getTuiles() {
+        return tuiles;
+    }
+
 }
