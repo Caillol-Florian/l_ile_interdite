@@ -8,33 +8,56 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 public class VueAssechement extends View {
         private final JFrame window ;
         private final JPanel mainPanel;
-        private final JPanel accepterPanel;
-        private final JPanel retourPanel;
-        private  JComboBox possibilite;
-        private final JLabel Assechement = new JLabel("Assechement");
-        private final JButton accepter;
-        private final JButton retour;
+        private final JPanel panelCentre;
+        private final JComboBox<Object> listeTuilesAssechement;
+        private final JPanel panelBoutons;
 
-        public VueAssechement(){
+    public VueAssechement(){
             // Création de la fenètre
             window = new JFrame();
-            window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-            window.setSize(480, 240);
+            window.setTitle("Assèchement");
+            window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            window.setSize(350, 200);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
 
+            // =================================================================================
             // Création du panel principal
-            mainPanel = new JPanel(new GridLayout(3, 3));
+            mainPanel = new JPanel(new BorderLayout());
             window.add(mainPanel);
-            possibilite = new JComboBox();
-            //Initialisation de boutton accepter et de son listner
-            accepter = new JButton("Accepter");
+
+            // =================================================================================
+            // Création du panel centre (sélection de la tuile à assécher)
+            panelCentre = new JPanel(new GridLayout(2,1));
+            mainPanel.add(panelCentre, BorderLayout.CENTER);
+            listeTuilesAssechement = new JComboBox<>();
+
+            panelCentre.add(new JLabel("Choisissez une tuile à assécher :",SwingConstants.CENTER ));
+            panelCentre.add(listeTuilesAssechement);
+
+            // =================================================================================
+            // Création du panel boutons (Retour/Accepter)
+            this.panelBoutons = new JPanel(new GridLayout(1,2));
+            this.panelBoutons.setOpaque(false);
+            mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
+
+        JButton retour = new JButton("Retour");
+            // Lors d'un clic sur le bouton Retour
+            retour.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    setChanged();
+                    notifyObservers(Messages.RETOUR);
+                    clearChanged();
+                }
+            });
+
+            JButton accepter = new JButton("Valider");
+            // Lors d'un clic sur le bouton Accepter
             accepter.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -44,56 +67,8 @@ public class VueAssechement extends View {
                 }
             });
 
-            // Initialisation du boutton retour et de son listner
-            retour  = new JButton("Retour");
-            accepter.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setChanged();
-                    notifyObservers(Messages.RETOUR);
-                    clearChanged();
-                }
-            });
-
-            // Création de panels secondaires
-            accepterPanel = new JPanel(new GridLayout(3,3));
-            for(int i = 0; i < 9 ; i++){
-                if (i==8){
-                    accepterPanel.add(accepter);
-                }
-                else{
-                    accepterPanel.add(new JLabel());
-                }
-            }
-
-            retourPanel = new JPanel(new GridLayout(3,3));
-
-            for(int i = 0; i < 9 ; i++){
-                if (i==6){
-                    retourPanel.add(retour);
-                }
-                else{
-                    retourPanel.add(new JLabel());
-                }
-            }
-            for (int i = 0; i < 9; i++) {
-                switch (i) {
-                    case 1 :
-                        mainPanel.add(Assechement);
-                        break;
-                    case 4 :
-                        mainPanel.add(possibilite);
-                        break;
-                    case 6 :
-                        mainPanel.add(retourPanel);
-                        break;
-                    case 8 :
-                        mainPanel.add(accepterPanel);
-                        break;
-                    default:
-                        mainPanel.add(new JLabel());
-                }
-            }
+            this.panelBoutons.add(retour);
+            this.panelBoutons.add(accepter);
         }
 
         public Tuile getSelection(){
@@ -102,13 +77,13 @@ public class VueAssechement extends View {
         }
 
         public void setAvailableTuile(ArrayList<Tuile> arTuile){
-            possibilite.setModel(new DefaultComboBoxModel(arTuile.toArray()));
+            listeTuilesAssechement.setModel(new DefaultComboBoxModel<>(arTuile.toArray()));
         }
 
         @Override
         public void setVisible(){
-        window.setVisible(true);
-    }
+            window.setVisible(true);
+        }
 
 }
 
