@@ -11,13 +11,27 @@ package main.main;
  */
 public class Tuile {
 
-    NOM_TUILE nom;
+    private NOM_TUILE nom;
+    private ETAT_TUILE etat;
     
-    public Tuile(NOM_TUILE nom){
+    public Tuile(NOM_TUILE nom, ETAT_TUILE etat){
         setNom(nom);
+        setEtat(etat);
     }
     
     public void setNom(NOM_TUILE nom){
         this.nom = nom;
+    }
+    
+    public void setEtat(ETAT_TUILE etat){
+        this.etat = etat;
+    }
+    
+    public NOM_TUILE getNom(){
+        return nom;
+    }
+    
+    public ETAT_TUILE getEtat(){
+        return etat;
     }
 }
