@@ -6,11 +6,14 @@
 package main.main;
 
 
+import java.util.ArrayList;
+
 /**
  *
- * @author souliern
+ * @author souliernLaVictime
  */
 public class Grille {
+
     private Tuile tuiles[][] = new Tuile[6][6];
     
     public Grille() {
@@ -27,11 +30,41 @@ public class Grille {
          }
     }
 
-
-    /**
-     * @return the tuiles
-     */
     public Tuile[][] getTuiles() {
         return tuiles;
+    }
+
+    public ArrayList getTuilesAdjacentes(Tuile tuile){
+        ArrayList<Tuile> tuilesAdjacentes = new ArrayList<Tuile>();
+        int[] coordonnes = new int[2];
+        coordonnes = this.getCordonneesTuiles(tuile);
+        
+
+
+    }
+
+    public Tuile getTuile(NOM_TUILE){
+        Tuile tuile;
+        for(int i = 0; i < tuiles.length ; i++) { // Lignes
+            for (int j = 0; j < tuiles.length; j++) { // Colonnes
+                if (NOM_TUILE == tuiles[i][j].toString()){
+                    tuile = tuile[i][j];
+                }
+            }
+        }
+        return tuile;
+    }
+
+    public int[] getCordonneesTuiles(Tuile tuile){
+       int[] coordonnes = new int[2];
+        for(int i = 0; i < tuiles.length ; i++) { // Lignes
+            for (int j = 0; j < tuiles.length; j++) { // Colonnes
+                if (tuile.toString() == tuiles[i][j].toString()){
+                    coordonnes[0] = i;
+                    coordonnes[1] = j;
+                }
+            }
+        }
+        return coordonnes;
     }
 }
