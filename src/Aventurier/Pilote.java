@@ -1,4 +1,7 @@
-package main.main;
+package Aventurier;
+
+import Aventurier.Explorateur;
+import main.main.Tuile;
 
 public class Pilote extends Explorateur {
 
