@@ -28,15 +28,14 @@ public class Controleur implements Observer {
         vue.setVisible();
     }
 
+    @Override
+    public void update(Observable o, Object arg) {}
+
     public Grille getGrille(){
         return grille;
     }
 
     public ArrayList getVues(){
         return vues;
-    }
-    @Override
-    public void update(Observable o, Object arg) {
-
     }
 }
