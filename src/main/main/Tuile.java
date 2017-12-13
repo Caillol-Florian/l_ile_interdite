@@ -27,8 +27,9 @@ public class Tuile {
         this.etat = etat;
     }
     
-    public NOM_TUILE getNom(){
-        return nom;
+    @Override
+    public String toString(){
+        return nom.toString();
     }
     
     public ETAT_TUILE getEtat(){
