@@ -18,6 +18,8 @@ public class Tuile {
         setNom(nom);
         setEtat(etat);
     }
+
+    public Tuile(){}; // /!\ Utilisé pour getTuile() et autre dans Grille, trouver un moyen de faire autrement ? /!\
     
     public void setNom(NOM_TUILE nom){
         this.nom = nom;

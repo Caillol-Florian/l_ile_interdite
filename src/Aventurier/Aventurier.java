@@ -19,7 +19,7 @@ public abstract class Aventurier {
     }
 
     public Tuile getPosition(){
-        return tuile.getNom;
+        return tuile;
     }
 
     public ArrayList getTuilesAccesibles(Grille g){
@@ -29,7 +29,7 @@ public abstract class Aventurier {
     }
 
     public ArrayList getTuilesAssechable(Grille g){
-        ArrayList<Tuile> tuilesAdjacentes = g.getTuilesAdjacentes(getPosition();
+        ArrayList<Tuile> tuilesAdjacentes = g.getTuilesAdjacentes(getPosition());
 
         return null;
     }

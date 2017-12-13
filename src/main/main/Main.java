@@ -6,21 +6,22 @@ package main.main;
 public class Main {
 
     public static void main(String[] args) {
-        // write your code here
-        VueAssechement vueDep = new VueAssechement();
-        vueDep.setVisible();
-        Grille gri = new Grille();
-        ArrayList<Tuile> a = new ArrayList<Tuile>();
+        Controleur controleur = new Controleur();
+        VueAssechement vueAssechement = new VueAssechement();
+        controleur.addView(vueAssechement);
 
-        Grille grille = new Grille();
+        // Test de l'affichage des tuiles dans un ComboBox
+        ArrayList<Tuile>a = new ArrayList<>();
+
         for (int i = 0; i < 6 ; i++){
             for(int j = 0; j < 6 ; j++){
-                a.add(grille.getTuiles()[i][j]);
+                if (controleur.getGrille().getTuiles()[i][j].toString()!="Eau"){
+                    a.add(controleur.getGrille().getTuiles()[i][j]);
+                }
             }
-            System.out.println();
         }
-         ;
-        vueDep.setAvailableTuile(a);
 
+        vueAssechement.setAvailableTuile(a);
+        // Fin du test
     }
 }

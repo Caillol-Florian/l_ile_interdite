@@ -5,11 +5,38 @@
  */
 package main.main;
 
+import java.util.ArrayList;
+import Aventurier.*;
+import Views.*;
+import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
 /**
  *
  * @author souliern
  */
-public class Controleur {
-    Grille grille = new Grille();
+public class Controleur implements Observer {
+    private Grille grille = new Grille();
+    private ArrayList<Aventurier>aventuriers = new ArrayList<>();
+    private ArrayList<View>vues = new ArrayList<>();
 
+    public Controleur(){};
+
+    public void addView(View vue){
+        vue.abonner(this);
+        vues.add(vue);
+        vue.setVisible();
+    }
+
+    public Grille getGrille(){
+        return grille;
+    }
+
+    public ArrayList getVues(){
+        return vues;
+    }
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
 }

@@ -14,7 +14,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 import main.main.Utils.Pion;
  
-public class VueAventurier  {
+public class VueAventurier extends View {
      
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
@@ -44,7 +44,6 @@ public class VueAventurier  {
 
         // =================================================================================
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
-
         this.panelAventurier = new JPanel();
         panelAventurier.setBackground(couleur);
         panelAventurier.add(new JLabel(nomAventurier,SwingConstants.CENTER ));

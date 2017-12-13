@@ -9,8 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 
-public class VueAssechement extends Observable {
+public class VueAssechement extends View {
         private final JFrame window ;
         private final JPanel mainPanel;
         private final JPanel accepterPanel;
@@ -42,6 +43,7 @@ public class VueAssechement extends Observable {
                     clearChanged();
                 }
             });
+
             // Initialisation du boutton retour et de son listner
             retour  = new JButton("Retour");
             accepter.addActionListener(new ActionListener() {
@@ -64,7 +66,6 @@ public class VueAssechement extends Observable {
                 }
             }
 
-
             retourPanel = new JPanel(new GridLayout(3,3));
 
             for(int i = 0; i < 9 ; i++){
@@ -75,8 +76,6 @@ public class VueAssechement extends Observable {
                     retourPanel.add(new JLabel());
                 }
             }
-
-
             for (int i = 0; i < 9; i++) {
                 switch (i) {
                     case 1 :
@@ -95,10 +94,6 @@ public class VueAssechement extends Observable {
                         mainPanel.add(new JLabel());
                 }
             }
-
-        }
-        public void setVisible(){
-            window.setVisible(true);
         }
 
         public Tuile getSelection(){
@@ -107,10 +102,13 @@ public class VueAssechement extends Observable {
         }
 
         public void setAvailableTuile(ArrayList<Tuile> arTuile){
-
             possibilite.setModel(new DefaultComboBoxModel(arTuile.toArray()));
-
         }
+
+        @Override
+        public void setVisible(){
+        window.setVisible(true);
+    }
 
 }
 

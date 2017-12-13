@@ -38,17 +38,19 @@ public class Grille {
         ArrayList<Tuile> tuilesAdjacentes = new ArrayList<Tuile>();
         int[] coordonnes = new int[2];
         coordonnes = this.getCordonneesTuiles(tuile);
-        
+
+
+        return null;
 
 
     }
 
-    public Tuile getTuile(NOM_TUILE){
-        Tuile tuile;
+    public Tuile getTuile(NOM_TUILE nomTuile){
+        Tuile tuile = new Tuile();
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
             for (int j = 0; j < tuiles.length; j++) { // Colonnes
-                if (NOM_TUILE == tuiles[i][j].toString()){
-                    tuile = tuile[i][j];
+                if (nomTuile.toString() == tuiles[i][j].toString()){
+                    tuile = tuiles[i][j];
                 }
             }
         }

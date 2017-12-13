@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Observable;
 
-public class VueDeplacement extends Observable {
+public class VueDeplacement extends View {
     private final JFrame window ;
     private final JPanel mainPanel;
     private final JPanel accepterPanel;
