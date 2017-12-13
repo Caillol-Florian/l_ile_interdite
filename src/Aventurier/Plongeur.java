@@ -1,4 +1,7 @@
-package main.main;
+package Aventurier;
+
+import Aventurier.Aventurier;
+import main.main.Tuile;
 
 public class Plongeur extends Aventurier {
 

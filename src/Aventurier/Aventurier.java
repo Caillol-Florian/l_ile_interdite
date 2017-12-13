@@ -1,4 +1,7 @@
-package main.main;
+package Aventurier;
+
+import main.main.Grille;
+import main.main.Tuile;
 
 import java.util.ArrayList;
 
