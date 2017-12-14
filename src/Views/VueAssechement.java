@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class VueAssechement extends View {
+public class VueAssechement extends Vue {
         private final JFrame window ;
         private final JPanel mainPanel;
         private final JPanel panelCentre;

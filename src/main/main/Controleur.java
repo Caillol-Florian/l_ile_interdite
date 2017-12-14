@@ -18,11 +18,11 @@ import java.util.Observer;
 public class Controleur implements Observer {
     private Grille grille = new Grille();
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
-    private ArrayList<View>vues = new ArrayList<>();
+    private ArrayList<Vue>vues = new ArrayList<>();
 
     public Controleur(){};
 
-    public void addView(View vue){
+    public void addView(Vue vue){
         vue.abonner(this);
         vues.add(vue);
         vue.setVisible();

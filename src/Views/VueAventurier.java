@@ -14,7 +14,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 import main.main.Utils.Pion;
  
-public class VueAventurier extends View {
+public class VueAventurier extends Vue {
      
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
@@ -107,7 +107,7 @@ public class VueAventurier extends View {
  
      public static void main(String [] args) {
         // Instanciation de la fenêtre 
-        VueAventurier vueAventurier = new VueAventurier("Manon", "Explorateur",Pion.ROUGE.getCouleur() );
+        VueAventurier vueAventurier = new VueAventurier("Manon", "Explorateur",Pion.VERT.getCouleur() );
     }
 }
 
