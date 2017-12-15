@@ -2,6 +2,7 @@ package main.main;
         import Views.*;
         import main.main.Utils.Pion;
         import java.util.ArrayList;
+        import Controleur.*;
 
 public class Main {
 
