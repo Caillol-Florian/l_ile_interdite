@@ -1,13 +1,15 @@
 package main.main;
-        import Views.VueAssechement;
-
+        import Views.*;
+        import main.main.Utils.Pion;
         import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
         Controleur controleur = new Controleur();
+        VueAventurier vueAventurier = new VueAventurier("Marion", "Explorateur", Pion.ROUGE.getCouleur() );
         VueAssechement vueAssechement = new VueAssechement();
+        controleur.addView(vueAventurier);
         controleur.addView(vueAssechement);
 
         // Test de l'affichage des tuiles dans un ComboBox
@@ -23,5 +25,7 @@ public class Main {
 
         vueAssechement.setAvailableTuile(a);
         // Fin du test
+
+        controleur.openView(vueAventurier);
     }
 }

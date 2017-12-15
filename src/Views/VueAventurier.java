@@ -104,11 +104,6 @@ public class VueAventurier extends Vue {
     public JButton getBtnTerminerTour() {
         return btnTerminerTour;
     }
- 
-     public static void main(String [] args) {
-        // Instanciation de la fenêtre 
-        VueAventurier vueAventurier = new VueAventurier("Manon", "Explorateur",Pion.VERT.getCouleur() );
-    }
 }
 
  

@@ -25,6 +25,9 @@ public class Controleur implements Observer {
     public void addView(Vue vue){
         vue.abonner(this);
         vues.add(vue);
+    }
+
+    public void openView(Vue vue){
         vue.setVisible();
     }
 
