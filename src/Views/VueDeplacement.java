@@ -1,6 +1,7 @@
 package Views;
 
 import main.main.Messages;
+import main.main.NOM_TUILE;
 import main.main.Tuile;
 import javax.swing.*;
 import javax.swing.JComboBox;
@@ -87,6 +88,17 @@ public class VueDeplacement extends Vue {
         } else {
             window.setVisible(false);
         }
+    }
+
+    @Override
+    public NOM_TUILE getTuileSelectionnee(){
+        NOM_TUILE nom_tuile_trouvee = null;
+        for(NOM_TUILE nom_tuile : NOM_TUILE.values()){
+            if(nom_tuile.toString() == listeTuilesAssechement.getSelectedItem()){
+                nom_tuile_trouvee = nom_tuile;
+            }
+        }
+        return nom_tuile_trouvee;
     }
 
 }

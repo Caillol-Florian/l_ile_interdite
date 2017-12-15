@@ -4,7 +4,7 @@ import main.main.Messages;
 import main.main.Tuile;
 import javax.swing.*;
 import javax.swing.JComboBox;
-import javax.swing.text.View;
+import main.main.NOM_TUILE;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -98,5 +98,16 @@ public class VueAssechement extends Vue {
 
     @Override
     public void setPosition(String pos) {}
+
+    @Override
+    public NOM_TUILE getTuileSelectionnee(){
+        NOM_TUILE nom_tuile_trouvee = null;
+        for(NOM_TUILE nom_tuile : NOM_TUILE.values()){
+            if(nom_tuile.toString() == listeTuilesAssechement.getSelectedItem()){
+                nom_tuile_trouvee = nom_tuile;
+            }
+        }
+        return nom_tuile_trouvee;
+    }
 }
 
