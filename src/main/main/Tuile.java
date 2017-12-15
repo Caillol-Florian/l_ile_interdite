@@ -28,13 +28,21 @@ public class Tuile {
     public void setEtat(ETAT_TUILE etat){
         this.etat = etat;
     }
-    
+
+    public ETAT_TUILE getEtat(){
+        return etat;
+    }
+
+    public boolean estCoulee(){
+        if (getEtat()==ETAT_TUILE.COULEE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public String toString(){
         return nom.toString();
-    }
-    
-    public ETAT_TUILE getEtat(){
-        return etat;
     }
 }

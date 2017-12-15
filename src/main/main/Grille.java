@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author souliernLaVictime
+ * @author souliern
  */
 public class Grille {
 
