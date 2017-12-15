@@ -80,8 +80,12 @@ public class VueDeplacement extends Vue {
     }
 
     @Override
-    public void setVisible(){
-        window.setVisible(true);
+    public void setVisible(Boolean b){
+        if (b == true) {
+            window.setVisible(true);
+        } else {
+            window.setVisible(false);
+        }
     }
 
 }

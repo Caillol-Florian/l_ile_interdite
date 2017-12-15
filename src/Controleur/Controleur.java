@@ -11,6 +11,7 @@ import Views.*;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import main.main.*;
 /**
  *
  * @author souliern
