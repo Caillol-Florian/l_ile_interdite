@@ -20,7 +20,6 @@ public class VueAssechement extends Vue {
             // Création de la fenètre
             window = new JFrame();
             window.setTitle("Assèchement");
-            window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             window.setSize(350, 200);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);

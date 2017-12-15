@@ -1,51 +1,52 @@
 package Views;
+
 import main.main.Messages;
 import main.main.Tuile;
-
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
+import javax.swing.*;
+import javax.swing.JComboBox;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Observable;
 
 public class VueDeplacement extends Vue {
     private final JFrame window ;
     private final JPanel mainPanel;
-    private final JPanel accepterPanel;
-    private final JPanel retourPanel;
-    private final JComboBox possibilite;
-    private final JLabel Deplacement = new JLabel("Déplacements");
-    private final JButton accepter;
-    private final JButton retour;
+    private final JPanel panelCentre;
+    private final JComboBox<Object> listeTuilesAssechement;
+    private final JPanel panelBoutons;
 
     public VueDeplacement(){
         // Création de la fenètre
         window = new JFrame();
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        window.setSize(480, 240);
+        window.setTitle("Se Déplacer");
+        window.setSize(350, 200);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
 
+        // =================================================================================
         // Création du panel principal
-        mainPanel = new JPanel(new GridLayout(3, 3));
+        mainPanel = new JPanel(new BorderLayout());
         window.add(mainPanel);
-        possibilite = new JComboBox();
-        //Initialisation de boutton et de son listner
-        accepter = new JButton("Accepter");
-        accepter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setChanged();
-                notifyObservers(Messages.VALIDERDEPLACEMENT);
-                clearChanged();
-            }
-        });
-        // Initialisation du boutton retour et de son listner
-        retour  = new JButton("Retour");
-        accepter.addActionListener(new ActionListener() {
+
+        // =================================================================================
+        // Création du panel centre (sélection de la tuile à assécher)
+        panelCentre = new JPanel(new GridLayout(2,1));
+        mainPanel.add(panelCentre, BorderLayout.CENTER);
+        listeTuilesAssechement = new JComboBox<>();
+
+        panelCentre.add(new JLabel("Choisissez une destination :",SwingConstants.CENTER ));
+        panelCentre.add(listeTuilesAssechement);
+
+        // =================================================================================
+        // Création du panel boutons (Retour/Accepter)
+        this.panelBoutons = new JPanel(new GridLayout(1,2));
+        this.panelBoutons.setOpaque(false);
+        mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
+
+        JButton retour = new JButton("Retour");
+        // Lors d'un clic sur le bouton Retour
+        retour.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setChanged();
@@ -54,52 +55,19 @@ public class VueDeplacement extends Vue {
             }
         });
 
-        // Création de panels secondaires
-        accepterPanel = new JPanel(new GridLayout(3,3));
-        for(int i = 0; i < 9 ; i++){
-            if (i==8){
-                accepterPanel.add(accepter);
+        JButton accepter = new JButton("Valider");
+        // Lors d'un clic sur le bouton Accepter
+        accepter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.VALIDERASSECHEMENT);
+                clearChanged();
             }
-            else{
-                accepterPanel.add(new JLabel());
-            }
-        }
+        });
 
-
-        retourPanel = new JPanel(new GridLayout(3,3));
-
-        for(int i = 0; i < 9 ; i++){
-            if (i==6){
-                retourPanel.add(retour);
-            }
-            else{
-                retourPanel.add(new JLabel());
-            }
-        }
-
-
-        for (int i = 0; i < 9; i++) {
-            switch (i) {
-                case 1 :
-                    mainPanel.add(Deplacement);
-                    break;
-                case 4 :
-                    mainPanel.add(possibilite);
-                    break;
-                case 6 :
-                    mainPanel.add(retourPanel);
-                    break;
-                case 8 :
-                    mainPanel.add(accepterPanel);
-                    break;
-                default:
-                    mainPanel.add(new JLabel());
-            }
-        }
-
-    }
-    public void setVisible(){
-        window.setVisible(true);
+        this.panelBoutons.add(retour);
+        this.panelBoutons.add(accepter);
     }
 
     public Tuile getSelection(){
@@ -108,10 +76,12 @@ public class VueDeplacement extends Vue {
     }
 
     public void setAvailableTuile(ArrayList<Tuile> arTuile){
-
-        possibilite.setModel(new DefaultComboBoxModel(arTuile.toArray()));
-
+        listeTuilesAssechement.setModel(new DefaultComboBoxModel<>(arTuile.toArray()));
     }
 
+    @Override
+    public void setVisible(){
+        window.setVisible(true);
+    }
 
 }
