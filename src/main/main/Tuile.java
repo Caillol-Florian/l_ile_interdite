@@ -41,6 +41,14 @@ public class Tuile {
         }
     }
 
+    public boolean estInondee(){
+        if(getEtat()==ETAT_TUILE.INONDEE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public String toString(){
         return nom.toString();
