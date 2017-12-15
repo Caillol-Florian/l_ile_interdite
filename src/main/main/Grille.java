@@ -65,7 +65,7 @@ public class Grille {
             if (coordonnes[1]!=0 && tuiles[coordonnes[0]][coordonnes[1]-1].estInondee()){
                 tuilesAdjacentes.add(tuiles[coordonnes[0]][coordonnes[1]-1]);
             }
-            if (coordonnes[1]!=5 && tuiles[coordonnes[0]][coordonnes[1]+1].estInnonde()){
+            if (coordonnes[1]!=5 && tuiles[coordonnes[0]][coordonnes[1]+1].estInondee()){
                 tuilesAdjacentes.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
             }
 
