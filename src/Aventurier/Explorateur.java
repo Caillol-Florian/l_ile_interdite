@@ -1,17 +1,16 @@
 package Aventurier;
 
 import Aventurier.Aventurier;
-import main.main.Grille;
-import main.main.Messages;
-import main.main.NOM_TUILE;
-import main.main.Tuile;
-
+import main.main.*;
+import main.main.Utils.Pion;
 import java.util.ArrayList;
 
 public class Explorateur extends Aventurier {
 
     public Explorateur(Tuile tuile, String nom) {
         super(tuile, nom);
+        setNomRole("Explorateur");
+        setPion(Pion.VERT);
     }
 
     @Override
@@ -20,6 +19,8 @@ public class Explorateur extends Aventurier {
         tuilesAccessibles.addAll(g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER));
         return tuilesAccessibles;
     }
+
+    @Override
     public ArrayList getTuilesAssechables(Grille g){
         ArrayList<Tuile>tuilesAssechables = g.getTuilesDiagonales(getPosition(), Messages.ASSECHER);
         tuilesAssechables.addAll(g.getTuilesAdjacentes(getPosition(), Messages.ASSECHER));

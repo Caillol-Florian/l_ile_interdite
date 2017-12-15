@@ -3,18 +3,20 @@ package Aventurier;
 import main.main.Grille;
 import main.main.Messages;
 import main.main.Tuile;
-
 import java.util.ArrayList;
+import main.main.Utils.Pion;
 
 public abstract class Aventurier {
 
     private Tuile tuile;
-    private String nom;
+    private String nomJoueur;
+    private String nomRole;
+    private Pion pion;
     private final static int nombreAction = 3;
 
-    public Aventurier(Tuile tuile, String nom){
+    public Aventurier(Tuile tuile, String nomJoueur){
         setTuile(tuile);
-        setNom(nom);
+        setNomJoueur(nomJoueur);
     }
 
     public int getNombreAction(){
@@ -37,7 +39,19 @@ public abstract class Aventurier {
         this.tuile = tuile;
     }
 
-    public String getNom(){return nom;}
+    public String getNomJoueur(){return nomJoueur;}
 
-    public void setNom(String nom){this.nom=nom;}
+    public void setNomJoueur(String nomJoueur){this.nomJoueur = nomJoueur;}
+
+    public void setNomRole(String nomRole){this.nomRole = nomRole;}
+
+    public String getNomRole(){return nomRole;}
+
+    public Pion getPion() {
+        return pion;
+    }
+
+    public void setPion(Pion pion) {
+        this.pion = pion;
+    }
 }

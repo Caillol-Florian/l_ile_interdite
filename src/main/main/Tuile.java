@@ -49,6 +49,13 @@ public class Tuile {
         }
     }
 
+    public boolean estSeche(){
+        if(getEtat()==ETAT_TUILE.SECHE){
+            return true;
+        } else {
+            return false;
+        }
+    }
     @Override
     public String toString(){
         return nom.toString();

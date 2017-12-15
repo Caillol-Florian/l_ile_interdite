@@ -113,6 +113,20 @@ public class Grille {
         return tuilesDiagonales;
     }
 
+    public ArrayList getTuilesSeches(Tuile tuile){
+        ArrayList<Tuile>tuilesSeches = new ArrayList<>();
+
+        for(int i = 0; i < tuiles.length ; i++) { // Lignes
+            for (int j = 0; j < tuiles.length; j++) { // Colonnes
+                if (tuiles[i][j].estSeche()){
+                    tuilesSeches.add(tuiles[i][j]);
+                }
+            }
+        }
+        tuilesSeches.remove(tuile);
+        return tuilesSeches;
+    }
+
     public Tuile getTuile(NOM_TUILE nomTuile){
         Tuile tuile = new Tuile();
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
