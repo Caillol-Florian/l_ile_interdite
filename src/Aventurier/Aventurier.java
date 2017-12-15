@@ -1,6 +1,7 @@
 package Aventurier;
 
 import main.main.Grille;
+import main.main.Messages;
 import main.main.Tuile;
 
 import java.util.ArrayList;
@@ -23,17 +24,14 @@ public abstract class Aventurier {
     }
 
     public ArrayList getTuilesAccesibles(Grille g){
-        ArrayList<Tuile> tuilesAdjacentes = g.getTuilesAdjacentes(getPosition());
-
-        return null;
+        ArrayList<Tuile> tuilesAdjacentes = g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER);
+        return tuilesAdjacentes;
     }
 
     public ArrayList getTuilesAssechable(Grille g){
-        ArrayList<Tuile> tuilesAdjacentes = g.getTuilesAdjacentes(getPosition());
-
-        return null;
+        ArrayList<Tuile> tuilesAdjacentes = g.getTuilesAdjacentes(getPosition(), Messages.ASSECHER);
+        return tuilesAdjacentes;
     }
-
 
     public Tuile getTuile() {
         return tuile;
