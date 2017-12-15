@@ -96,12 +96,7 @@ public class VueDeplacement extends Vue {
                     mainPanel.add(new JLabel());
             }
         }
-
     }
-    public void setVisible(){
-        window.setVisible(true);
-    }
-
     public Tuile getSelection(){
         // return possibilite.getSelectedItem();
         return null;
@@ -113,5 +108,12 @@ public class VueDeplacement extends Vue {
 
     }
 
-
+    @Override
+    public void setVisible(Boolean b){
+        if (b == true) {
+            window.setVisible(true);
+        } else {
+            window.setVisible(false);
+        }
+    }
 }

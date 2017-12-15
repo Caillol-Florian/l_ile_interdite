@@ -1,8 +1,8 @@
 package Views;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
+
+import main.main.Messages;
 import main.main.Utils.Pion;
  
 public class VueAventurier extends Vue {
@@ -34,6 +36,8 @@ public class VueAventurier extends Vue {
 
         this.window = new JFrame();
         window.setSize(350, 200);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         //le titre = nom du joueur 
         window.setTitle(nomJoueur);
         mainPanel = new JPanel(new BorderLayout());
@@ -69,7 +73,24 @@ public class VueAventurier extends Vue {
         mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
 
         this.btnBouger = new JButton("Bouger") ;
+        btnBouger.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.DEPLACER);
+                clearChanged();
+            }
+        });
+
         this.btnAssecher = new JButton( "Assecher");
+        btnAssecher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.ASSECHER);
+                clearChanged();
+            }
+        });
         this.btnAutreAction = new JButton("AutreAction") ;
         this.btnTerminerTour = new JButton("Terminer Tour") ;
         
@@ -103,6 +124,14 @@ public class VueAventurier extends Vue {
 
     public JButton getBtnTerminerTour() {
         return btnTerminerTour;
+    }
+    @Override
+    public void setVisible(Boolean b){
+        if (b == true) {
+            window.setVisible(true);
+        } else {
+            window.setVisible(false);
+        }
     }
 }
 

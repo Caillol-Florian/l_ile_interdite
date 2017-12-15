@@ -28,11 +28,25 @@ public class Controleur implements Observer {
     }
 
     public void openView(Vue vue){
-        vue.setVisible();
+        vue.setVisible(true);
+    }
+    public void closeView(Vue vue){
+        vue.setVisible(false);
     }
 
     @Override
-    public void update(Observable o, Object arg) {}
+    public void update(Observable o, Object arg) {
+        if (arg == Messages.ASSECHER){
+            openView(vues.get(1));
+        }
+        if (arg == Messages.DEPLACER){
+            openView(vues.get(2));
+        }
+
+        if (arg == Messages.RETOUR){
+            closeView((Vue)o);
+        }
+    }
 
     public Grille getGrille(){
         return grille;

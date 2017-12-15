@@ -9,8 +9,10 @@ public class Main {
         Controleur controleur = new Controleur();
         VueAventurier vueAventurier = new VueAventurier("Marion", "Explorateur", Pion.ROUGE.getCouleur() );
         VueAssechement vueAssechement = new VueAssechement();
+        VueDeplacement vueDeplacement = new VueDeplacement();
         controleur.addView(vueAventurier);
         controleur.addView(vueAssechement);
+        controleur.addView(vueDeplacement);
 
         // Test de l'affichage des tuiles dans un ComboBox
         ArrayList<Tuile>a = new ArrayList<>();
