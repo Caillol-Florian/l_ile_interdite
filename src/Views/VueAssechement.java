@@ -77,8 +77,14 @@ public class VueAssechement extends Vue {
             return null;
         }
 
+        @Override
         public void setAvailableTuile(ArrayList<Tuile> arTuile){
-            listeTuilesAssechement.setModel(new DefaultComboBoxModel<>(arTuile.toArray()));
+            if (!arTuile.isEmpty()) {
+                listeTuilesAssechement.setEnabled(true);
+                listeTuilesAssechement.setModel(new DefaultComboBoxModel<>(arTuile.toArray()));
+            } else {
+                listeTuilesAssechement.setEnabled(false);
+            }
         }
 
         @Override
@@ -89,5 +95,8 @@ public class VueAssechement extends Vue {
                 window.setVisible(false);
             }
         }
+
+    @Override
+    public void setPosition(String pos) {}
 }
 

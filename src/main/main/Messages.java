@@ -6,5 +6,7 @@ public enum Messages {
     ASSECHER,
     VALIDERDEPLACEMENT,
     RETOUR,
-    VALIDERASSECHEMENT ;
+    VALIDERASSECHEMENT,
+    AUTRE,
+    FINTOUR;
 }

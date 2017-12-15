@@ -3,13 +3,8 @@ package Views;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 
@@ -43,7 +38,7 @@ public class VueAventurier extends Vue {
         mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
         window.setResizable(false);
-
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
 
@@ -64,6 +59,7 @@ public class VueAventurier extends Vue {
         panelCentre.add(new JLabel ("Position", SwingConstants.CENTER));
         position = new  JTextField(30); 
         position.setHorizontalAlignment(CENTER);
+        position.setEditable(false);
         panelCentre.add(position);
 
 
@@ -93,19 +89,32 @@ public class VueAventurier extends Vue {
             }
         });
         this.btnAutreAction = new JButton("AutreAction") ;
+        btnAutreAction.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.AUTRE);
+                clearChanged();
+            }
+        });
+
         this.btnTerminerTour = new JButton("Terminer Tour") ;
-        
+        btnTerminerTour.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.FINTOUR);
+                clearChanged();
+            }
+        });
         this.panelBoutons.add(btnBouger);
         this.panelBoutons.add(btnAssecher);
         this.panelBoutons.add(btnAutreAction);
         this.panelBoutons.add(btnTerminerTour);
 
         this.window.setVisible(true);
-    } 
-    
-    public void setPosition(String pos) {
-        this.position.setText(pos);
     }
+
     
      public JButton getBtnAutreAction() {
         return btnAutreAction;
@@ -126,6 +135,7 @@ public class VueAventurier extends Vue {
     public JButton getBtnTerminerTour() {
         return btnTerminerTour;
     }
+
     @Override
     public void setVisible(Boolean b){
         if (b == true) {
@@ -134,6 +144,12 @@ public class VueAventurier extends Vue {
             window.setVisible(false);
         }
     }
+
+    @Override
+    public void setPosition(String pos){
+        position.setText(pos);
+    };
+
 }
 
  

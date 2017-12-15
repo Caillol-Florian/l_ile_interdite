@@ -29,24 +29,45 @@ public class Controleur implements Observer {
         vues.add(vue);
     }
 
+    public void addAventurier(Aventurier a){
+        aventuriers.add(a);
+    }
+
+    public void startGame(Aventurier a){
+        updatePos(a);
+        openView(vues.get(0));
+    }
+
+    public void updatePos(Aventurier a){
+        vues.get(0).setPosition(a.getPosition().toString());
+    }
+
     public void openView(Vue vue){
         vue.setVisible(true);
     }
+
     public void closeView(Vue vue){
         vue.setVisible(false);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg == Messages.ASSECHER){
-            openView(vues.get(1));
-        }
-        if (arg == Messages.DEPLACER){
-            openView(vues.get(2));
-        }
+        for(Aventurier a : aventuriers) {
+            if (arg == Messages.ASSECHER) {
+                openView(vues.get(1));
+                vues.get(1).setAvailableTuile(a.getTuilesAssechables(grille));
+            }
+            if (arg == Messages.DEPLACER) {
+                openView(vues.get(2));
+                vues.get(2).setAvailableTuile(a.getTuilesAccesibles(grille));
+            }
 
-        if (arg == Messages.RETOUR){
-            closeView((Vue)o);
+            if(arg == Messages.AUTRE || arg == Messages.FINTOUR){
+                 Utils.afficherInformation("Cette fonctionnalité n'est pas encore disponible !");
+            }
+            if (arg == Messages.RETOUR) {
+                closeView((Vue) o);
+            }
         }
     }
 

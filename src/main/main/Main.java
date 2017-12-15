@@ -1,4 +1,5 @@
 package main.main;
+        import Aventurier.Explorateur;
         import Views.*;
         import main.main.Utils.Pion;
         import java.util.ArrayList;
@@ -8,27 +9,18 @@ public class Main {
 
     public static void main(String[] args) {
         Controleur controleur = new Controleur();
-        VueAventurier vueAventurier = new VueAventurier("Marion", "Explorateur", Pion.ROUGE.getCouleur() );
+        Explorateur greg = new Explorateur(controleur.getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), "Greg");
+
+        VueAventurier vueAventurier = new VueAventurier(greg.getNom(), "Explorateur", Pion.VERT.getCouleur() );
         VueAssechement vueAssechement = new VueAssechement();
         VueDeplacement vueDeplacement = new VueDeplacement();
+
         controleur.addView(vueAventurier);
         controleur.addView(vueAssechement);
         controleur.addView(vueDeplacement);
 
-        // Test de l'affichage des tuiles dans un ComboBox
-        ArrayList<Tuile>a = new ArrayList<>();
+        controleur.addAventurier(greg);
 
-        for (int i = 0; i < 6 ; i++){
-            for(int j = 0; j < 6 ; j++){
-                if (controleur.getGrille().getTuiles()[i][j].toString()!="Eau"){
-                    a.add(controleur.getGrille().getTuiles()[i][j]);
-                }
-            }
-        }
-
-        vueAssechement.setAvailableTuile(a);
-        // Fin du test
-
-        controleur.openView(vueAventurier);
+        controleur.startGame(greg);
     }
 }

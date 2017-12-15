@@ -5,7 +5,7 @@ import main.main.Tuile;
 
 public class Navigateur extends Aventurier {
 
-    public Navigateur(Tuile tuile) {
-        super(tuile);
+    public Navigateur(Tuile tuile, String nom) {
+        super(tuile, nom);
     }
 }
