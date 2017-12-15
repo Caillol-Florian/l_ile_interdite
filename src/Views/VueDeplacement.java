@@ -23,6 +23,7 @@ public class VueDeplacement extends Vue {
         window.setSize(350, 200);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
+        window.setResizable(false);
 
         // =================================================================================
         // Création du panel principal

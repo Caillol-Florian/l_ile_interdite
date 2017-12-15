@@ -42,6 +42,7 @@ public class VueAventurier extends Vue {
         window.setTitle(nomJoueur);
         mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
+        window.setResizable(false);
 
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
