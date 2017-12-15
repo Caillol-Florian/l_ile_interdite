@@ -16,6 +16,7 @@ import main.main.*;
  *
  * @author souliern
  */
+
 public class Controleur implements Observer {
     private Grille grille = new Grille();
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();

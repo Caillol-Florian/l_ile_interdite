@@ -4,6 +4,7 @@ import main.main.Messages;
 import main.main.Tuile;
 import javax.swing.*;
 import javax.swing.JComboBox;
+import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

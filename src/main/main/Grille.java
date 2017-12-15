@@ -30,14 +30,18 @@ public class Grille {
          }
     }
 
-    public ArrayList getTuilesAdjacentes(Tuile tuile){
+    public Tuile[][] getTuiles() {
+        return tuiles;
+    }
 
-        /*
-        // /!\ Cette méthode n'est pas aboutie /!\
-        */
+    public ArrayList getTuilesAdjacentes(Tuile tuile, ){
 
         ArrayList<Tuile> tuilesAdjacentes = new ArrayList<>();
         int[] coordonnes = this.getCordonneesTuiles(tuile);
+
+        if (coordonnes[0]
+
+
 
         return null;
     }
@@ -55,7 +59,7 @@ public class Grille {
     }
 
     public int[] getCordonneesTuiles(Tuile tuile){
-       int[] coordonnees = new int[2];
+        int[] coordonnees = new int[2];
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
             for (int j = 0; j < tuiles.length; j++) { // Colonnes
                 if (tuile.toString().equals(tuiles[i][j].toString())){
@@ -67,8 +71,5 @@ public class Grille {
         return coordonnees;
     }
 
-    public Tuile[][] getTuiles() {
-        return tuiles;
-    }
 
 }
