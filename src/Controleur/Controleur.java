@@ -22,7 +22,7 @@ public class Controleur implements Observer {
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
     private ArrayList<Vue>vues = new ArrayList<>();
 
-    public Controleur(){};
+    public Controleur(){}
 
     public void addView(Vue vue){
         vue.abonner(this);
@@ -57,14 +57,28 @@ public class Controleur implements Observer {
                 openView(vues.get(1));
                 vues.get(1).setAvailableTuile(a.getTuilesAssechables(grille));
             }
+
+            if(arg == Messages.VALIDERASSECHEMENT){
+                getGrille().getTuile(((Vue)o).getTuileSelectionnee()).setEtat(ETAT_TUILE.SECHE);
+                closeView((Vue)o);
+            }
+
             if (arg == Messages.DEPLACER) {
                 openView(vues.get(2));
                 vues.get(2).setAvailableTuile(a.getTuilesAccesibles(grille));
             }
 
+            if (arg == Messages.VALIDERDEPLACEMENT){
+                System.out.println(((Vue)o).getTuileSelectionnee());
+                a.setPosition(getGrille().getTuile(((Vue)o).getTuileSelectionnee()));
+                updatePos(a);
+                closeView((Vue)o);
+            }
+
             if(arg == Messages.AUTRE || arg == Messages.FINTOUR){
                  Utils.afficherInformation("Cette fonctionnalité n'est pas encore disponible !");
             }
+
             if (arg == Messages.RETOUR) {
                 closeView((Vue) o);
             }

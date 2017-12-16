@@ -4,13 +4,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
-
 import main.main.Messages;
-import main.main.Utils.Pion;
- 
 public class VueAventurier extends Vue {
      
     private final JPanel panelBoutons ;
@@ -114,7 +110,6 @@ public class VueAventurier extends Vue {
 
         this.window.setVisible(true);
     }
-
     
      public JButton getBtnAutreAction() {
         return btnAutreAction;
@@ -138,7 +133,7 @@ public class VueAventurier extends Vue {
 
     @Override
     public void setVisible(Boolean b){
-        if (b == true) {
+        if (b) {
             window.setVisible(true);
         } else {
             window.setVisible(false);
@@ -148,7 +143,7 @@ public class VueAventurier extends Vue {
     @Override
     public void setPosition(String pos){
         position.setText(pos);
-    };
+    }
 
 }
 

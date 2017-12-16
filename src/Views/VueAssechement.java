@@ -1,7 +1,6 @@
 package Views;
 
 import main.main.Messages;
-import main.main.Tuile;
 import javax.swing.*;
 import javax.swing.JComboBox;
 import main.main.NOM_TUILE;
@@ -72,13 +71,8 @@ public class VueAssechement extends Vue {
             this.panelBoutons.add(accepter);
         }
 
-        public Tuile getSelection(){
-           // return possibilite.getSelectedItem();
-            return null;
-        }
-
         @Override
-        public void setAvailableTuile(ArrayList<Tuile> arTuile){
+        public void setAvailableTuile(ArrayList<String> arTuile){
             if (!arTuile.isEmpty()) {
                 listeTuilesAssechement.setEnabled(true);
                 listeTuilesAssechement.setModel(new DefaultComboBoxModel<>(arTuile.toArray()));
@@ -89,7 +83,7 @@ public class VueAssechement extends Vue {
 
         @Override
         public void setVisible(Boolean b){
-            if (b == true) {
+            if (b) {
                 window.setVisible(true);
             } else {
                 window.setVisible(false);
@@ -101,13 +95,15 @@ public class VueAssechement extends Vue {
 
     @Override
     public NOM_TUILE getTuileSelectionnee(){
-        NOM_TUILE nom_tuile_trouvee = null;
-        for(NOM_TUILE nom_tuile : NOM_TUILE.values()){
-            if(nom_tuile.toString() == listeTuilesAssechement.getSelectedItem()){
-                nom_tuile_trouvee = nom_tuile;
+        NOM_TUILE nomTuileTrouvee = null;
+        int i  = 0;
+        while(nomTuileTrouvee == null && i < NOM_TUILE.values().length){
+            if(NOM_TUILE.values()[i].toString().equals(listeTuilesAssechement.getSelectedItem().toString())){
+                nomTuileTrouvee = NOM_TUILE.values()[i];
             }
+            i++;
         }
-        return nom_tuile_trouvee;
+        return nomTuileTrouvee;
     }
 }
 

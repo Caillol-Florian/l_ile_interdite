@@ -15,7 +15,7 @@ public abstract class Aventurier {
     private final static int nombreAction = 3;
 
     public Aventurier(Tuile tuile, String nomJoueur){
-        setTuile(tuile);
+        setPosition(tuile);
         setNomJoueur(nomJoueur);
     }
 
@@ -35,7 +35,7 @@ public abstract class Aventurier {
         return g.getTuilesAdjacentes(getPosition(), Messages.ASSECHER);
     }
 
-    public void setTuile(Tuile tuile) {
+    public void setPosition(Tuile tuile) {
         this.tuile = tuile;
     }
 
