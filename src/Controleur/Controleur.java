@@ -11,6 +11,8 @@ import Views.*;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+
+import com.sun.prism.paint.Color;
 import main.main.*;
 /**
  *
@@ -36,16 +38,21 @@ public class Controleur implements Observer {
         vues.add(vue);
     }
 
-    public void addAventurier(Aventurier a){
-        aventuriers.add(a);
-    }
-
-    public void startGame(){
+    public void startInscription(){
         openView(vues.get(0));
     }
 
+    public void startGame(){
+        VueAventurier vueAventurier = new VueAventurier(aventuriers.get(0).getNomJoueur(), aventuriers.get(0).getNomRole(), aventuriers.get(0).getPion().getCouleur());
+        addView(vueAventurier);
+        updatePos(aventuriers.get(0));
+        openView(vues.get(3));
+
+
+    }
+
     public void updatePos(Aventurier a){
-        vues.get(1).setPosition(a.getPosition().toString());
+        vues.get(3).setPosition(a.getPosition().toString());
     }
 
     public void openView(Vue vue){
@@ -67,41 +74,40 @@ public class Controleur implements Observer {
                 }
 
                 if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.INGENIEUR) {
-                    Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_BRONZE), ((Vue) o).getNom());
                     aventuriers.add(aventurier);
                 }
 
                 if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.MESSAGER) {
-                    Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_FER), ((Vue) o).getNom());
                     aventuriers.add(aventurier);
                 }
 
                 if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.NAVIGATEUR) {
-                    Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_OR), ((Vue) o).getNom());
                     aventuriers.add(aventurier);
                 }
 
                 if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PILOTE) {
-                    Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.HELIPORT), ((Vue) o).getNom());
                     aventuriers.add(aventurier);
                 }
 
                 if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PLONGEUR) {
-                    Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_ARGENT), ((Vue) o).getNom());
                     aventuriers.add(aventurier);
                 }
                 ((Vue) o).resetInscription(((Vue) o).getRoleSelectionne());
             } else {
                 closeView((Vue)o);
-                openView(vues.get(1));
+                startGame();
             }
         }
 
 
-        for(Aventurier a : aventuriers) {
             if (arg == Messages.ASSECHER) {
-                openView(vues.get(2));
-                vues.get(2).setAvailableTuile(a.getTuilesAssechables(grille));
+                openView(vues.get(1));
+                vues.get(1).setAvailableTuile(aventuriers.get(0).getTuilesAssechables(grille));
             }
 
             if(arg == Messages.VALIDERASSECHEMENT){
@@ -110,13 +116,13 @@ public class Controleur implements Observer {
             }
 
             if (arg == Messages.DEPLACER) {
-                openView(vues.get(3));
-                vues.get(3).setAvailableTuile(a.getTuilesAccesibles(grille));
+                openView(vues.get(2));
+                vues.get(2).setAvailableTuile(aventuriers.get(0).getTuilesAccesibles(grille));
             }
 
             if (arg == Messages.VALIDERDEPLACEMENT){
-                a.setPosition(getGrille().getTuile(((Vue)o).getTuileSelectionnee()));
-                updatePos(a);
+                aventuriers.get(0).setPosition(getGrille().getTuile(((Vue)o).getTuileSelectionnee()));
+                updatePos(aventuriers.get(0));
                 closeView((Vue)o);
             }
 
@@ -128,7 +134,6 @@ public class Controleur implements Observer {
                 closeView((Vue) o);
             }
         }
-    }
 
     public Grille getGrille(){
         return grille;
