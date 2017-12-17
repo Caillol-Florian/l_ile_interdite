@@ -1,9 +1,10 @@
 package Aventurier;
 
 import Aventurier.Aventurier;
-import main.main.NOM_AVENTURIER;
-import main.main.Tuile;
-import main.main.Utils;
+import main.main.*;
+
+import javax.swing.plaf.TableUI;
+import java.util.ArrayList;
 
 public class Plongeur extends Aventurier {
 
@@ -12,4 +13,20 @@ public class Plongeur extends Aventurier {
         setNomRole(NOM_AVENTURIER.PLONGEUR);
         setPion(Utils.Pion.ORANGE);
     }
+
+    @Override
+    public ArrayList getTuilesAccesibles(Grille g) {
+
+        ArrayList<Tuile> tuilesAccessibleDirect = g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER);
+        ArrayList<Tuile> tuilesAccessiblePlongeur = g.getTuilesPlongeur(getPosition());
+
+        for (Tuile tuileAccessibleDirect : tuilesAccessibleDirect) {
+            if (!tuilesAccessiblePlongeur.contains(tuileAccessibleDirect)){
+                tuilesAccessiblePlongeur.add(tuileAccessibleDirect);
+            }
+        }
+
+        return tuilesAccessiblePlongeur;
+    }
+
 }

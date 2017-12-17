@@ -6,6 +6,7 @@
 package main.main;
 
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -111,6 +112,121 @@ public class Grille {
         }
 
         return tuilesDiagonales;
+    }
+
+    public ArrayList getTuilesPlongeur(Tuile tuile){
+
+        ArrayList<Tuile>tuilesPlongeur = new ArrayList<>();
+        ArrayList<Tuile>tuilesPlongeurIntermediaire = new ArrayList<>();
+        ArrayList<Tuile>tuilesPlongeurIntermediaire2 = new ArrayList<>();
+        Boolean rechercheDeTuile = false;
+
+        int[] coordonnes = this.getCordonneesTuiles(tuile);
+
+        if (coordonnes[0]!=0 && !tuiles[coordonnes[0]-1][coordonnes[1]].estSeche() && !tuiles[coordonnes[0]-1][coordonnes[1]].estOcean()){
+            tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]-1][coordonnes[1]]);
+        }
+        if (coordonnes[0]!=5 && !tuiles[coordonnes[0]+1][coordonnes[1]].estSeche() && !tuiles[coordonnes[0]+1][coordonnes[1]].estOcean()){
+            tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]+1][coordonnes[1]]);
+        }
+        if (coordonnes[1]!=0 && !tuiles[coordonnes[0]][coordonnes[1]-1].estSeche() && !tuiles[coordonnes[0]][coordonnes[1]-1].estOcean()){
+            tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]][coordonnes[1]-1]);
+        }
+        if (coordonnes[1]!=5 && !tuiles[coordonnes[0]][coordonnes[1]+1].estSeche() && !tuiles[coordonnes[0]][coordonnes[1]+1].estOcean()){
+            tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
+        }
+
+        for (int i = 0; i< tuilesPlongeurIntermediaire2.size(); i++){
+            //System.out.println(tuilesPlongeurIntermediaire2.get(i).getNom());
+        }
+
+        while (tuilesPlongeurIntermediaire.size() != tuilesPlongeurIntermediaire2.size()){
+
+            rechercheDeTuile = true;
+
+            for (Tuile tuileACopier : tuilesPlongeurIntermediaire2){
+                if (!tuilesPlongeurIntermediaire.contains(tuileACopier)){
+                    tuilesPlongeurIntermediaire.add(tuileACopier);
+                    //System.out.println(tuileACopier.getNom());
+                }
+            }
+
+            for (int i = 0; i < tuilesPlongeurIntermediaire2.size(); i++){
+
+                coordonnes = getCordonneesTuiles(tuilesPlongeurIntermediaire2.get(i));
+                //System.out.println(tuileAExplorer.getNom());
+
+                if (coordonnes[0]!=0 && !tuiles[coordonnes[0]-1][coordonnes[1]].estSeche() && !tuiles[coordonnes[0]-1][coordonnes[1]].estOcean()){
+                    if (!tuilesPlongeurIntermediaire2.contains(tuiles[coordonnes[0]-1][coordonnes[1]])){
+                        tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]-1][coordonnes[1]]);
+                    }
+                }
+                if (coordonnes[0]!=5 && !tuiles[coordonnes[0]+1][coordonnes[1]].estSeche() && !tuiles[coordonnes[0]+1][coordonnes[1]].estOcean()){
+                    if (!tuilesPlongeurIntermediaire2.contains(tuiles[coordonnes[0]+1][coordonnes[1]])){
+                        tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]+1][coordonnes[1]]);
+                    }
+                }
+                if (coordonnes[1]!=0 && !tuiles[coordonnes[0]][coordonnes[1]-1].estSeche() && !tuiles[coordonnes[0]][coordonnes[1]-1].estOcean()){
+                    if (!tuilesPlongeurIntermediaire2.contains(tuiles[coordonnes[0]][coordonnes[1]-1])){
+                        tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]][coordonnes[1]-1]);
+                        //System.out.println(tuiles[coordonnes[0]][coordonnes[1]+1].getNom());
+                    }
+                }
+                if (coordonnes[1]!=5 && !tuiles[coordonnes[0]][coordonnes[1]+1].estSeche() && !tuiles[coordonnes[0]][coordonnes[1]+1].estOcean()){
+                    if (!tuilesPlongeurIntermediaire2.contains(tuiles[coordonnes[0]][coordonnes[1]+1])){
+                        tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
+                        //System.out.println(tuiles[coordonnes[0]][coordonnes[1]+1].getNom());
+                    }
+                }
+            }
+        }
+
+        if (rechercheDeTuile){
+
+            for (int i = 0; i < tuilesPlongeurIntermediaire.size(); i++){
+
+                coordonnes = getCordonneesTuiles(tuilesPlongeurIntermediaire.get(i));
+
+                if (coordonnes[0]!=0 && tuiles[coordonnes[0]-1][coordonnes[1]].estSeche()){
+                    if (!tuilesPlongeur.contains(tuiles[coordonnes[0]-1][coordonnes[1]])){
+                        tuilesPlongeur.add(tuiles[coordonnes[0]-1][coordonnes[1]]);
+                    }
+                }
+                if (coordonnes[0]!=5 && tuiles[coordonnes[0]+1][coordonnes[1]].estSeche()){
+                    if (!tuilesPlongeur.contains(tuiles[coordonnes[0]+1][coordonnes[1]])){
+                        tuilesPlongeur.add(tuiles[coordonnes[0]+1][coordonnes[1]]);
+                    }
+                }
+                if (coordonnes[1]!=0 && tuiles[coordonnes[0]][coordonnes[1]-1].estSeche()){
+                    if (!tuilesPlongeur.contains(tuiles[coordonnes[0]][coordonnes[1]-1])){
+                        tuilesPlongeur.add(tuiles[coordonnes[0]][coordonnes[1]-1]);
+                    }
+                }
+                if (coordonnes[1]!=5 && tuiles[coordonnes[0]][coordonnes[1]+1].estSeche()){
+                    if (!tuilesPlongeur.contains(tuiles[coordonnes[0]][coordonnes[1]+1])){
+                        tuilesPlongeur.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
+                    }
+
+                }
+            }
+
+            for (Tuile t : tuilesPlongeurIntermediaire){
+              //  System.out.println(t.getNom());
+            }
+
+            for (Tuile tuileInnondeAccessible : tuilesPlongeurIntermediaire){
+
+                if (tuileInnondeAccessible.estInondee()){
+                    tuilesPlongeur.add(tuileInnondeAccessible);
+                }
+            }
+        }
+
+        tuilesPlongeur.remove(tuile);
+
+        return tuilesPlongeur;
+
+
     }
 
     public ArrayList getTuilesSeches(Tuile tuile){

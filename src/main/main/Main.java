@@ -17,15 +17,21 @@ public class Main {
         controleur.addView(vueAssechement);
         controleur.addView(vueDeplacement);
 
+        controleur.getGrille().getTuiles()[0][3].setEtat(ETAT_TUILE.INONDEE);
+        controleur.getGrille().getTuiles()[1][2].setEtat(ETAT_TUILE.INONDEE);
+        controleur.getGrille().getTuiles()[2][2].setEtat(ETAT_TUILE.COULEE);
+        controleur.getGrille().getTuiles()[3][1].setEtat(ETAT_TUILE.INONDEE);
+        controleur.getGrille().getTuiles()[3][3].setEtat(ETAT_TUILE.INONDEE);
+        controleur.getGrille().getTuiles()[3][4].setEtat(ETAT_TUILE.COULEE);
+        controleur.getGrille().getTuiles()[4][2].setEtat(ETAT_TUILE.COULEE);
+        controleur.getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
+
+        controleur.getGrille().getTuiles()[3][2].setEtat(ETAT_TUILE.COULEE);
+
         controleur.startInscription();
+    }
 
 
-        for(int i = 0; i < controleur.getGrille().getTuiles().length ; i++) { // Lignes
-            for (int j = 0; j < controleur.getGrille().getTuiles().length; j++) { // Colonnes
-                System.out.print(i); System.out.print(" - " + j);System.out.print(controleur.getGrille().getTuiles()[i][j]);System.out.print("|");
-                }
-                System.out.println();
-            }
-        }
+
         }
 

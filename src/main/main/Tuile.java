@@ -34,30 +34,27 @@ public class Tuile {
     }
 
     public boolean estCoulee(){
-        if (getEtat()==ETAT_TUILE.COULEE){
-            return true;
-        } else {
-            return false;
-        }
+        return getEtat()==ETAT_TUILE.COULEE;
     }
 
     public boolean estInondee(){
-        if(getEtat()==ETAT_TUILE.INONDEE){
-            return true;
-        } else {
-            return false;
-        }
+        return getEtat()==ETAT_TUILE.INONDEE;
     }
 
     public boolean estSeche(){
-        if(getEtat()==ETAT_TUILE.SECHE){
-            return true;
-        } else {
-            return false;
-        }
+        return getEtat()==ETAT_TUILE.SECHE;
     }
+
+    public boolean estOcean(){
+        return getNom()==NOM_TUILE.EAU;
+    }
+
     @Override
     public String toString(){
-        return nom.toString();
+        return getNom().toString();
+    }
+
+    public NOM_TUILE getNom() {
+        return nom;
     }
 }
