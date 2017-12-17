@@ -1,6 +1,7 @@
 package main.main;
 
 public enum Messages {
+    VALIDERINSCRIPTION,
     ANNULER,
     DEPLACER,
     ASSECHER,

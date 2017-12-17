@@ -20,6 +20,13 @@ import main.main.*;
 public class Controleur implements Observer {
     private Grille grille = new Grille();
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
+
+    // -----------------
+    // Les vues seront rangées dans cet ordre :
+    // 0 : VueInscription
+    // 1 : VueAventurier
+    // 2 : VueAssechement
+    // 3 : VUeDeplacement
     private ArrayList<Vue>vues = new ArrayList<>();
 
     public Controleur(){}
@@ -33,13 +40,12 @@ public class Controleur implements Observer {
         aventuriers.add(a);
     }
 
-    public void startGame(Aventurier a){
-        updatePos(a);
+    public void startGame(){
         openView(vues.get(0));
     }
 
     public void updatePos(Aventurier a){
-        vues.get(0).setPosition(a.getPosition().toString());
+        vues.get(1).setPosition(a.getPosition().toString());
     }
 
     public void openView(Vue vue){
@@ -52,10 +58,19 @@ public class Controleur implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        if (arg == Messages.VALIDERINSCRIPTION){
+            if(((Vue)o).getRoleSelectionne().equals("Explorateur")){
+                Explorateur explorateur = new Explorateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+            }
+        }
+
+
+
+
         for(Aventurier a : aventuriers) {
             if (arg == Messages.ASSECHER) {
-                openView(vues.get(1));
-                vues.get(1).setAvailableTuile(a.getTuilesAssechables(grille));
+                openView(vues.get(2));
+                vues.get(2).setAvailableTuile(a.getTuilesAssechables(grille));
             }
 
             if(arg == Messages.VALIDERASSECHEMENT){
@@ -64,12 +79,11 @@ public class Controleur implements Observer {
             }
 
             if (arg == Messages.DEPLACER) {
-                openView(vues.get(2));
-                vues.get(2).setAvailableTuile(a.getTuilesAccesibles(grille));
+                openView(vues.get(3));
+                vues.get(3).setAvailableTuile(a.getTuilesAccesibles(grille));
             }
 
             if (arg == Messages.VALIDERDEPLACEMENT){
-                System.out.println(((Vue)o).getTuileSelectionnee());
                 a.setPosition(getGrille().getTuile(((Vue)o).getTuileSelectionnee()));
                 updatePos(a);
                 closeView((Vue)o);

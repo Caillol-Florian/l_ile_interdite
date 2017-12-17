@@ -9,7 +9,7 @@ public class Explorateur extends Aventurier {
 
     public Explorateur(Tuile tuile, String nom) {
         super(tuile, nom);
-        setNomRole("Explorateur");
+        setNomRole(NOM_AVENTURIER.EXPLORATEUR);
         setPion(Pion.VERT);
     }
 

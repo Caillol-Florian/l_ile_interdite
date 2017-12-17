@@ -7,8 +7,8 @@ import javax.swing.*;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 import main.main.Messages;
+
 public class VueAventurier extends Vue {
-     
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
     private final JFrame window;
@@ -107,8 +107,6 @@ public class VueAventurier extends Vue {
         this.panelBoutons.add(btnAssecher);
         this.panelBoutons.add(btnAutreAction);
         this.panelBoutons.add(btnTerminerTour);
-
-        this.window.setVisible(true);
     }
     
      public JButton getBtnAutreAction() {

@@ -1,5 +1,6 @@
 package Views;
 
+import main.main.NOM_AVENTURIER;
 import main.main.NOM_TUILE;
 import main.main.Tuile;
 
@@ -16,5 +17,7 @@ public abstract class Vue extends Observable {
     public void setPosition(String pos){}
     public void setAvailableTuile(ArrayList<String> arTuile){}
     public NOM_TUILE getTuileSelectionnee(){return null;}
+    public NOM_AVENTURIER getRoleSelectionne(){return null;}
+    public String getNom(){return null;}
 
 }

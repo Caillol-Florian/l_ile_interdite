@@ -2,6 +2,7 @@ package Aventurier;
 
 import main.main.Grille;
 import main.main.Messages;
+import main.main.NOM_AVENTURIER;
 import main.main.Tuile;
 import java.util.ArrayList;
 import main.main.Utils.Pion;
@@ -10,7 +11,7 @@ public abstract class Aventurier {
 
     private Tuile tuile;
     private String nomJoueur;
-    private String nomRole;
+    private NOM_AVENTURIER nomRole;
     private Pion pion;
     private final static int nombreAction = 3;
 
@@ -43,9 +44,9 @@ public abstract class Aventurier {
 
     public void setNomJoueur(String nomJoueur){this.nomJoueur = nomJoueur;}
 
-    public void setNomRole(String nomRole){this.nomRole = nomRole;}
+    public void setNomRole(NOM_AVENTURIER nomRole){this.nomRole = nomRole;}
 
-    public String getNomRole(){return nomRole;}
+    public NOM_AVENTURIER getNomRole(){return nomRole;}
 
     public Pion getPion() {
         return pion;

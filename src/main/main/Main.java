@@ -10,16 +10,16 @@ public class Main {
         Controleur controleur = new Controleur();
         Pilote greg = new Pilote(controleur.getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), "Greg");
 
+        VueInscription vueInscription = new VueInscription();
         VueAventurier vueAventurier = new VueAventurier(greg.getNomJoueur(), greg.getNomRole(), greg.getPion().getCouleur());
         VueAssechement vueAssechement = new VueAssechement();
         VueDeplacement vueDeplacement = new VueDeplacement();
 
+        controleur.addView(vueInscription);
         controleur.addView(vueAventurier);
         controleur.addView(vueAssechement);
         controleur.addView(vueDeplacement);
 
-        controleur.addAventurier(greg);
-
-        controleur.startGame(greg);
-    }
+        controleur.startGame();
+        }
 }
