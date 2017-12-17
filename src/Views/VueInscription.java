@@ -11,6 +11,8 @@ public class VueInscription extends Vue{
     private final JFrame window;
     private final JComboBox<Object> roles;
     private final JTextField nom;
+    private final JLabel joueurIndice;
+    private int i = 1;
     public VueInscription(){
         window = new JFrame();
         window.setTitle("Inscription");
@@ -23,12 +25,11 @@ public class VueInscription extends Vue{
         window.add(mainPanel);
 
         // Joueur + indice
-        int i = 1;
-        JLabel joueurIndice = new JLabel("Joueur " + i, SwingConstants.CENTER);
+        joueurIndice = new JLabel("Joueur " + i, SwingConstants.CENTER);
         mainPanel.add(joueurIndice);
 
         // Nom à entrer
-        nom = new JTextField("Nom du joueur");
+        nom = new JTextField("Nom du joueur " + i);
         mainPanel.add(nom);
 
         // Rôles disponibles à sélectionner
@@ -55,10 +56,20 @@ public class VueInscription extends Vue{
 
     }
 
+    @Override
     public NOM_AVENTURIER getRoleSelectionne(){
-    return null;
+        return (NOM_AVENTURIER) roles.getSelectedItem();
     }
 
+    @Override
+    public void resetInscription(NOM_AVENTURIER nomAventurier){
+        roles.removeItem(nomAventurier);
+        joueurIndice.setText("Joueur "  + i++);
+        nom.setText("Nom du joueur " + i);
+    }
+
+
+    @Override
     public String getNom(){
         return nom.getText();
     }

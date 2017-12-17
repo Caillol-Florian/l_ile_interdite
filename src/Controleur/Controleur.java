@@ -58,13 +58,44 @@ public class Controleur implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg == Messages.VALIDERINSCRIPTION){
-            if(((Vue)o).getRoleSelectionne().equals("Explorateur")){
-                Explorateur explorateur = new Explorateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+
+        if (arg == Messages.VALIDERINSCRIPTION) {
+            if (aventuriers.size() < 4) {
+                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.EXPLORATEUR) {
+                    Explorateur aventurier = new Explorateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    aventuriers.add(aventurier);
+                }
+
+                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.INGENIEUR) {
+                    Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    aventuriers.add(aventurier);
+                }
+
+                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.MESSAGER) {
+                    Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    aventuriers.add(aventurier);
+                }
+
+                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.NAVIGATEUR) {
+                    Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    aventuriers.add(aventurier);
+                }
+
+                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PILOTE) {
+                    Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    aventuriers.add(aventurier);
+                }
+
+                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PLONGEUR) {
+                    Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                    aventuriers.add(aventurier);
+                }
+                ((Vue) o).resetInscription(((Vue) o).getRoleSelectionne());
+            } else {
+                closeView((Vue)o);
+                openView(vues.get(1));
             }
         }
-
-
 
 
         for(Aventurier a : aventuriers) {
