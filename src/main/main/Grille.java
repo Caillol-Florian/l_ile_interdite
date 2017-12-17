@@ -39,9 +39,6 @@ public class Grille {
         ArrayList<Tuile> tuilesAdjacentes = new ArrayList<>();
         int[] coordonnes = this.getCordonneesTuiles(tuile);
 
-        System.out.println(coordonnes[0]);
-        System.out.println(coordonnes[1]);
-
         if (messages == Messages.DEPLACER) {
             if (coordonnes[0]!=0 && !tuiles[coordonnes[0]-1][coordonnes[1]].estCoulee()){
                 tuilesAdjacentes.add(tuiles[coordonnes[0]-1][coordonnes[1]]);
@@ -147,8 +144,6 @@ public class Grille {
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
             for (int j = 0; j < tuiles.length; j++) { // Colonnes
                 if (tuile.toString().equals(tuiles[i][j].toString())){
-                    System.out.println(tuile);
-                    System.out.println(tuiles[i][j]);
                     coordonnees[0] = i;
                     coordonnees[1] = j;
                 }
