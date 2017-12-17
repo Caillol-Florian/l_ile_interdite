@@ -7,6 +7,7 @@ import javax.swing.*;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 import main.main.Messages;
+import main.main.NOM_AVENTURIER;
 
 public class VueAventurier extends Vue {
     private final JPanel panelBoutons ;
@@ -23,7 +24,7 @@ public class VueAventurier extends Vue {
    
    
     
-    public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
+    public VueAventurier(String nomJoueur, NOM_AVENTURIER nomAventurier, Color couleur){
 
         this.window = new JFrame();
         window.setSize(350, 200);
@@ -42,7 +43,7 @@ public class VueAventurier extends Vue {
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
         this.panelAventurier = new JPanel();
         panelAventurier.setBackground(couleur);
-        panelAventurier.add(new JLabel(nomAventurier,SwingConstants.CENTER ));
+        panelAventurier.add(new JLabel(nomAventurier.toString(),SwingConstants.CENTER ));
         mainPanel.add(panelAventurier, BorderLayout.NORTH);
    
         // =================================================================================
