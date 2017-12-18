@@ -20,6 +20,8 @@ public class VueAventurier extends Vue {
     private final JButton btnAutreAction;
     private final JButton btnTerminerTour;
     private JTextField position;
+    private JLabel labelNomAventurier;
+    private MatteBorder bordure;
    
    
    
@@ -43,14 +45,16 @@ public class VueAventurier extends Vue {
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
         this.panelAventurier = new JPanel();
         panelAventurier.setBackground(couleur);
-        panelAventurier.add(new JLabel(nomAventurier.toString(),SwingConstants.CENTER ));
+        labelNomAventurier = new JLabel(nomAventurier.toString(),SwingConstants.CENTER);
+        panelAventurier.add(labelNomAventurier);
         mainPanel.add(panelAventurier, BorderLayout.NORTH);
    
         // =================================================================================
         // CENTRE : 1 ligne pour position courante
         this.panelCentre = new JPanel(new GridLayout(2, 1));
         this.panelCentre.setOpaque(false);
-        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, couleur));
+        bordure = new MatteBorder(0, 0, 2, 0, couleur);
+        this.panelCentre.setBorder(bordure);
         mainPanel.add(this.panelCentre, BorderLayout.CENTER);
         
         panelCentre.add(new JLabel ("Position", SwingConstants.CENTER));
@@ -143,6 +147,16 @@ public class VueAventurier extends Vue {
     public void setPosition(String pos){
         position.setText(pos);
     }
+
+    @Override
+    public void updateVue(String pos, String nom, NOM_AVENTURIER nomRole, Color couleur){
+        window.setTitle(nom);
+        setPosition(pos);
+        labelNomAventurier.setText(nomRole.toString());
+        mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
+        panelAventurier.setBackground(couleur);
+        bordure = new MatteBorder(0, 0, 2, 0, couleur);    }
+
 
 }
 

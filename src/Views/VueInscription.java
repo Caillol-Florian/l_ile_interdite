@@ -64,7 +64,8 @@ public class VueInscription extends Vue{
     @Override
     public void resetInscription(NOM_AVENTURIER nomAventurier){
         roles.removeItem(nomAventurier);
-        joueurIndice.setText("Joueur "  + i++);
+        i++;
+        joueurIndice.setText("Joueur "  + i);
         nom.setText("Nom du joueur " + i);
     }
 

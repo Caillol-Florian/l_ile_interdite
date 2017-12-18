@@ -80,6 +80,8 @@ public class Grille {
         ArrayList<Tuile> tuilesDiagonales = new ArrayList<>();
         int[] coordonnes = this.getCordonneesTuiles(tuile);
 
+        System.out.print(" | " + coordonnes[0]);
+        System.out.println(coordonnes[1] + " | ");
         if (messages == Messages.DEPLACER) {
             if (coordonnes[0] != 0 && !tuiles[coordonnes[0] - 1][coordonnes[1] - 1].estCoulee()) {
                 tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] - 1]);
