@@ -55,4 +55,10 @@ public abstract class Aventurier {
     public void setPion(Pion pion) {
         this.pion = pion;
     }
+
+    public void setAssechementBonus(boolean b){};
+
+    public boolean getAssechementBonus(){
+        return false;
+    }
 }

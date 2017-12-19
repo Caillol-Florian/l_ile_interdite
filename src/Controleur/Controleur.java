@@ -189,7 +189,15 @@ public class Controleur implements Observer {
             System.out.print(nbActions);
             getGrille().getTuile(((Vue) o).getTuileSelectionnee()).setEtat(ETAT_TUILE.SECHE);
             closeView((Vue) o);
-            nbActions++;
+            if (aventuriers.get(joueurActif%4).getNomRole() == NOM_AVENTURIER.INGENIEUR && aventuriers.get(joueurActif%4).getAssechementBonus() == false)
+                aventuriers.get(joueurActif%4).setAssechementBonus(true);
+                nbActions++;
+            }
+            else if (aventuriers.get(joueurActif%4).getAssechementBonus() == true) {
+            aventuriers.get(joueurActif%4).setAssechementBonus(false);
+            else {
+               nbActions++;
+            }
         }
 
         if (arg == Messages.DEPLACER) {
