@@ -34,6 +34,15 @@ public class Controleur implements Observer {
     private ArrayList<Vue>vues = new ArrayList<>();
 
     public Controleur(){
+        getGrille().getTuiles()[0][3].setEtat(ETAT_TUILE.INONDEE);
+        getGrille().getTuiles()[2][2].setEtat(ETAT_TUILE.COULEE);
+        getGrille().getTuiles()[3][1].setEtat(ETAT_TUILE.INONDEE);
+        getGrille().getTuiles()[3][3].setEtat(ETAT_TUILE.INONDEE);
+        getGrille().getTuiles()[3][4].setEtat(ETAT_TUILE.COULEE);
+        getGrille().getTuiles()[3][2].setEtat(ETAT_TUILE.COULEE);
+        getGrille().getTuiles()[3][5].setEtat(ETAT_TUILE.INONDEE);
+        getGrille().getTuiles()[4][2].setEtat(ETAT_TUILE.COULEE);
+        getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
 
         VueInscription vueInscription = new VueInscription();
         VueAssechement vueAssechement = new VueAssechement();
@@ -43,7 +52,6 @@ public class Controleur implements Observer {
         addView(vueAssechement);
         addView(vueDeplacement);
         startInscription();
-
     }
 
     public void addView(Vue vue){
@@ -168,9 +176,6 @@ public class Controleur implements Observer {
             tourPassé = false; // Le tour n'est plus passé
             // On met à jour le vue aventurier pour le prochain joueur
             ((Vue)o).updateVue(aventuriers.get(joueurActif%4).getPosition().toString(), aventuriers.get(joueurActif%4).getNomJoueur(), aventuriers.get(joueurActif%4).getNomRole(), aventuriers.get(joueurActif%4).getPion().getCouleur());
-            System.out.println("Tour suivant");
-            System.out.println("\t Joueur :");
-            System.out.println("\t\tNom :" + aventuriers.get(joueurActif%4).getNomJoueur());
             }
     }
 

@@ -155,7 +155,11 @@ public class VueAventurier extends Vue {
         labelNomAventurier.setText(nomRole.toString());
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
         panelAventurier.setBackground(couleur);
-        bordure = new MatteBorder(0, 0, 2, 0, couleur);    }
+        bordure = new MatteBorder(0, 0, 2, 0, couleur);
+        System.out.println("Tour suivant");
+        System.out.println("\t Joueur :");
+        System.out.println("\t\tNom :" + nom);
+    }
 
 
 }
