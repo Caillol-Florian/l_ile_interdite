@@ -84,31 +84,31 @@ public class Grille {
         System.out.print(" | " + coordonnes[0]);
         System.out.println(coordonnes[1] + " | ");
         if (messages == Messages.DEPLACER) {
-            if (coordonnes[0] != 0 && !tuiles[coordonnes[0] - 1][coordonnes[1] - 1].estCoulee()) {
+            if (coordonnes[0] != 0 && coordonnes[1] != 0 && !tuiles[coordonnes[0] - 1][coordonnes[1] - 1].estCoulee()) {
                 tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] - 1]);
             }
-            if (coordonnes[0] != 5 && !tuiles[coordonnes[0] + 1][coordonnes[1] + 1].estCoulee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] + 1]);
+            if (coordonnes[0] != 0 && coordonnes[1] != 5 && !tuiles[coordonnes[0] - 1][coordonnes[1] + 1].estCoulee()) {
+                tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] + 1]);
             }
-            if (coordonnes[1] != 0 && !tuiles[coordonnes[0] + 1][coordonnes[1] - 1].estCoulee()) {
+            if (coordonnes[1] != 0 && coordonnes[0] != 5 && !tuiles[coordonnes[0] + 1][coordonnes[1] - 1].estCoulee()) {
                 tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] - 1]);
             }
-            if (coordonnes[1] != 5 && !tuiles[coordonnes[0] - 1][coordonnes[1] + 1].estCoulee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] + 1]);
+            if (coordonnes[1] != 5 && coordonnes[0] != 5 && !tuiles[coordonnes[0] + 1][coordonnes[1] + 1].estCoulee()) {
+                tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] + 1]);
             }
         }
 
         if (messages == Messages.ASSECHER) {
-            if (coordonnes[0] != 0 && tuiles[coordonnes[0] - 1][coordonnes[1] - 1].estInondee()) {
+            if (coordonnes[0] != 0 && coordonnes[1] != 0 && tuiles[coordonnes[0] - 1][coordonnes[1] - 1].estInondee()) {
                 tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] - 1]);
             }
-            if (coordonnes[0] != 5 && tuiles[coordonnes[0] + 1][coordonnes[1] - 1].estInondee()) {
+            if (coordonnes[0] != 0 && coordonnes[1] != 5 && tuiles[coordonnes[0] - 1][coordonnes[1] + 1].estInondee()) {
+                tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] + 1]);
+            }
+            if (coordonnes[1]!= 0 && coordonnes[0] != 5 && tuiles[coordonnes[0] + 1][coordonnes[1]-1].estInondee()){
                 tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] - 1]);
             }
-            if (coordonnes[1]!=0 && tuiles[coordonnes[0] + 1][coordonnes[1]-1].estInondee()){
-                tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] - 1]);
-            }
-            if (coordonnes[1]!=5 && tuiles[coordonnes[0] + 1][coordonnes[1]+1].estInondee()){
+            if (coordonnes[1]!= 5 && coordonnes[0] != 5 && tuiles[coordonnes[0] + 1][coordonnes[1]+1].estInondee()){
                 tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] + 1]);
             }
         }
