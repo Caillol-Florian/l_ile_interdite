@@ -45,7 +45,7 @@ public class VueAssechement extends Vue {
             this.panelBoutons.setOpaque(false);
             mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
 
-        JButton retour = new JButton("Retour");
+            JButton retour = new JButton("Retour");
             // Lors d'un clic sur le bouton Retour
             retour.addActionListener(new ActionListener() {
                 @Override
@@ -69,41 +69,33 @@ public class VueAssechement extends Vue {
 
             this.panelBoutons.add(retour);
             this.panelBoutons.add(accepter);
-        }
-
-        @Override
-        public void setAvailableTuile(ArrayList<String> arTuile){
-            if (!arTuile.isEmpty()) {
-                listeTuilesAssechement.setEnabled(true);
-                listeTuilesAssechement.setModel(new DefaultComboBoxModel<>(arTuile.toArray()));
-            } else {
-                listeTuilesAssechement.setEnabled(false);
-            }
-        }
-
-        @Override
-        public void setVisible(Boolean b){
-            if (b) {
-                window.setVisible(true);
-            } else {
-                window.setVisible(false);
-            }
-        }
+    }
 
     @Override
-    public void setPosition(String pos) {}
+    public void setAvailableTuile(ArrayList<String> arTuile){
+        listeTuilesAssechement.setModel(new DefaultComboBoxModel<>(arTuile.toArray()));
+    }
+
+    @Override
+    public void setVisible(Boolean b){
+        window.setVisible(b);
+    }
 
     @Override
     public NOM_TUILE getTuileSelectionnee(){
-        NOM_TUILE nomTuileTrouvee = null;
-        int i  = 0;
-        while(nomTuileTrouvee == null && i < NOM_TUILE.values().length){
-            if(NOM_TUILE.values()[i].toString().equals(listeTuilesAssechement.getSelectedItem().toString())){
-                nomTuileTrouvee = NOM_TUILE.values()[i];
+        if(listeTuilesAssechement.getSelectedItem() != null) {
+            NOM_TUILE nomTuileTrouvee = null;
+            int i = 0;
+            while (nomTuileTrouvee == null && i < NOM_TUILE.values().length) {
+                if (NOM_TUILE.values()[i].toString().equals(listeTuilesAssechement.getSelectedItem().toString())) {
+                    nomTuileTrouvee = NOM_TUILE.values()[i];
+                }
+                i++;
             }
-            i++;
+            return nomTuileTrouvee;
+        } else {
+            return null;
         }
-        return nomTuileTrouvee;
     }
 }
 

@@ -1,10 +1,9 @@
 package Aventurier;
 
-import Aventurier.Aventurier;
 import main.main.NOM_AVENTURIER;
 import main.main.Tuile;
-
 import main.main.Utils.Pion;
+
 public class Ingenieur extends Aventurier {
     private boolean assechementBonus=false;
     public Ingenieur(Tuile tuile, String nom) {

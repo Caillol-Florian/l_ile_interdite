@@ -25,7 +25,7 @@ public class Grille {
                     tuiles[j][i] = new Tuile(NOM_TUILE.EAU, ETAT_TUILE.COULEE); // On créé une tuile d'eau qu'on ajoute au tableau des tuiles.
                  } else {
                     tuiles[j][i] = new Tuile(NOM_TUILE.values()[indexEnum], ETAT_TUILE.SECHE); // Sinon, on créé une tuile normale (le nom étant la valeur de indexEnum dans la liste de l'enum)
-                    indexEnum++;
+                    indexEnum++; // On augmente l'index pour la prochaine tuile à créer
                 }
              }
          }
@@ -139,7 +139,6 @@ public class Grille {
         }
 
         for (int i = 0; i< tuilesPlongeurIntermediaire2.size(); i++){
-            //System.out.println(tuilesPlongeurIntermediaire2.get(i).getNom());
         }
 
         while (tuilesPlongeurIntermediaire.size() != tuilesPlongeurIntermediaire2.size()){
@@ -149,14 +148,12 @@ public class Grille {
             for (Tuile tuileACopier : tuilesPlongeurIntermediaire2){
                 if (!tuilesPlongeurIntermediaire.contains(tuileACopier)){
                     tuilesPlongeurIntermediaire.add(tuileACopier);
-                    //System.out.println(tuileACopier.getNom());
                 }
             }
 
             for (int i = 0; i < tuilesPlongeurIntermediaire2.size(); i++){
 
                 coordonnes = getCordonneesTuiles(tuilesPlongeurIntermediaire2.get(i));
-                //System.out.println(tuileAExplorer.getNom());
 
                 if (coordonnes[0]!=0 && !tuiles[coordonnes[0]-1][coordonnes[1]].estSeche() && !tuiles[coordonnes[0]-1][coordonnes[1]].estOcean()){
                     if (!tuilesPlongeurIntermediaire2.contains(tuiles[coordonnes[0]-1][coordonnes[1]])){
@@ -171,13 +168,11 @@ public class Grille {
                 if (coordonnes[1]!=0 && !tuiles[coordonnes[0]][coordonnes[1]-1].estSeche() && !tuiles[coordonnes[0]][coordonnes[1]-1].estOcean()){
                     if (!tuilesPlongeurIntermediaire2.contains(tuiles[coordonnes[0]][coordonnes[1]-1])){
                         tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]][coordonnes[1]-1]);
-                        //System.out.println(tuiles[coordonnes[0]][coordonnes[1]+1].getNom());
                     }
                 }
                 if (coordonnes[1]!=5 && !tuiles[coordonnes[0]][coordonnes[1]+1].estSeche() && !tuiles[coordonnes[0]][coordonnes[1]+1].estOcean()){
                     if (!tuilesPlongeurIntermediaire2.contains(tuiles[coordonnes[0]][coordonnes[1]+1])){
                         tuilesPlongeurIntermediaire2.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
-                        //System.out.println(tuiles[coordonnes[0]][coordonnes[1]+1].getNom());
                     }
                 }
             }
@@ -212,12 +207,7 @@ public class Grille {
                 }
             }
 
-            for (Tuile t : tuilesPlongeurIntermediaire){
-              //  System.out.println(t.getNom());
-            }
-
             for (Tuile tuileInnondeAccessible : tuilesPlongeurIntermediaire){
-
                 if (tuileInnondeAccessible.estInondee()){
                     tuilesPlongeur.add(tuileInnondeAccessible);
                 }
@@ -269,6 +259,4 @@ public class Grille {
         }
         return coordonnees;
     }
-
-
 }

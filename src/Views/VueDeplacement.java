@@ -77,13 +77,8 @@ public class VueDeplacement extends Vue {
 
     @Override
     public void setVisible(Boolean b){
-        if (b) {
-            window.setVisible(true);
-        } else {
-            window.setVisible(false);
-        }
+        window.setVisible(b);
     }
-
 
     @Override
     public NOM_TUILE getTuileSelectionnee(){

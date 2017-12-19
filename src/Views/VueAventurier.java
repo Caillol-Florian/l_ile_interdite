@@ -22,16 +22,13 @@ public class VueAventurier extends Vue {
     private JTextField position;
     private JLabel labelNomAventurier;
     private MatteBorder bordure;
-   
-   
-   
     
-    public VueAventurier(String nomJoueur, NOM_AVENTURIER nomAventurier, Color couleur){
+    public VueAventurier(String nomJoueur, NOM_AVENTURIER nomAventurier, Color couleur, int indexPos){
 
         this.window = new JFrame();
         window.setSize(350, 200);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
+        window.setLocation(dim.width / 2 - window.getSize().width / 2, (dim.height / 4 - window.getSize().height)+indexPos*200);
         //le titre = nom du joueur 
         window.setTitle(nomJoueur);
         mainPanel = new JPanel(new BorderLayout());
@@ -40,7 +37,6 @@ public class VueAventurier extends Vue {
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
-
         // =================================================================================
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
         this.panelAventurier = new JPanel();
@@ -136,29 +132,12 @@ public class VueAventurier extends Vue {
 
     @Override
     public void setVisible(Boolean b){
-        if (b) {
-            window.setVisible(true);
-        } else {
-            window.setVisible(false);
-        }
+        window.setVisible(b);
     }
 
     @Override
     public void setPosition(String pos){
         position.setText(pos);
-    }
-
-    @Override
-    public void updateVue(String pos, String nom, NOM_AVENTURIER nomRole, Color couleur){
-        window.setTitle(nom);
-        setPosition(pos);
-        labelNomAventurier.setText(nomRole.toString());
-        mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
-        panelAventurier.setBackground(couleur);
-        bordure = new MatteBorder(0, 0, 2, 0, couleur);
-        System.out.println("Tour suivant");
-        System.out.println("\t Joueur :");
-        System.out.println("\t\tNom :" + nom);
     }
 }
 

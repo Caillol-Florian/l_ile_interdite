@@ -1,6 +1,5 @@
 package Aventurier;
 
-import Aventurier.Aventurier;
 import main.main.*;
 import main.main.Utils.Pion;
 import java.util.ArrayList;

@@ -8,12 +8,10 @@ package Controleur;
 import java.util.ArrayList;
 import Aventurier.*;
 import Views.*;
-import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
-import java.awt.Toolkit;
-import com.sun.prism.paint.Color;
 import main.main.*;
+
 /**
  *
  * @author souliern
@@ -26,19 +24,20 @@ public class Controleur implements Observer {
     private int joueurActif = 0;
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
 
-    // -----------------
+    // ==============================
     // Les vues autres que aventuriers seront rangées dans cet ordre :
     // 0 : VueInscription
     // 1 : VueAssechement
     // 2 : VueDeplacement
     private ArrayList<Vue>vues = new ArrayList<>();
 
-    // -----------------
+    // =============================
     // ArrayList des vuesAventuriers
     private ArrayList<VueAventurier> vueAventuriers = new ArrayList<>();
 
-    public Controleur(){
+    // =============================
 
+    public Controleur(){
         // On change les état des tuiles pour qu'elles correspondent au plateau fourni
         getGrille().getTuiles()[0][3].setEtat(ETAT_TUILE.INONDEE);
         getGrille().getTuiles()[2][2].setEtat(ETAT_TUILE.COULEE);
@@ -49,6 +48,10 @@ public class Controleur implements Observer {
         getGrille().getTuiles()[3][5].setEtat(ETAT_TUILE.INONDEE);
         getGrille().getTuiles()[4][2].setEtat(ETAT_TUILE.COULEE);
         getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
+        getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
+        getGrille().getTuiles()[0][2].setEtat(ETAT_TUILE.INONDEE);
+        getGrille().getTuiles()[1][3].setEtat(ETAT_TUILE.INONDEE);
+
 
         // Création des différentes vues
         VueInscription vueInscription = new VueInscription();
@@ -60,7 +63,7 @@ public class Controleur implements Observer {
         addView(vueAssechement);
         addView(vueDeplacement);
 
-        // On commence
+        // On commence par l'inscription des joueurs
         startInscription();
     }
 
@@ -75,30 +78,18 @@ public class Controleur implements Observer {
     }
 
     public void startInscription(){
+        // Ouverture de la vue Inscription
         openView(vues.get(0));
     }
 
     public void startGame(){
+        // Pour chaque aventurier on ouvre sa vue correspondante en mettant à jour la position affichée
+        // On active/désactive les boutons de la vue s'il s'agit du joueurActif (Dans ce cas là joueurActif = 0 donc la seule vue avec les boutons activés est celui du Joueur n°1
         for(int i = 0; i < vueAventuriers.size() ; i++){
-            vueAventuriers.get(i).setVisible(true);
-            vueAventuriers.get(i).setPosition(aventuriers.get(i).getPosition().toString());
-            if (i == joueurActif){
-                enableBouton(true, i);
-            } else {
-                enableBouton(false, i);
-            }
+            openView(vueAventuriers.get(i));
+            updatePos(i);
+            enableBouton(i == joueurActif, i);
         }
-    }
-
-    public void enableBouton(boolean b, int vueActive){
-            vueAventuriers.get(vueActive%aventuriers.size()).getBtnAssecher().setEnabled(b);
-            vueAventuriers.get(vueActive%aventuriers.size()).getBtnAutreAction().setEnabled(b);
-            vueAventuriers.get(vueActive%aventuriers.size()).getBtnBouger().setEnabled(b);
-            vueAventuriers.get(vueActive%aventuriers.size()).getBtnTerminerTour().setEnabled(b);
-    }
-
-    public void updatePos(int joueur){
-        vueAventuriers.get(joueur).setPosition(aventuriers.get(joueur).getPosition().toString());
     }
 
     @Override
@@ -108,148 +99,171 @@ public class Controleur implements Observer {
         // ----- INSCRIPTION DES JOUEURS ---- //
         // ---------------------------------- //
 
-            if (arg == Messages.VALIDERINSCRIPTION) {
-                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.EXPLORATEUR) {
-                    Explorateur aventurier = new Explorateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
-                    aventuriers.add(aventurier);
+        if (arg == Messages.VALIDERINSCRIPTION) {
+            // Si le rôle sélectionné est l'explorateur, on créé un Explorateur avec les infos rentrées par le joueur
+            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.EXPLORATEUR) {
+                Explorateur aventurier = new Explorateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
+                aventuriers.add(aventurier);
 
-                    VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur());
-                    addViewAventurier(vueAventurier);
-                }
-
-                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.INGENIEUR) {
-                    Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_BRONZE), ((Vue) o).getNom());
-                    aventuriers.add(aventurier);
-
-                    VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur());
-                    addViewAventurier(vueAventurier);
-                }
-
-                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.MESSAGER) {
-                    Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_FER), ((Vue) o).getNom());
-                    aventuriers.add(aventurier);
-
-                    VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur());
-                    addViewAventurier(vueAventurier);
-                }
-
-                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.NAVIGATEUR) {
-                    Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_OR), ((Vue) o).getNom());
-                    aventuriers.add(aventurier);
-
-                    VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur());
-                    addViewAventurier(vueAventurier);
-                }
-
-                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PILOTE) {
-                    Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.HELIPORT), ((Vue) o).getNom());
-                    aventuriers.add(aventurier);
-
-                    VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur());
-                    addViewAventurier(vueAventurier);
-                }
-
-                if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PLONGEUR) {
-                    Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_ARGENT), ((Vue) o).getNom());
-                    aventuriers.add(aventurier);
-
-                    VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur());
-                    addViewAventurier(vueAventurier);
-                }
-
-                if(aventuriers.size()==4){ // Si après avoir inscrit un aventurier il s'agissait du 4ème joueur, on commence la partie
-                    closeView((Vue) o);
-                    startGame();
-                }
-
-                // Dès lors qu'on a inscrit 2 joueurs, on active le bouton Finir ce qui rend la fin de l'inscription possible (On a donc 2 à 4 joueurs)
-                if(aventuriers.size() == 2){
-                    ((Vue)o).getBtnFinir().setEnabled(true);
-                }
-
-                // On remet à 0 la vue après avoir inscrit un joueur.
-                ((Vue) o).resetInscription(((Vue) o).getRoleSelectionne());
+                // On créé aussi la vue associé à cet aventurier en récupérant ses informations. A savoir : l'index de la vue dans l'ArrayList des VueAventurier est le même que celui de l'aventurier dans l'ArrayList aventuriers
+                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
+                addViewAventurier(vueAventurier);
             }
 
-            if (arg == Messages.FINIRINSCRIPTION) {
-                 closeView((Vue)o);
-                 startGame();
+            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.INGENIEUR) {
+                Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_BRONZE), ((Vue) o).getNom());
+                aventuriers.add(aventurier);
+
+                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
+                addViewAventurier(vueAventurier);
             }
 
-            // ---------------------------------- //
+            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.MESSAGER) {
+                Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_FER), ((Vue) o).getNom());
+                aventuriers.add(aventurier);
+
+                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
+                addViewAventurier(vueAventurier);
+            }
+
+            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.NAVIGATEUR) {
+                Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_OR), ((Vue) o).getNom());
+                aventuriers.add(aventurier);
+
+                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
+                addViewAventurier(vueAventurier);
+            }
+
+            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PILOTE) {
+                Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.HELIPORT), ((Vue) o).getNom());
+                aventuriers.add(aventurier);
+
+                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
+                addViewAventurier(vueAventurier);
+            }
+
+            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PLONGEUR) {
+                Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_ARGENT), ((Vue) o).getNom());
+                aventuriers.add(aventurier);
+
+                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
+                addViewAventurier(vueAventurier);
+            }
+
+            // Dès lors qu'on a inscrit 2 joueurs, on active le bouton Finir ce qui rend la fin de l'inscription possible (On a donc 2 à 4 joueurs)
+            if(aventuriers.size() == 2){
+                ((Vue)o).getBtnFinir().setEnabled(true);
+            }
+
+            if(aventuriers.size()==4){ // Si après avoir inscrit un aventurier il s'agissait du 4ème joueur (aventuriers.size() est désormais = à 4), on commence la partie
+                closeView((Vue) o);
+                startGame();
+            }
+
+            // On remet à 0 la vue après avoir inscrit un joueur.
+            ((Vue) o).resetInscription(((Vue) o).getRoleSelectionne());
+        }
+
+        // Si on clique sur le bouton Finir pendant l'inscription, on lance directement la partie.
+        if (arg == Messages.FINIRINSCRIPTION) {
+             closeView((Vue)o);
+             startGame();
+        }
+
+        // ---------------------------------- //
         // --------- VUE AVENTURIER  -------- //
         // ---------------------------------- //
 
+            // Ouverture de la vue Assèchement
         if (arg == Messages.ASSECHER) {
             openView(vues.get(1));
             vues.get(1).setAvailableTuile(aventuriers.get(joueurActif%aventuriers.size()).getTuilesAssechables(grille));
         }
 
+            // Validation de la case à assécher
         if (arg == Messages.VALIDERASSECHEMENT) {
-            System.out.print(nbActions);
-            getGrille().getTuile(((Vue) o).getTuileSelectionnee()).setEtat(ETAT_TUILE.SECHE);
-            closeView((Vue) o);
-            if (aventuriers.get(joueurActif%4).getNomRole() == NOM_AVENTURIER.INGENIEUR && aventuriers.get(joueurActif%4).getAssechementBonus() == false)
-                aventuriers.get(joueurActif%4).setAssechementBonus(true);
-                nbActions++;
-            }
-            else if (aventuriers.get(joueurActif%4).getAssechementBonus() == true) {
-            aventuriers.get(joueurActif%4).setAssechementBonus(false);
-            else {
-               nbActions++;
+            if(((Vue) o).getTuileSelectionnee() != null) {
+                getGrille().getTuile(((Vue) o).getTuileSelectionnee()).setEtat(ETAT_TUILE.SECHE);
+                closeView((Vue) o);
+
+                if (aventuriers.get(joueurActif % aventuriers.size()).getNomRole() == NOM_AVENTURIER.INGENIEUR && aventuriers.get(joueurActif % aventuriers.size()).getAssechementBonus() == false) {
+                    aventuriers.get(joueurActif % aventuriers.size()).setAssechementBonus(true);
+                } else if (aventuriers.get(joueurActif % aventuriers.size()).getAssechementBonus() == true) {
+                    aventuriers.get(joueurActif % aventuriers.size()).setAssechementBonus(false);
+                    nbActions++;
+                } else {
+                    nbActions++;
+                }
+
+            } else {
+                Utils.afficherInformation("Aucune tuile sélectionnée !");
             }
         }
 
+            // Ouverture de la vue Déplacement
         if (arg == Messages.DEPLACER) {
             vues.get(2).setAvailableTuile(aventuriers.get(joueurActif%aventuriers.size()).getTuilesAccesibles(grille));
             openView(vues.get(2));}
 
         if (arg == Messages.VALIDERDEPLACEMENT) {
-            System.out.println(nbActions);
-            aventuriers.get(joueurActif%aventuriers.size()).setPosition(getGrille().getTuile(((Vue) o).getTuileSelectionnee()));
-            updatePos(joueurActif%aventuriers.size());
-            closeView((Vue) o);
-            nbActions++;
+            if(((Vue) o).getTuileSelectionnee() != null){
+                aventuriers.get(joueurActif % aventuriers.size()).setPosition(getGrille().getTuile(((Vue) o).getTuileSelectionnee()));
+                updatePos(joueurActif % aventuriers.size());
+                closeView((Vue) o);
+                nbActions++;
+            } else {
+                Utils.afficherInformation("Aucune tuile sélectionnée !");
+            }
         }
 
         if (arg == Messages.AUTRE) {
             Utils.afficherInformation("Cette fonctionnalité n'est pas encore disponible !");
         }
 
+        // Si on appuie sur le bouton Fin Tour pendant un tour, tourPassé = true (ce qui aura pour effet de passer le tour)
         if (arg == Messages.FINTOUR) {
             tourPassé = true;
         }
 
+        // Quand on clique sur un bouton Retour, on ferme la présente vue.
         if (arg == Messages.RETOUR) {
             closeView((Vue) o);
         }
-
 
         // ---------------------------------- //
         // --------  GESTION DU TOUR -------- //
         // ---------------------------------- //
 
+
+        // Si le nombre d'actions possibles de l'aventurier est égal au nombre d'actions effectuées pendant ce tour (nbActions) on passe le tour
         if(aventuriers.get(joueurActif%aventuriers.size()).getNombreAction() == nbActions){
                 tourPassé = true;
         }
-        // Si le nombre d'actions possibles de l'aventurier est égal au nombre d'actions effectuées pendant ce tour OU qu'il a appuyé sur "Fin Tour"
+
+        // tourPassé est true si on a atteint le nombre maximum d'actions possibles ou qu'on a appuyé sur le bouton Fin Tour
         if (tourPassé) {
-            enableBouton(false, joueurActif%aventuriers.size());
+            enableBouton(false, joueurActif%aventuriers.size()); // On désactive les boutons de la vue Aventurier correspondant au joueur qui est actif
             joueurActif++; // On passe au prochain joueur
             nbActions = 0; // On remet le nombre d'actions effectuées à 0
             tourPassé = false; // Le tour n'est plus passé
-            // On met à jour le vue aventurier pour le prochain joueur
+            // On active les boutons de la vue Aventurier pour le prochain joueur
             enableBouton(true, joueurActif%aventuriers.size());
-
         }
+    }
+
+    public void enableBouton(boolean b, int vueActive){
+        vueAventuriers.get(vueActive%aventuriers.size()).getBtnAssecher().setEnabled(b);
+        vueAventuriers.get(vueActive%aventuriers.size()).getBtnAutreAction().setEnabled(b);
+        vueAventuriers.get(vueActive%aventuriers.size()).getBtnBouger().setEnabled(b);
+        vueAventuriers.get(vueActive%aventuriers.size()).getBtnTerminerTour().setEnabled(b);
+    }
+
+    public void updatePos(int joueur){
+        vueAventuriers.get(joueur).setPosition(aventuriers.get(joueur).getPosition().toString());
     }
 
     public Grille getGrille(){
         return grille;
-    }
-
-    public ArrayList getVues(){
-        return vues;
     }
 
     public void openView(Vue vue){

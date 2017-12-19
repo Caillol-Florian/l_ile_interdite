@@ -1,6 +1,5 @@
 package Aventurier;
 
-import Aventurier.Aventurier;
 import main.main.NOM_AVENTURIER;
 import main.main.Tuile;
 

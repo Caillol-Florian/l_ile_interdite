@@ -1,14 +1,13 @@
 package Views;
 import main.main.Messages;
 import main.main.NOM_AVENTURIER;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VueInscription extends Vue{
-    private final JFrame window;
+    protected final JFrame window;
     private final JComboBox<Object> roles;
     private final JTextField nom;
     private final JLabel joueurIndice;
@@ -21,18 +20,22 @@ public class VueInscription extends Vue{
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         window.setResizable(false);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel mainPanel = new JPanel(new GridLayout(4,1));
         window.add(mainPanel);
 
-        // Joueur + indice
+        // =====================================
+        // n° du Joueur à créer
         joueurIndice = new JLabel("Joueur " + i, SwingConstants.CENTER);
         mainPanel.add(joueurIndice);
 
+        // =====================================
         // Nom à entrer
         nom = new JTextField("Nom du joueur " + i);
         mainPanel.add(nom);
 
+        // =====================================
         // Rôles disponibles à sélectionner
         roles = new JComboBox<>();
         for(NOM_AVENTURIER nomAventurier : NOM_AVENTURIER.values()){
@@ -40,6 +43,7 @@ public class VueInscription extends Vue{
         }
         mainPanel.add(roles);
 
+        // =====================================
         // Bouton Valider / Finir inscription
         JPanel panelBoutons = new JPanel(new GridLayout(1,2));
         mainPanel.add(panelBoutons);
@@ -65,7 +69,7 @@ public class VueInscription extends Vue{
         });
 
         panelBoutons.add(btnFinir);
-        btnFinir.setEnabled(false);
+        btnFinir.setEnabled(false); // Le bouton n'est pas activé de base.
     }
 
     @Override
@@ -91,13 +95,10 @@ public class VueInscription extends Vue{
     public String getNom(){
         return nom.getText();
     }
+
     @Override
-    public void setVisible(Boolean b) {
-        if(b){
-            window.setVisible(true);
-        } else {
-            window.setVisible(false);
-        }
+    public void setVisible(Boolean b){
+        window.setVisible(b);
     }
 }
 
