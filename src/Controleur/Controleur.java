@@ -48,10 +48,6 @@ public class Controleur implements Observer {
         getGrille().getTuiles()[3][5].setEtat(ETAT_TUILE.INONDEE);
         getGrille().getTuiles()[4][2].setEtat(ETAT_TUILE.COULEE);
         getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
-        getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
-        getGrille().getTuiles()[0][2].setEtat(ETAT_TUILE.INONDEE);
-        getGrille().getTuiles()[1][3].setEtat(ETAT_TUILE.INONDEE);
-
 
         // Création des différentes vues
         VueInscription vueInscription = new VueInscription();
