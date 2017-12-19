@@ -2,7 +2,7 @@ package main.main;
 
 public enum Messages {
     VALIDERINSCRIPTION,
-    ANNULER,
+    FINIRINSCRIPTION,
     DEPLACER,
     ASSECHER,
     VALIDERDEPLACEMENT,

@@ -160,8 +160,6 @@ public class VueAventurier extends Vue {
         System.out.println("\t Joueur :");
         System.out.println("\t\tNom :" + nom);
     }
-
-
 }
 
  

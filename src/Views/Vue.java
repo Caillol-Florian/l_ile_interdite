@@ -20,5 +20,5 @@ public abstract class Vue extends Observable {
     public String getNom(){return null;}
     public void resetInscription(NOM_AVENTURIER nom_aventurier){}
     public void updateVue(String pos, String nom, NOM_AVENTURIER nomRole, Color couleur){}
-
+    public JButton getBtnFinir(){return null;}
 }

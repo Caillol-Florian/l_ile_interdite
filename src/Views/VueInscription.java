@@ -12,6 +12,7 @@ public class VueInscription extends Vue{
     private final JComboBox<Object> roles;
     private final JTextField nom;
     private final JLabel joueurIndice;
+    private final JButton btnFinir;
     private int i = 1;
     public VueInscription(){
         window = new JFrame();
@@ -39,7 +40,9 @@ public class VueInscription extends Vue{
         }
         mainPanel.add(roles);
 
-        // Bouton Valider
+        // Bouton Valider / Finir inscription
+        JPanel panelBoutons = new JPanel(new GridLayout(1,2));
+        mainPanel.add(panelBoutons);
         JButton btnValider = new JButton("Valider");
         btnValider.addActionListener(new ActionListener() {
             @Override
@@ -49,11 +52,25 @@ public class VueInscription extends Vue{
                 clearChanged();
             }
         });
-        mainPanel.add(btnValider);
+        panelBoutons.add(btnValider);
+
+        btnFinir = new JButton("Terminer");
+        btnFinir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.FINIRINSCRIPTION);
+                clearChanged();
+            }
+        });
+
+        panelBoutons.add(btnFinir);
+        btnFinir.setEnabled(false);
     }
 
-    public void nextAventurier(){
-
+    @Override
+    public JButton getBtnFinir(){
+        return btnFinir;
     }
 
     @Override
