@@ -22,6 +22,7 @@ public class Controleur implements Observer {
     private int nbActions = 0;
     private boolean tourPassé = false;
     private int joueurActif = 0;
+    boolean aAsseché = false; //afin de traiter l'assechement supplementaire de l'ingenieur
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
 
     // ==============================
@@ -181,27 +182,27 @@ public class Controleur implements Observer {
             if(((Vue) o).getTuileSelectionnee() != null) {
                 getGrille().getTuile(((Vue) o).getTuileSelectionnee()).setEtat(ETAT_TUILE.SECHE);
                 closeView((Vue) o);
-
-                if (aventuriers.get(joueurActif % aventuriers.size()).getNomRole() == NOM_AVENTURIER.INGENIEUR && aventuriers.get(joueurActif % aventuriers.size()).getAssechementBonus() == false) {
-                    aventuriers.get(joueurActif % aventuriers.size()).setAssechementBonus(true);
-                } else if (aventuriers.get(joueurActif % aventuriers.size()).getAssechementBonus() == true) {
-                    aventuriers.get(joueurActif % aventuriers.size()).setAssechementBonus(false);
+                if (aventuriers.get(joueurActif % aventuriers.size()).getNomRole() == NOM_AVENTURIER.INGENIEUR && !aAsseché) {
+                aAsseché = true;
+                } else if (aAsseché) {
                     nbActions++;
                 } else {
                     nbActions++;
                 }
-
             } else {
+
                 Utils.afficherInformation("Aucune tuile sélectionnée !");
             }
         }
 
             // Ouverture de la vue Déplacement
+
         if (arg == Messages.DEPLACER) {
             vues.get(2).setAvailableTuile(aventuriers.get(joueurActif%aventuriers.size()).getTuilesAccesibles(grille));
             openView(vues.get(2));}
 
         if (arg == Messages.VALIDERDEPLACEMENT) {
+
             if(((Vue) o).getTuileSelectionnee() != null){
                 aventuriers.get(joueurActif % aventuriers.size()).setPosition(getGrille().getTuile(((Vue) o).getTuileSelectionnee()));
                 updatePos(joueurActif % aventuriers.size());
@@ -226,13 +227,19 @@ public class Controleur implements Observer {
             closeView((Vue) o);
         }
 
+        // On gère l'assèchement bonus de l'Ingénieur
+        if (nbActions == 2 & aAsseché){ // Si l'ingénieur a effectué 2 actions et qu'il a déjà asséché une fois, il n'a plus le choix que de profiter de son
+                                        // assèchement bonus ou de passer le tour.
+            vueAventuriers.get(joueurActif%aventuriers.size()).getBtnBouger().setEnabled(false);
+        }
+
         // ---------------------------------- //
         // --------  GESTION DU TOUR -------- //
         // ---------------------------------- //
 
 
         // Si le nombre d'actions possibles de l'aventurier est égal au nombre d'actions effectuées pendant ce tour (nbActions) on passe le tour
-        if(aventuriers.get(joueurActif%aventuriers.size()).getNombreAction() == nbActions){
+        if((aventuriers.get(joueurActif%aventuriers.size()).getNombreAction() == nbActions)){
                 tourPassé = true;
         }
 
@@ -242,6 +249,7 @@ public class Controleur implements Observer {
             joueurActif++; // On passe au prochain joueur
             nbActions = 0; // On remet le nombre d'actions effectuées à 0
             tourPassé = false; // Le tour n'est plus passé
+            aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
             // On active les boutons de la vue Aventurier pour le prochain joueur
             enableBouton(true, joueurActif%aventuriers.size());
         }

@@ -221,12 +221,12 @@ public class Grille {
 
     }
 
-    public ArrayList getTuilesSeches(Tuile tuile){
+    public ArrayList getTuilesNonCoulee(Tuile tuile){
         ArrayList<Tuile>tuilesSeches = new ArrayList<>();
 
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
             for (int j = 0; j < tuiles.length; j++) { // Colonnes
-                if (tuiles[i][j].estSeche()){
+                if (!tuiles[i][j].estCoulee()){
                     tuilesSeches.add(tuiles[i][j]);
                 }
             }

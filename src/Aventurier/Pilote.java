@@ -15,6 +15,6 @@ public class Pilote extends Aventurier {
     }
     @Override
     public ArrayList getTuilesAccesibles(Grille g){
-        return g.getTuilesSeches(getPosition());
+        return g.getTuilesNonCoulee(getPosition());
     }
 }

@@ -22,7 +22,7 @@ public class VueAssechement extends Vue {
             window.setTitle("Assèchement");
             window.setSize(350, 200);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
+            window.setLocation(dim.width / 2 - window.getSize().width / 2 + 400, dim.height / 2 - window.getSize().height / 2);
             window.setResizable(false);
 
             // =================================================================================
