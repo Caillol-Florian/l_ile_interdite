@@ -182,12 +182,15 @@ public class Controleur implements Observer {
             if(((Vue) o).getTuileSelectionnee() != null) {
                 getGrille().getTuile(((Vue) o).getTuileSelectionnee()).setEtat(ETAT_TUILE.SECHE);
                 closeView((Vue) o);
+
+                // Si l'aventurier qui assèche est un ingénieur et qu'il n'a pas déjà asseché
                 if (aventuriers.get(joueurActif % aventuriers.size()).getNomRole() == NOM_AVENTURIER.INGENIEUR && !aAsseché) {
-                aAsseché = true;
-                } else if (aAsseché) {
-                    nbActions++;
+                aAsseché = true; // On change la valeur aAsseché en true
+                } else if (aAsseché) { // S'il a déjà asseché
+                    nbActions++; // On augmente le nombre d'action effectué
+                    aAsseché = false; // On remet la valeur aAsseché en false
                 } else {
-                    nbActions++;
+                    nbActions++; // Sinon s'il s'agit pas d'un ingénieur on augmente le nombre d'action
                 }
             } else {
 
@@ -228,8 +231,9 @@ public class Controleur implements Observer {
         }
 
         // On gère l'assèchement bonus de l'Ingénieur
-        if (nbActions == 2 & aAsseché){ // Si l'ingénieur a effectué 2 actions et qu'il a déjà asséché une fois, il n'a plus le choix que de profiter de son
-                                        // assèchement bonus ou de passer le tour.
+        // Si l'ingénieur a effectué 2 actions et qu'il a déjà asséché une fois, il n'a plus le choix que de profiter de son
+        // assèchement bonus ou de passer le tour.
+        if (nbActions == 2 & aAsseché){
             vueAventuriers.get(joueurActif%aventuriers.size()).getBtnBouger().setEnabled(false);
         }
 
