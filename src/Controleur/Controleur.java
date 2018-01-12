@@ -273,6 +273,7 @@ public class Controleur implements Observer {
             nbActions = 0; // On remet le nombre d'actions effectuées à 0
             tourPassé = false; // Le tour n'est plus passé
             aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
+            piloteSpecial = false; // Reset de l'action spéciale du pilote
             // On active les boutons de la vue Aventurier pour le prochain joueur
             enableBouton(true, joueurActif%aventuriers.size());
         }
