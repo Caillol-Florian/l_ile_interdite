@@ -71,13 +71,6 @@ public class Utils {
             return null ;
         }
     }
-
-    public static ArrayList<Aventurier> melangerAventuriers(ArrayList<Aventurier> arrayList) {
-        if (Parameters.ALEAS) {
-            Collections.shuffle(arrayList);
-        }
-        return arrayList ;
-    }
     
     /**
      * Permet de poser une question à laquelle l'utilisateur répond par oui ou non

@@ -1,6 +1,7 @@
 package Aventurier;
 
 import main.main.Grille;
+import main.main.Messages;
 import main.main.NOM_AVENTURIER;
 import main.main.Tuile;
 import main.main.Utils.Pion;
@@ -13,8 +14,12 @@ public class Pilote extends Aventurier {
         setNomRole(NOM_AVENTURIER.PILOTE);
         setPion(Pion.BLEU);
     }
-    @Override
-    public ArrayList getTuilesAccesibles(Grille g){
-        return g.getTuilesNonCoulee(getPosition());
+
+    public ArrayList getTuilesAccesibles(Grille g, Boolean specialUtilisé){
+        if (!specialUtilisé) {
+            return g.getTuilesNonCoulee(getPosition());
+        } else {
+            return g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER);
+        }
     }
 }

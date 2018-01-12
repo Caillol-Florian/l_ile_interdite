@@ -23,6 +23,7 @@ public class Controleur implements Observer {
     private boolean tourPassé = false;
     private int joueurActif = 0;
     boolean aAsseché = false; //afin de traiter l'assechement supplementaire de l'ingenieur
+    boolean piloteSpecial = false; // Déplacement spécial du pilote
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
 
     // ==============================
@@ -201,13 +202,31 @@ public class Controleur implements Observer {
             // Ouverture de la vue Déplacement
 
         if (arg == Messages.DEPLACER) {
-            vues.get(2).setAvailableTuile(aventuriers.get(joueurActif%aventuriers.size()).getTuilesAccesibles(grille));
-            openView(vues.get(2));}
+            // Afin de traiter le déplacement du pilote :
+            // On vérifie que le joueur actif est un pilote
+                // S'il est pilote, on affiche les tuiles disponibles en fonction de s'il a utilisé son déplacement spécial
+            // SINON, on affiche les tuiles des autres aventuriers.
+            if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
+               vues.get(2).setAvailableTuile(((Pilote) aventuriers.get(joueurActif%aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial));
+            } else {
+                vues.get(2).setAvailableTuile(aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
+            }
+            openView(vues.get(2));
+        }
 
         if (arg == Messages.VALIDERDEPLACEMENT) {
-
             if(((Vue) o).getTuileSelectionnee() != null){
                 aventuriers.get(joueurActif % aventuriers.size()).setPosition(getGrille().getTuile(((Vue) o).getTuileSelectionnee()));
+
+                // Vérification si le pilote a utilisé son déplacement spécial :
+                // Si la tuile sélectionnée n'est pas une tuile adjacente au pilote alors il a utilisé son pouvoir
+                if (aventuriers.get(joueurActif % aventuriers.size()) instanceof Pilote){
+                    if ( !((ArrayList<Tuile>) (aventuriers.get(joueurActif% aventuriers.size())).getTuilesAccesibles(grille)).contains(getGrille().getTuile(((Vue) o).getTuileSelectionnee()))){
+                        piloteSpecial = true;
+                    }
+                }
+
+                // Update visuel de la position
                 updatePos(joueurActif % aventuriers.size());
                 closeView((Vue) o);
                 nbActions++;
