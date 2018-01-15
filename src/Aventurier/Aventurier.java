@@ -10,6 +10,9 @@ public abstract class Aventurier {
     private String nomJoueur;
     private NOM_AVENTURIER nomRole;
     private PION pion;
+    private ArrayList<Tresor>tresors = new ArrayList<>();
+    private ArrayList<CarteStockable>cartes = new ArrayList<>();
+
     private final static int nombreAction = 3;
 
     public Aventurier(Tuile tuile, String nomJoueur){
@@ -51,5 +54,21 @@ public abstract class Aventurier {
 
     public void setPion(PION pion) {
         this.pion = pion;
+    }
+
+    public ArrayList<Tresor> getTresors() {
+        return tresors;
+    }
+
+    public void addTresor(Tresor tresor) {
+        this.tresors.add(tresor);
+    }
+
+    public ArrayList<CarteStockable> getCartes() {
+        return cartes;
+    }
+
+    public void addCarte(CarteStockable carte) {
+        this.cartes.add(carte);
     }
 }

@@ -5,7 +5,6 @@
  */
 package Controleur;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import Aventurier.*;
@@ -22,13 +21,22 @@ import javax.sound.sampled.*;
  */
 
 public class Controleur implements Observer {
+
+    // ==============================
+    // Modèle
+    private ArrayList<Aventurier>aventuriers = new ArrayList<>();
     private Grille grille = new Grille();
+    private ArrayList<CarteAction>pileCartesAction = new ArrayList<>();
+    private ArrayList<CarteInondation>pileCartesInondations = new ArrayList<>();
+
+    // ==============================
+    // Paramètres
     private int nbActions = 0;
     private boolean tourPassé = false;
     private int joueurActif = 0;
     boolean aAsseché = false; //afin de traiter l'assechement supplementaire de l'ingenieur
     boolean piloteSpecial = false; // Déplacement spécial du pilote
-    private ArrayList<Aventurier>aventuriers = new ArrayList<>();
+
 
     // ==============================
     // Les vues autres que aventuriers seront rangées dans cet ordre :
