@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class VueTest {
     private final JFrame window;
-    private final JPanel mainPanel;
+    private final PanelAvecImage mainPanel;
 
     public VueTest() {
 
@@ -34,7 +34,8 @@ public class VueTest {
 
         // =================================================================================
         // Création du panel principal
-        mainPanel = new JPanel(new GridBagLayout());
+        mainPanel = new PanelAvecImage(1000,1000,"images/backgrounds/bg_plateau.png");
+        mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
@@ -74,6 +75,7 @@ public class VueTest {
 
         tableauTuile[4][3].update(ETAT_TUILE.SECHE, pions);
         tableauTuile[4][3].update(ETAT_TUILE.INONDEE, pions);
+        tableauTuile[4][4].update(ETAT_TUILE.INONDEE, pions);
 
         pions.clear();
         pions.add(PION.VIOLET);
@@ -83,6 +85,31 @@ public class VueTest {
         window.setVisible(true);
     }
 
+
+    private class PanelAvecImage extends JPanel {
+
+        private Image image ;
+        private final Integer width ;
+        private final Integer height ;
+
+        public PanelAvecImage(Integer width, Integer height, String imageFile) {
+            this.width = width ;
+            this.height = height ;
+            try {
+                this.image = ImageIO.read(new File(imageFile));
+            } catch (IOException ex) {
+                System.err.println("Erreur de lecture background");
+            }
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (image != null) {
+                g.drawImage(image, 0, 0, this.width, this.height, null, this);
+            }
+        }
+    }
 
 
     public static void main(String[] args){

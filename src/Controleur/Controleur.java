@@ -5,12 +5,16 @@
  */
 package Controleur;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import Aventurier.*;
 import Views.*;
 import java.util.Observable;
 import java.util.Observer;
 import main.main.*;
+
+import javax.sound.sampled.*;
 
 /**
  *
@@ -39,7 +43,7 @@ public class Controleur implements Observer {
 
     // =============================
 
-    public Controleur(){
+    public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
         // On change les état des tuiles pour qu'elles correspondent au plateau fourni
         getGrille().getTuiles()[0][3].setEtat(ETAT_TUILE.INONDEE);
         getGrille().getTuiles()[2][2].setEtat(ETAT_TUILE.COULEE);
@@ -56,6 +60,7 @@ public class Controleur implements Observer {
         VueAssechement vueAssechement = new VueAssechement();
         VueDeplacement vueDeplacement = new VueDeplacement();
 
+
         // Abonnement
         addView(vueInscription);
         addView(vueAssechement);
@@ -63,6 +68,19 @@ public class Controleur implements Observer {
 
         // On commence par l'inscription des joueurs
         startInscription();
+
+        //Test IHM
+        VueMenuF vueMenuF = new VueMenuF();
+        openView(vueMenuF);
+
+        // pour l'exécuter au moment ou la fenêtre s'ouvre
+        //AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/src/Controleur/1055.wav"));
+        // Get a sound clip resource.
+        //Clip clip = AudioSystem.getClip();
+        // Open audio clip and load samples from the audio input stream.
+        //clip.open(audioIn);
+        //clip.start();
+        //clip.loop((int)clip.getMicrosecondLength());
     }
 
     public void addView(Vue vue){
