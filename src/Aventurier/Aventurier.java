@@ -1,18 +1,15 @@
 package Aventurier;
 
-import main.main.Grille;
-import main.main.Messages;
-import main.main.NOM_AVENTURIER;
-import main.main.Tuile;
+import main.main.*;
+
 import java.util.ArrayList;
-import main.main.Utils.Pion;
 
 public abstract class Aventurier {
 
     private Tuile tuile;
     private String nomJoueur;
     private NOM_AVENTURIER nomRole;
-    private Pion pion;
+    private PION pion;
     private final static int nombreAction = 3;
 
     public Aventurier(Tuile tuile, String nomJoueur){
@@ -48,11 +45,11 @@ public abstract class Aventurier {
 
     public NOM_AVENTURIER getNomRole(){return nomRole;}
 
-    public Pion getPion() {
+    public PION getPion() {
         return pion;
     }
 
-    public void setPion(Pion pion) {
+    public void setPion(PION pion) {
         this.pion = pion;
     }
 }

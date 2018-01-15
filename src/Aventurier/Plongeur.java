@@ -1,6 +1,5 @@
 package Aventurier;
 import main.main.*;
-import main.main.Utils.Pion;
 import java.util.ArrayList;
 
 public class Plongeur extends Aventurier {
@@ -8,7 +7,7 @@ public class Plongeur extends Aventurier {
     public Plongeur(Tuile tuile, String nom) {
         super(tuile, nom);
         setNomRole(NOM_AVENTURIER.PLONGEUR);
-        setPion(Pion.ORANGE);
+        setPion(PION.GRIS);
     }
 
     @Override
