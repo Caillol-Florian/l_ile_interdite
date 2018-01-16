@@ -36,6 +36,7 @@ public class VueTest {
         JPanel panelAventuriers = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
+        c.fill = GridBagConstraints.BOTH;
 
         mainPanel.add(panelAventuriers, c);
 
