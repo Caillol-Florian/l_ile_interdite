@@ -64,13 +64,13 @@ public class Controleur implements Observer {
         getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
 
         // Création des différentes vues
-        VueInscription vueInscription = new VueInscription();
+        //VueInscription vueInscription = new VueInscription();
         VueAssechement vueAssechement = new VueAssechement();
         VueDeplacement vueDeplacement = new VueDeplacement();
 
 
         // Abonnement
-        addView(vueInscription);
+        //addView(vueInscription);
         addView(vueAssechement);
         addView(vueDeplacement);
 
@@ -78,14 +78,14 @@ public class Controleur implements Observer {
         startInscription();
 
         //Test IHM
-        VueMenuF vueMenuF = new VueMenuF();
-        openView(vueMenuF);
+        VueInscription vueInscription = new VueInscription();
+        openView(vueInscription);
 
-        // pour l'exécuter au moment ou la fenêtre s'ouvre
+        //pour l'exécuter au moment ou la fenêtre s'ouvre
         //AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/src/Controleur/1055.wav"));
-        // Get a sound clip resource.
+        //Get a sound clip resource.
         //Clip clip = AudioSystem.getClip();
-        // Open audio clip and load samples from the audio input stream.
+        //Open audio clip and load samples from the audio input stream.
         //clip.open(audioIn);
         //clip.start();
         //clip.loop((int)clip.getMicrosecondLength());

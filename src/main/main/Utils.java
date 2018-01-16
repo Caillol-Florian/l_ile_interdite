@@ -10,7 +10,7 @@ import Aventurier.Aventurier;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  *
@@ -28,6 +28,8 @@ public class Utils {
         EtatTuile(String libelle) {
             this.libelle = libelle ;
         }
+
+        JToolBar toolBar = new JToolBar();
 
         @Override
         public String toString() {

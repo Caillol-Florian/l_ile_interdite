@@ -41,6 +41,7 @@ public class VueTest {
         c.gridx = 0;
         c.gridy = 0;
         c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(5,5,5,5);
 
         // =============
         // Test d'une carte
