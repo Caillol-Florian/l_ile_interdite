@@ -24,7 +24,6 @@ public class VueAventurier extends Vue {
     private MatteBorder bordure;
     
     public VueAventurier(String nomJoueur, NOM_AVENTURIER nomAventurier, Color couleur, int indexPos){
-
         this.window = new JFrame();
         window.setSize(350, 200);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

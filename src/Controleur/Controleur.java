@@ -31,6 +31,7 @@ public class Controleur implements Observer {
 
     // ==============================
     // Paramètres
+    private boolean jeuLance = false;
     private int nbActions = 0;
     private boolean tourPassé = false;
     private int joueurActif = 0;
@@ -43,6 +44,7 @@ public class Controleur implements Observer {
     // 0 : VueInscription
     // 1 : VueAssechement
     // 2 : VueDeplacement
+    // 3 : VueMenu
     private ArrayList<Vue>vues = new ArrayList<>();
 
     // =============================
@@ -64,22 +66,20 @@ public class Controleur implements Observer {
         getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
 
         // Création des différentes vues
-        //VueInscription vueInscription = new VueInscription();
+        VueInscription vueInscription = new VueInscription();
         VueAssechement vueAssechement = new VueAssechement();
         VueDeplacement vueDeplacement = new VueDeplacement();
+        VueMenu vueMenu = new VueMenu();
 
 
         // Abonnement
-        //addView(vueInscription);
+        addView(vueInscription);
         addView(vueAssechement);
         addView(vueDeplacement);
+        addView(vueMenu);
 
         // On commence par l'inscription des joueurs
-        startInscription();
-
-        //Test IHM
-        VueInscription vueInscription = new VueInscription();
-        openView(vueInscription);
+        openView(vues.get(3));
 
         //pour l'exécuter au moment ou la fenêtre s'ouvre
         //AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/src/Controleur/1055.wav"));
@@ -113,11 +113,20 @@ public class Controleur implements Observer {
             openView(vueAventuriers.get(i));
             updatePos(i);
             enableBouton(i == joueurActif, i);
+            jeuLance = true;
         }
     }
 
     @Override
     public void update(Observable o, Object arg) {
+
+        // =====================================
+        // Ouverture vue Inscrition
+
+        if (arg == Messages.INSCRPTION){
+            startInscription();
+            closeView((Vue)o);
+        }
 
         // ---------------------------------- //
         // ----- INSCRIPTION DES JOUEURS ---- //
@@ -286,22 +295,23 @@ public class Controleur implements Observer {
         // --------  GESTION DU TOUR -------- //
         // ---------------------------------- //
 
-
-        // Si le nombre d'actions possibles de l'aventurier est égal au nombre d'actions effectuées pendant ce tour (nbActions) on passe le tour
-        if((aventuriers.get(joueurActif%aventuriers.size()).getNombreAction() == nbActions)){
+        if(jeuLance) {
+            // Si le nombre d'actions possibles de l'aventurier est égal au nombre d'actions effectuées pendant ce tour (nbActions) on passe le tour
+            if ((aventuriers.get(joueurActif % aventuriers.size()).getNombreAction() == nbActions)) {
                 tourPassé = true;
-        }
+            }
 
-        // tourPassé est true si on a atteint le nombre maximum d'actions possibles ou qu'on a appuyé sur le bouton Fin Tour
-        if (tourPassé) {
-            enableBouton(false, joueurActif%aventuriers.size()); // On désactive les boutons de la vue Aventurier correspondant au joueur qui est actif
-            joueurActif++; // On passe au prochain joueur
-            nbActions = 0; // On remet le nombre d'actions effectuées à 0
-            tourPassé = false; // Le tour n'est plus passé
-            aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
-            piloteSpecial = false; // Reset de l'action spéciale du pilote
-            // On active les boutons de la vue Aventurier pour le prochain joueur
-            enableBouton(true, joueurActif%aventuriers.size());
+            // tourPassé est true si on a atteint le nombre maximum d'actions possibles ou qu'on a appuyé sur le bouton Fin Tour
+            if (tourPassé) {
+                enableBouton(false, joueurActif % aventuriers.size()); // On désactive les boutons de la vue Aventurier correspondant au joueur qui est actif
+                joueurActif++; // On passe au prochain joueur
+                nbActions = 0; // On remet le nombre d'actions effectuées à 0
+                tourPassé = false; // Le tour n'est plus passé
+                aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
+                piloteSpecial = false; // Reset de l'action spéciale du pilote
+                // On active les boutons de la vue Aventurier pour le prochain joueur
+                enableBouton(true, joueurActif % aventuriers.size());
+            }
         }
     }
 

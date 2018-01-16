@@ -1,8 +1,12 @@
 package Views;
 
+import main.main.Messages;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -79,6 +83,14 @@ public class VueMenu extends Vue {
         btnStart.setFont(bold);
         btnStart.setPreferredSize( new Dimension(360,60));
         mainPanel.add(btnStart,gc);
+        btnStart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.INSCRPTION);
+                clearChanged();
+            }
+        });
 
         //btn regle
 
