@@ -1,4 +1,4 @@
-package main.main;
+package Modèles;
 import Controleur.Controleur;
 
 import javax.sound.sampled.LineUnavailableException;

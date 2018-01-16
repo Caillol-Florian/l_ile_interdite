@@ -1,8 +1,7 @@
 package Views;
 
-import main.main.Messages;
-import main.main.NIVEAU_DIFFICULTE;
-import sun.plugin2.message.Message;
+import Enums.Messages;
+import Enums.NIVEAU_DIFFICULTE;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -36,7 +35,7 @@ public class VueInscription extends Vue {
 
     public VueInscription(){
 
-        window.setSize(1920, 1280);
+        window.setSize(1920, 1080);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         //window.setResizable(false);

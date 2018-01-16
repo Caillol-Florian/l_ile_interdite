@@ -1,21 +1,14 @@
 package Views;
 
-import Controleur.Controleur;
-import main.main.ETAT_TUILE;
-import main.main.Messages;
-import main.main.NOM_TUILE;
-import main.main.PION;
+import Enums.ETAT_TUILE;
+import Enums.NOM_TUILE;
+import Enums.PION;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
-import java.lang.reflect.Array;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 

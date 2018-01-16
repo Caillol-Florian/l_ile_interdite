@@ -1,4 +1,6 @@
-package main.main;
+package Modèles;
+
+import Enums.TYPE_TRESOR;
 
 public class Tresor {
     private TYPE_TRESOR nom;

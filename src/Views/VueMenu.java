@@ -1,6 +1,6 @@
 package Views;
 
-import main.main.Messages;
+import Enums.Messages;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,7 +21,7 @@ public class VueMenu extends Vue {
 
     public VueMenu(){
 
-        window.setSize(1920, 1280);
+        window.setSize(1920, 1080);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         //window.setResizable(false);

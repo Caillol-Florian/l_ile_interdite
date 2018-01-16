@@ -1,6 +1,10 @@
-package Aventurier;
+package Modèles.Aventurier;
 
-import main.main.*;
+import Enums.NOM_AVENTURIER;
+import Enums.PION;
+import Modèles.Grille;
+import Enums.Messages;
+import Modèles.Tuile;
 import java.util.ArrayList;
 
 public class Explorateur extends Aventurier {

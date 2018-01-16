@@ -1,12 +1,12 @@
 package Views;
 
-import main.main.*;
+import Enums.NOM_AVENTURIER;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Observer;
 import java.util.Observable;
-import main.main.NOM_TUILE;
+import Enums.NOM_TUILE;
 
 public abstract class Vue extends Observable {
 

@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
-import main.main.Messages;
-import main.main.NOM_AVENTURIER;
+import Enums.Messages;
+import Enums.NOM_AVENTURIER;
 
 public class VueAventurier extends Vue {
     private final JPanel panelBoutons ;

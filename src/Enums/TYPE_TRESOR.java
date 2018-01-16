@@ -1,4 +1,4 @@
-package main.main;
+package Enums;
 
 public enum TYPE_TRESOR {
     PIERRE,

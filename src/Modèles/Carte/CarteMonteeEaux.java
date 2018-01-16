@@ -1,4 +1,4 @@
-package main.main;
+package Modèles.Carte;
 
 public class CarteMonteeEaux extends CarteAction {
 

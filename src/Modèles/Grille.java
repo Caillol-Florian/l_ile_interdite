@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.main;
+package Modèles;
 
 
-import java.awt.*;
+import Enums.ETAT_TUILE;
+import Enums.Messages;
+import Enums.NOM_TUILE;
+
 import java.util.ArrayList;
 
 /**
@@ -35,7 +38,7 @@ public class Grille {
         return tuiles;
     }
 
-    public ArrayList getTuilesAdjacentes(Tuile tuile,Messages messages){
+    public ArrayList getTuilesAdjacentes(Tuile tuile, Messages messages){
 
         ArrayList<Tuile> tuilesAdjacentes = new ArrayList<>();
         int[] coordonnes = this.getCordonneesTuiles(tuile);

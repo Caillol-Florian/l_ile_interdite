@@ -1,4 +1,4 @@
-package main.main;
+package Modèles;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;

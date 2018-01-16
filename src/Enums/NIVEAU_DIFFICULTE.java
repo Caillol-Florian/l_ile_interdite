@@ -1,4 +1,4 @@
-package main.main;
+package Enums;
 
 public enum NIVEAU_DIFFICULTE {
     NOVICE("Novice"),

@@ -1,4 +1,6 @@
-package main.main;
+package Modèles.Carte;
+
+import Modèles.Tresor;
 
 public class CarteTresor extends CarteStockable {
 

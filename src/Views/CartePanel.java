@@ -1,8 +1,5 @@
 package Views;
 
-import main.main.ETAT_TUILE;
-import main.main.PION;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

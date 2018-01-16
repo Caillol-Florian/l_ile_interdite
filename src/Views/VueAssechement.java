@@ -1,9 +1,9 @@
 package Views;
 
-import main.main.Messages;
+import Enums.Messages;
 import javax.swing.*;
 import javax.swing.JComboBox;
-import main.main.NOM_TUILE;
+import Enums.NOM_TUILE;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

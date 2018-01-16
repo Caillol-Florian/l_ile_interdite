@@ -1,4 +1,4 @@
-package main.main;
+package Enums;
 
 import java.awt.*;
 

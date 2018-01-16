@@ -1,6 +1,10 @@
-package Aventurier;
+package Modèles.Aventurier;
 
-import main.main.*;
+import Enums.Messages;
+import Enums.NOM_AVENTURIER;
+import Enums.PION;
+import Modèles.*;
+import Modèles.Carte.CarteStockable;
 
 import java.util.ArrayList;
 

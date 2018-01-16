@@ -7,11 +7,18 @@ package Controleur;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import Aventurier.*;
+
+import Enums.ETAT_TUILE;
+import Enums.Messages;
+import Enums.NOM_AVENTURIER;
+import Enums.NOM_TUILE;
+import Modèles.*;
+import Modèles.Aventurier.*;
+import Modèles.Carte.CarteAction;
+import Modèles.Carte.CarteInondation;
 import Views.*;
 import java.util.Observable;
 import java.util.Observer;
-import main.main.*;
 
 import javax.sound.sampled.*;
 

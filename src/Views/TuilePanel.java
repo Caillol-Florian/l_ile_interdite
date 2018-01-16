@@ -1,18 +1,15 @@
 package Views;
 
-import main.main.ETAT_TUILE;
-import main.main.NOM_TUILE;
-import main.main.PION;
+import Enums.ETAT_TUILE;
+import Enums.NOM_TUILE;
+import Enums.PION;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class TuilePanel extends JPanel {

@@ -1,4 +1,4 @@
-package main.main;
+package Modèles;
 
 import java.awt.Color;
 

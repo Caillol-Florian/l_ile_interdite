@@ -1,8 +1,8 @@
-package Aventurier;
+package Modèles.Aventurier;
 
-import main.main.NOM_AVENTURIER;
-import main.main.PION;
-import main.main.Tuile;
+import Enums.NOM_AVENTURIER;
+import Enums.PION;
+import Modèles.Tuile;
 
 public class Navigateur extends Aventurier {
 
