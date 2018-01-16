@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import Modèles.Parameters;
- 
+
 public class VueNiveau {
     
     private Integer niveau ;

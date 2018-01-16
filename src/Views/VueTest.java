@@ -28,7 +28,8 @@ public class VueTest {
 
         // =============================================================
         // Création du panel principal
-        mainPanel = new JPanel(new GridBagLayout());
+        mainPanel = new PanelAvecImage(1500,1500,"images/backgrounds/bg_plateau.png");
+        mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
         // =============================================================
@@ -74,8 +75,6 @@ public class VueTest {
             // Position
             cAventurier.gridy = 2;
             JPanel panelPosition = new JPanel(new GridLayout(2, 1));
-            panelPosition.setOpaque(false);
-
             panelPosition.add(new JLabel ("Position", SwingConstants.CENTER));
             JTextField position = new  JTextField(30);
             position.setHorizontalAlignment(CENTER);
@@ -102,6 +101,14 @@ public class VueTest {
             cColonneAventurier.gridy++;
         }
 
+        JPanel panelBoutons = new JPanel(new GridLayout(2,2));
+        cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
+        panelAventuriers.add(panelBoutons, cColonneAventurier);
+        panelBoutons.add(new JButton("Se déplacer"));
+        panelBoutons.add(new JButton("Assécher"));
+        panelBoutons.add(new JButton("Autre action"));
+        panelBoutons.add(new JButton("Passer son tour"));
+
         // =============================================================
         // Panel Grille
         JPanel panelPlateau = new PanelAvecImage(1500,1500,"images/backgrounds/bg_plateau.png");
@@ -112,7 +119,7 @@ public class VueTest {
         c.gridx = 1;
         c.weightx = 6;
         mainPanel.add(panelPlateau, c);
-
+        c.fill = GridBagConstraints.NONE;
         // Contrainte pour le panel grille
         c.weightx = 1;
         c.gridx = 0;
