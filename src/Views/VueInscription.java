@@ -12,19 +12,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static Modèles.Utils.afficherInformation;
+
 public class VueInscription extends Vue {
 
 
     private Window window = new JFrame("Inscription");
     private PanelAvecImage mainPanel;
-    private Font regular = new Font("Gill Sans",0,25);
+    private Font regular = new Font("Gill Sans",0,22);
     private Font bold = new Font("Gill Sans", 1, 50);
+    private Font jouer = new Font("Gill Sans", 1,22);
+    private Font btn = new Font("Gill Sans", 0,17);
+    private Font btnBold = new Font("Gill Sans", 1,17);
     private boolean btn2P = false;
     private boolean btn3P = false;
     private boolean btn4P = false;
-    private JButton jButton2;
-    private JButton jButton3;
-    private JButton jButton4;
+
     private ArrayList<String> pseudos = new ArrayList<>();
     private ArrayList<JTextField> JTextFields = new ArrayList<>();
 
@@ -32,6 +35,11 @@ public class VueInscription extends Vue {
     private boolean btnD2 = false;
     private boolean btnD3 = false;
     private boolean btnD4 = false;
+
+    private JButton jButtonD1;
+    private JButton jButtonD2;
+    private JButton jButtonD3;
+    private JButton jButtonD4;
 
     public VueInscription(){
 
@@ -41,7 +49,9 @@ public class VueInscription extends Vue {
         //window.setResizable(false);
         //window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new PanelAvecImage(1400,1200, "images/backgrounds/bg_options.jpeg") ;
+        mainPanel = new PanelAvecImage(1920,1080, "images/backgrounds/bg_plateau.png") ;
+        //JPanel mainPanel = new JPanel();
+        //mainPanel.setBackground(Color.DARK_GRAY);
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
@@ -77,6 +87,7 @@ public class VueInscription extends Vue {
         gc.gridheight= 2;
         gc.anchor = GridBagConstraints.CENTER;
 
+
         String imgUrl="images/icones/iconSettings.png";
         ImageIcon icone0 = new ImageIcon(imgUrl);
 
@@ -91,6 +102,8 @@ public class VueInscription extends Vue {
         gc.gridy = 2;
         gc.gridwidth = 4;
         gc.gridheight = 1;
+        gc.anchor = GridBagConstraints.LAST_LINE_START;
+        gc.insets = new Insets(0,55,0,0);
 
         JLabel titre = new JLabel("Veuillez séléctionner le nombre de joueur");
         titre.setFont(regular);
@@ -102,12 +115,14 @@ public class VueInscription extends Vue {
         gc.gridy = 3;
         gc.gridwidth = 1;
         gc.gridheight = 1;
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.insets = new Insets(0,0,0,0);
 
         //URL de l'image
         String imgUrl1="images/icones/icon2PN.png";
         ImageIcon icone1 = new ImageIcon(imgUrl1);
         //création des boutons - ajout icones
-        jButton2 = new JButton(icone1);
+        JButton jButton2 = new JButton(icone1);
         jButton2.setPreferredSize(new Dimension(200,60));
         //ajouter les deux JLabel a JFrame
         mainPanel.add(jButton2,gc);
@@ -115,10 +130,8 @@ public class VueInscription extends Vue {
         jButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
                 btn2P = true; btn3P = false; btn4P = false;
-                update();
-                clearChanged();
+                updateJTextField();
             }
         });
 
@@ -127,17 +140,15 @@ public class VueInscription extends Vue {
 
         String imgUrl2="images/icones/icon3PN.png";
         ImageIcon icone2 = new ImageIcon(imgUrl2);
-        jButton3 = new JButton(icone2);
+        JButton jButton3 = new JButton(icone2);
         jButton3.setPreferredSize(new Dimension(200,60));
         mainPanel.add(jButton3,gc);
 
         jButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
                 btn2P = false; btn3P = true; btn4P = false;
-                update();
-                clearChanged();
+                updateJTextField();
             }
         });
 
@@ -147,17 +158,15 @@ public class VueInscription extends Vue {
 
         String imgUrl3="images/icones/icon4PN.png";
         ImageIcon icone3 = new ImageIcon(imgUrl3);
-        jButton4 = new JButton(icone3);
+        JButton jButton4 = new JButton(icone3);
         jButton4.setPreferredSize(new Dimension(200,60));
         mainPanel.add(jButton4,gc);
 
         jButton4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
                 btn2P = false; btn3P = false; btn4P = true;
-                update();
-                clearChanged();
+                updateJTextField();
             }
         });
 
@@ -169,8 +178,10 @@ public class VueInscription extends Vue {
         gc.gridy = 4;
         gc.gridwidth = 4;
         gc.gridheight = 1;
+        gc.anchor = GridBagConstraints.LAST_LINE_START;
+        gc.insets = new Insets(0,55,0,0);
 
-        JLabel pseudoLabel = new JLabel("Veuillez entrer vos pseudos");
+        JLabel pseudoLabel = new JLabel("Veuillez entrer vos pseudos (obligatoire)");
         pseudoLabel.setFont(regular);
         mainPanel.add(pseudoLabel,gc);
 
@@ -182,7 +193,8 @@ public class VueInscription extends Vue {
             gc.gridy = 5;
             gc.gridwidth = 1;
             gc.gridheight = 1;
-            gc.fill = GridBagConstraints.NONE;
+            gc.anchor = GridBagConstraints.CENTER;
+            gc.insets = new Insets(0,0,0,0);
 
             JTextField pseudo = new JTextField();
             JTextFields.add(pseudo);
@@ -196,6 +208,8 @@ public class VueInscription extends Vue {
         gc.gridy = 6;
         gc.gridwidth = 4;
         gc.gridheight = 1;
+        gc.anchor = GridBagConstraints.LAST_LINE_START;
+        gc.insets = new Insets(0,55,0,0);
 
         JLabel difficulteChoix = new JLabel("Veuillez séléctionner le niveau de difficulté");
         difficulteChoix.setFont(regular);
@@ -207,8 +221,10 @@ public class VueInscription extends Vue {
         gc.gridy = 7;
         gc.gridwidth = 1;
         gc.gridheight = 1;
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.insets = new Insets(0,0,0,0);
 
-        JButton jButtonD1 = new JButton();
+        jButtonD1 = new JButton();
         jButtonD1.setPreferredSize(new Dimension(200,60));
         jButtonD1.setText("Novice");
         mainPanel.add(jButtonD1,gc);
@@ -216,16 +232,15 @@ public class VueInscription extends Vue {
         jButtonD1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
                 btnD1 = true; btnD2 = false; btnD3 = false; btnD4 =  false;
-                clearChanged();
+                updateBtn(jButtonD1);
             }
         });
 
         gc.gridx = 2;
         gc.gridy = 7;
 
-        JButton jButtonD2 = new JButton();
+        jButtonD2 = new JButton();
         jButtonD2.setPreferredSize(new Dimension(200,60));
         jButtonD2.setText("Normal");
         mainPanel.add(jButtonD2,gc);
@@ -233,33 +248,32 @@ public class VueInscription extends Vue {
         jButtonD2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
                 btnD1 = false; btnD2 = true; btnD3 = false; btnD4 =  false;
-                clearChanged();
+                updateBtn(jButtonD2);
             }
         });
 
         gc.gridx = 3;
         gc.gridy = 7;
 
-        JButton jButtonD3 = new JButton();
+        jButtonD3 = new JButton();
         jButtonD3.setPreferredSize(new Dimension(200,60));
         jButtonD3.setText("Elite");
+        jButtonD3.setFont(btnBold);
         mainPanel.add(jButtonD3,gc);
 
         jButtonD3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
                 btnD1 = false; btnD2 = false; btnD3 = true; btnD4 =  false;
-                clearChanged();
+                updateBtn(jButtonD3);
             }
         });
 
         gc.gridx = 4;
         gc.gridy = 7;
 
-        JButton jButtonD4 = new JButton();
+        jButtonD4 = new JButton();
         jButtonD4.setPreferredSize(new Dimension(200,60));
         jButtonD4.setText("Légendaire");
         mainPanel.add(jButtonD4,gc);
@@ -267,11 +281,12 @@ public class VueInscription extends Vue {
         jButtonD4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
                 btnD1 = false; btnD2 = false; btnD3 = false; btnD4 = true;
-                clearChanged();
+                updateBtn(jButtonD4);
             }
         });
+
+        updateBtn(jButtonD1);
 
         gc.gridwidth = 4;
         gc.gridheight = 1;
@@ -282,14 +297,18 @@ public class VueInscription extends Vue {
         JButton jButtonSuivant = new JButton();
         jButtonSuivant.setPreferredSize(new Dimension(250,60));
         jButtonSuivant.setText("Jouer");
+        jButtonSuivant.setFont(jouer);
         mainPanel.add(jButtonSuivant,gc);
 
         jButtonSuivant.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setChanged();
-                notifyObservers(Messages.SUIVANT);
-                btnD1 = false; btnD2 = false; btnD3 = false; btnD4 = true;
+                if (getPseudos().get(0).contentEquals("")){
+                    afficherInformation("Veuillez écrire vos pseudos pour commencer la partie");
+                } else {
+                    notifyObservers(Messages.SUIVANT);
+                }
                 clearChanged();
             }
         });
@@ -322,7 +341,7 @@ public class VueInscription extends Vue {
         }
     }
 
-    public void update(){
+    public void updateJTextField(){
 
         for (int i=0; i<4; i++){
             if (i<getNombreJoueurs()){
@@ -332,6 +351,15 @@ public class VueInscription extends Vue {
             }
         }
     }
+
+    public void updateBtn(JButton jButton){
+        jButtonD1.setFont(btn);
+        jButtonD2.setFont(btn);
+        jButtonD3.setFont(btn);
+        jButtonD4.setFont(btn);
+        jButton.setFont(btnBold);
+    }
+
 
     public int getNombreJoueurs(){
 
