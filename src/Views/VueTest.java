@@ -106,7 +106,7 @@ public class VueTest {
         // Panel Grille
         JPanel panelPlateau = new PanelAvecImage(1500,1500,"images/backgrounds/bg_plateau.png");
         panelPlateau.setLayout(new GridBagLayout());
-        c.fill = GridBagConstraints.NONE;
+        c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.LINE_END;
         c.gridy = 0;
         c.gridx = 1;

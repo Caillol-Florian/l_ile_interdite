@@ -41,7 +41,7 @@ public class VueInscription extends Vue {
         //window.setResizable(false);
         //window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new PanelAvecImage(1400,1000, "images/backgrounds/bg_options.jpeg") ;
+        mainPanel = new PanelAvecImage(1400,1200, "images/backgrounds/bg_options.jpeg") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
@@ -293,7 +293,6 @@ public class VueInscription extends Vue {
                 clearChanged();
             }
         });
-
     }
 
 
@@ -321,7 +320,6 @@ public class VueInscription extends Vue {
                 g.drawImage(image, 0, 0, this.width, this.height, null, this);
             }
         }
-
     }
 
     public void update(){
@@ -332,9 +330,7 @@ public class VueInscription extends Vue {
             } else {
                 JTextFields.get(i).setVisible(false);
             }
-
         }
-
     }
 
     public int getNombreJoueurs(){
