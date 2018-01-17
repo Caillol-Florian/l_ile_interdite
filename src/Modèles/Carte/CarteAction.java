@@ -1,13 +1,13 @@
 package Modèles.Carte;
 
 public class CarteAction {
-    private String nom;
+    private String path;
 
-    public CarteAction(String nom){
-        this.nom = nom;
+    public CarteAction(String path){
+        this.path = path;
     }
 
-    public String getNom(){
-        return this.nom;
+    public String getPath(){
+        return this.path;
     }
 }

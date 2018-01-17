@@ -48,7 +48,7 @@ public class CartePanel extends JPanel {
     public void setCarte(String path){
         try {
             this.imageCarte = ImageIO.read(new File(path));
-            imageCarte.getGraphics().drawImage(imageCarte, 0, 0, null);
+            repaint();
         } catch (IOException e) {
             System.out.println("Impossible de récupérer l'image.");
         }

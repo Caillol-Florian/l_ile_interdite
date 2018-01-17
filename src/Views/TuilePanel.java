@@ -31,7 +31,6 @@ public class TuilePanel extends JPanel {
 
         setEtatTuile(etatTuile);
         setNomTuile(nomTuile);
-        setNomTuile(nomTuile);
 
         try {
             // Récupération de l'image highlight
@@ -40,8 +39,10 @@ public class TuilePanel extends JPanel {
             // Récupération de l'image de la tuile en fonction de son état.
             if (getEtatTuile() == ETAT_TUILE.SECHE){
                 this.setImageTuile(ImageIO.read(new File(nomTuile.getPath())));
-            } else {
+            } else if (getEtatTuile() == ETAT_TUILE.INONDEE) {
                 this.setImageTuile(ImageIO.read(new File(nomTuile.getPathInonde())));
+            } else if (getEtatTuile() == ETAT_TUILE.COULEE){
+                this.setImageTuile(ImageIO.read(new File("images/tuiles/Ocean.png")));
             }
             if (pions != null) {
                 for (PION pion : pions) {
@@ -67,7 +68,7 @@ public class TuilePanel extends JPanel {
         drawPions(this.getImagesPions());
     }
 
-    public static BufferedImage resize(BufferedImage img, int newW, int newH){
+    private static BufferedImage resize(BufferedImage img, int newW, int newH){
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = dimg.createGraphics();
@@ -84,6 +85,9 @@ public class TuilePanel extends JPanel {
                 this.setImageTuile(ImageIO.read(new File(getNomTuile().getPath())));
             } else if (getEtatTuile() == ETAT_TUILE.INONDEE) {
                 this.setImageTuile(ImageIO.read(new File(getNomTuile().getPathInonde())));
+            } else if (getEtatTuile() == ETAT_TUILE.COULEE){
+                System.out.println("oua");
+                this.setImageTuile(ImageIO.read(new File("images/tuiles/Ocean.png")));
             }
 
             // Affichage des pions
