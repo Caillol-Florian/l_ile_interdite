@@ -18,14 +18,23 @@ public class CartePanel extends JPanel {
         }
     }
 
+    public CartePanel(String path, int W, int H){
+        try {
+            this.imageCarte = ImageIO.read(new File(path));
+        } catch (IOException e) {
+            System.out.println("Impossible de récupérer l'image.");
+        }
+    }
+
     public CartePanel(){
 
     }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(resize(imageCarte, 60, 84), 0, 0, null);
+        g.drawImage(resize(imageCarte, 90, 120), 0, 0, null);
     }
+
 
     public static BufferedImage resize(BufferedImage img, int newW, int newH){
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);

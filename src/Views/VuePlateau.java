@@ -31,7 +31,7 @@ public class VuePlateau extends Vue {
 
         window = new JFrame();
         window.setTitle("Ile Interdite");
-        window.setSize(1350, 1000);
+        window.setSize(1450, 1000);
         window.setLocation(0, 0);
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -66,7 +66,24 @@ public class VuePlateau extends Vue {
             cAventurier.gridy = 0; cAventurier.gridx = 0;
             cAventurier.fill = GridBagConstraints.HORIZONTAL;
 
+            cAventurier.weightx = 2;
+            cAventurier.weighty = 2;
+
+            // Role
+            cAventurier.gridy = 0;
+            cAventurier.gridx = 0;
+            cAventurier.gridheight = 2;
+            cAventurier.fill = GridBagConstraints.BOTH;
+
+            CartePanel cartePersonnage = new CartePanel("images/personnages/"+nomRoles.get(i).toLowerCase()+".png");
+            System.out.println("images/personnages/"+nomRoles.get(i).toLowerCase()+".png");
+            cartePersonnage.setPreferredSize(new Dimension(90,120));
+            panelAventurier.add(cartePersonnage, cAventurier);
+
             // Nom de l'aventurier
+            cAventurier.gridy = 0;
+            cAventurier.gridx = 1;
+            cAventurier.gridheight = 1;
             JPanel panelNom = new JPanel();
             panelNom.setBackground(couleurs.get(i));
             JLabel labelNomAventurier = new JLabel(pseudosJoueurs.get(i),SwingConstants.CENTER);
@@ -75,34 +92,12 @@ public class VuePlateau extends Vue {
 
             panelAventurier.add(panelNom, cAventurier);
 
-            // Nom du Role
-            cAventurier.gridy = 1;
-            JPanel panelRole = new JPanel();
-            panelRole.setBackground(couleurs.get(i));
-            JLabel labelNomRole = new JLabel(nomRoles.get(i),SwingConstants.CENTER);
-            labelNomRole.setForeground(Color.WHITE);
-            panelRole.add(labelNomRole);
-
-            panelAventurier.add(panelRole, cAventurier);
-
-            // Position
-            cAventurier.gridy = 2;
-            JPanel panelPosition = new JPanel(new GridLayout(2, 1));
-            panelPosition.add(new JLabel ("Position", SwingConstants.CENTER));
-            JTextField position = new  JTextField(30);
-            position.setHorizontalAlignment(CENTER);
-            position.setEditable(false);
-            panelPosition.add(position);
-
-            panelAventurier.add(panelPosition, cAventurier);
-
             // Cartes
-            cAventurier.gridy = 3;
+            cAventurier.gridy = 1;
             JPanel panelCarte = new JPanel(new GridBagLayout());
             GridBagConstraints cCarte = new GridBagConstraints();
-            cCarte.gridy = 0;
+            //cCarte.gridy = 0;
             cCarte.gridx = 0;
-            panelCarte.add(new JLabel("Cartes"), cCarte);
             cCarte.gridy = 1;
             cCarte.insets = new Insets(3,3,3,3);
 
