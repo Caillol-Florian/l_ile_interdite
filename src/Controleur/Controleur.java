@@ -6,19 +6,14 @@
 package Controleur;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
-import Enums.ETAT_TUILE;
-import Enums.Messages;
-import Enums.NOM_AVENTURIER;
-import Enums.NOM_TUILE;
+import Enums.*;
 import Modèles.*;
 import Modèles.Aventurier.*;
 import Modèles.Carte.CarteAction;
 import Modèles.Carte.CarteInondation;
 import Views.*;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.sound.sampled.*;
 
@@ -36,6 +31,8 @@ public class Controleur implements Observer {
     private ArrayList<CarteAction>pileCartesAction = new ArrayList<>();
     private ArrayList<CarteInondation>pileCartesInondations = new ArrayList<>();
 
+    private ArrayList<NOM_AVENTURIER>roles = new ArrayList<>();
+
     // ==============================
     // Paramètres
     private boolean jeuLance = false;
@@ -45,48 +42,28 @@ public class Controleur implements Observer {
     boolean aAsseché = false; //afin de traiter l'assechement supplementaire de l'ingenieur
     boolean piloteSpecial = false; // Déplacement spécial du pilote
 
-
-    // ==============================
-    // Les vues autres que aventuriers seront rangées dans cet ordre :
-    // 0 : VueInscription
-    // 1 : VueAssechement
-    // 2 : VueDeplacement
-    // 3 : VueMenu
-    private ArrayList<Vue>vues = new ArrayList<>();
+    private int nbJoueurs;
+    private NIVEAU_DIFFICULTE difficulte;
+    private ArrayList<String> pseudos;
 
     // =============================
     // ArrayList des vuesAventuriers
     private ArrayList<VueAventurier> vueAventuriers = new ArrayList<>();
 
+
     // =============================
+    // Vues
+    private VueMenu vueMenu = new VueMenu();
+    private VueInscription vueInscription = new VueInscription();
 
     public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-        // On change les état des tuiles pour qu'elles correspondent au plateau fourni
-        getGrille().getTuiles()[0][3].setEtat(ETAT_TUILE.INONDEE);
-        getGrille().getTuiles()[2][2].setEtat(ETAT_TUILE.COULEE);
-        getGrille().getTuiles()[3][1].setEtat(ETAT_TUILE.INONDEE);
-        getGrille().getTuiles()[3][3].setEtat(ETAT_TUILE.INONDEE);
-        getGrille().getTuiles()[3][4].setEtat(ETAT_TUILE.COULEE);
-        getGrille().getTuiles()[3][2].setEtat(ETAT_TUILE.COULEE);
-        getGrille().getTuiles()[3][5].setEtat(ETAT_TUILE.INONDEE);
-        getGrille().getTuiles()[4][2].setEtat(ETAT_TUILE.COULEE);
-        getGrille().getTuiles()[5][3].setEtat(ETAT_TUILE.INONDEE);
 
-        // Création des différentes vues
-        VueInscription vueInscription = new VueInscription();
-        VueAssechement vueAssechement = new VueAssechement();
-        VueDeplacement vueDeplacement = new VueDeplacement();
-        VueMenu vueMenu = new VueMenu();
+        //Ajout observer aux différentes vues
+        vueMenu.abonner(this);
+        vueInscription.abonner(this);
 
-
-        // Abonnement
-        addView(vueInscription);
-        addView(vueAssechement);
-        addView(vueDeplacement);
-        addView(vueMenu);
-
-        // On commence par l'inscription des joueurs
-        openView(vues.get(3));
+        //Lancement du jeu
+        openView(vueMenu);
 
         //pour l'exécuter au moment ou la fenêtre s'ouvre
         //AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/src/Controleur/1055.wav"));
@@ -98,117 +75,90 @@ public class Controleur implements Observer {
         //clip.loop((int)clip.getMicrosecondLength());
     }
 
-    public void addView(Vue vue){
-        vue.abonner(this);
-        vues.add(vue);
-    }
-
-    public void addViewAventurier(VueAventurier vue){
-        vue.abonner(this);
-        vueAventuriers.add(vue);
-    }
-
-    public void startInscription(){
-        // Ouverture de la vue Inscription
-        openView(vues.get(0));
-    }
 
     public void startGame(){
-        // Pour chaque aventurier on ouvre sa vue correspondante en mettant à jour la position affichée
+        /* // Pour chaque aventurier on ouvre sa vue correspondante en mettant à jour la position affichée
         // On active/désactive les boutons de la vue s'il s'agit du joueurActif (Dans ce cas là joueurActif = 0 donc la seule vue avec les boutons activés est celui du Joueur n°1
         for(int i = 0; i < vueAventuriers.size() ; i++){
             openView(vueAventuriers.get(i));
             updatePos(i);
             enableBouton(i == joueurActif, i);
             jeuLance = true;
-        }
+        }*/
     }
 
     @Override
     public void update(Observable o, Object arg) {
 
-        // =====================================
-        // Ouverture vue Inscrition
+        // ---------------------------------- //
+        // -------- MENU PRINCIPALE --------- //
+        // ---------------------------------- //
 
         if (arg == Messages.INSCRPTION){
-            startInscription();
+            openView(vueInscription);
             closeView((Vue)o);
+        }
+
+        //Ajout vue règles
+
+        if (arg == Messages.QUITTER){
+            closeView(((Vue)o));
         }
 
         // ---------------------------------- //
         // ----- INSCRIPTION DES JOUEURS ---- //
         // ---------------------------------- //
 
-        if (arg == Messages.VALIDERINSCRIPTION) {
-            // Si le rôle sélectionné est l'explorateur, on créé un Explorateur avec les infos rentrées par le joueur
-            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.EXPLORATEUR) {
-                Explorateur aventurier = new Explorateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), ((Vue) o).getNom());
-                aventuriers.add(aventurier);
 
-                // On créé aussi la vue associé à cet aventurier en récupérant ses informations. A savoir : l'index de la vue dans l'ArrayList des VueAventurier est le même que celui de l'aventurier dans l'ArrayList aventuriers
-                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
-                addViewAventurier(vueAventurier);
+        if (arg == Messages.SUIVANT) {
+            //récupération des paramètres de jeu
+            nbJoueurs = ((VueInscription)o).getNombreJoueurs();
+            difficulte = ((VueInscription)o).getNiveauDifficulte();
+            pseudos = ((VueInscription)o).getPseudos();
+
+            //On créer les aventuriers en leur attribbuant alétoirement un role
+            for (NOM_AVENTURIER role : NOM_AVENTURIER.values()){
+                roles.add(role);
+            }
+            Collections.shuffle(roles);
+
+            int i=0;
+            while (i<nbJoueurs){
+                if (roles.get(i).equals(NOM_AVENTURIER.EXPLORATEUR)){
+                    Explorateur aventurier = new Explorateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    aventuriers.add(aventurier);
+                }
+                if (roles.get(i).equals(NOM_AVENTURIER.INGENIEUR)){
+                    Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    aventuriers.add(aventurier);
+                }
+                if (roles.get(i).equals(NOM_AVENTURIER.MESSAGER)){
+                    Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    aventuriers.add(aventurier);
+                }
+                if (roles.get(i).equals(NOM_AVENTURIER.NAVIGATEUR)){
+                    Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    aventuriers.add(aventurier);
+                }
+                if (roles.get(i).equals(NOM_AVENTURIER.PILOTE)){
+                    Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    aventuriers.add(aventurier);
+                }
+                if (roles.get(i).equals(NOM_AVENTURIER.PLONGEUR)){
+                    Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    aventuriers.add(aventurier);
+                }
+                i++;
             }
 
-            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.INGENIEUR) {
-                Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_BRONZE), ((Vue) o).getNom());
-                aventuriers.add(aventurier);
-
-                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
-                addViewAventurier(vueAventurier);
-            }
-
-            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.MESSAGER) {
-                Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_FER), ((Vue) o).getNom());
-                aventuriers.add(aventurier);
-
-                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
-                addViewAventurier(vueAventurier);
-            }
-
-            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.NAVIGATEUR) {
-                Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_OR), ((Vue) o).getNom());
-                aventuriers.add(aventurier);
-
-                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
-                addViewAventurier(vueAventurier);
-            }
-
-            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PILOTE) {
-                Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.HELIPORT), ((Vue) o).getNom());
-                aventuriers.add(aventurier);
-
-                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
-                addViewAventurier(vueAventurier);
-            }
-
-            if (((Vue) o).getRoleSelectionne() == NOM_AVENTURIER.PLONGEUR) {
-                Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_ARGENT), ((Vue) o).getNom());
-                aventuriers.add(aventurier);
-
-                VueAventurier vueAventurier = new VueAventurier(aventurier.getNomJoueur(), aventurier.getNomRole(), aventurier.getPion().getCouleur(), aventuriers.size()-1);
-                addViewAventurier(vueAventurier);
-            }
-
-            // Dès lors qu'on a inscrit 2 joueurs, on active le bouton Finir ce qui rend la fin de l'inscription possible (On a donc 2 à 4 joueurs)
-            if(aventuriers.size() == 2){
-                ((Vue)o).getBtnFinir().setEnabled(true);
-            }
-
-            if(aventuriers.size()==4){ // Si après avoir inscrit un aventurier il s'agissait du 4ème joueur (aventuriers.size() est désormais = à 4), on commence la partie
-                closeView((Vue) o);
-                startGame();
-            }
-
-            // On remet à 0 la vue après avoir inscrit un joueur.
-            ((Vue) o).resetInscription(((Vue) o).getRoleSelectionne());
+            closeView((Vue)o);
+            startGame();
         }
 
-        // Si on clique sur le bouton Finir pendant l'inscription, on lance directement la partie.
-        if (arg == Messages.FINIRINSCRIPTION) {
-             closeView((Vue)o);
-             startGame();
-        }
+        //setup la Vue niveau avec la difficulté
+
+        //construite les p
+
 
         // ---------------------------------- //
         // --------- VUE AVENTURIER  -------- //
@@ -216,8 +166,8 @@ public class Controleur implements Observer {
 
             // Ouverture de la vue Assèchement
         if (arg == Messages.ASSECHER) {
-            openView(vues.get(1));
-            vues.get(1).setAvailableTuile(aventuriers.get(joueurActif%aventuriers.size()).getTuilesAssechables(grille));
+            //openView(vues.get(1));
+            //vues.get(1).setAvailableTuile(aventuriers.get(joueurActif%aventuriers.size()).getTuilesAssechables(grille));
         }
 
             // Validation de la case à assécher
@@ -249,11 +199,11 @@ public class Controleur implements Observer {
                 // S'il est pilote, on affiche les tuiles disponibles en fonction de s'il a utilisé son déplacement spécial
             // SINON, on affiche les tuiles des autres aventuriers.
             if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
-               vues.get(2).setAvailableTuile(((Pilote) aventuriers.get(joueurActif%aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial));
+               //vues.get(2).setAvailableTuile(((Pilote) aventuriers.get(joueurActif%aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial));
             } else {
-                vues.get(2).setAvailableTuile(aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
+               // vues.get(2).setAvailableTuile(aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
             }
-            openView(vues.get(2));
+            //openView(vues.get(2));
         }
 
         if (arg == Messages.VALIDERDEPLACEMENT) {

@@ -374,8 +374,9 @@ public class VueInscription extends Vue {
     }
 
     public ArrayList<String> getPseudos() {
-        for (JTextField jTextField : JTextFields){
-            pseudos.add(jTextField.getText());
+        pseudos.clear();
+        for (int i = 0; i<getNombreJoueurs();i++){
+            pseudos.add(JTextFields.get(i).getText());
         }
         return pseudos;
     }

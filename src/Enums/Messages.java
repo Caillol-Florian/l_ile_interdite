@@ -2,6 +2,7 @@ package Enums;
 
 public enum Messages {
     INSCRPTION,
+    QUITTER,
     VALIDERINSCRIPTION,
     FINIRINSCRIPTION,
     DEPLACER,

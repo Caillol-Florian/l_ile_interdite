@@ -107,7 +107,7 @@ public class VueMenu extends Vue {
         mainPanel.add(btnRegle,gc);
 
 
-        //btn settings
+        //btn quitter
 
         gc.gridx = 2;
         gc.gridy = 11;
@@ -119,6 +119,15 @@ public class VueMenu extends Vue {
         btnQuitter.setFont(regular);
         btnQuitter.setPreferredSize( new Dimension(170,40));
         mainPanel.add(btnQuitter,gc);
+
+        btnQuitter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.QUITTER);
+                clearChanged();
+            }
+        });
     }
 
     private class PanelAvecImage extends JPanel {
