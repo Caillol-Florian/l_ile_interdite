@@ -1,15 +1,14 @@
 package Views;
 
-import Enums.ETAT_TUILE;
-import Enums.Messages;
-import Enums.NOM_TUILE;
-import Enums.PION;
+import Enums.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.awt.*;
@@ -141,9 +140,28 @@ public class VuePlateau extends Vue {
         });
         panelBoutons.add(btnBouger);
 
-        panelBoutons.add(new JButton("Assécher"));
+        JButton btnAssecher = new JButton("Se Assécher");
+        btnAssecher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.ASSECHER);
+                clearChanged();
+            }
+        });
+        panelBoutons.add(btnAssecher);
+
         panelBoutons.add(new JButton("Autre action"));
-        panelBoutons.add(new JButton("Passer son tour"));
+
+        JButton btnFinir = new JButton("Finir Tour");
+        btnFinir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.FINTOUR);
+                clearChanged();
+            }
+        });
 
         // =============================================================
         // Panel Grille
@@ -170,12 +188,12 @@ public class VuePlateau extends Vue {
         int indexTresor = 0;
         for(int i = 0; i < 6; i++){
             for (int j = 0; j < 6; j++){
+                // Tuiles vide
                 if(((i == 0 || i == 5) && (j == 1 || j == 4)) || ((i == 1 || i == 4) && (j==0 || j == 5))) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
                     this.tableauTuile[i][j] = null;
                     panelPlateau.add(new JLabel(),c);
 
-                } else if((i == 0 || i == 5) && (j==0 || j == 5)){
-
+                } else if((i == 0 || i == 5) && (j==0 || j == 5)){ // Trésors
                     TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
                     this.tableauTuile[i][j] = tresor;
                     panelPlateau.add(tresor, c);
@@ -183,9 +201,31 @@ public class VuePlateau extends Vue {
                     tresor.setOpaque(false);
                     indexTresor++;
                 }
-                else{
+                else{ // Tuiles
                     System.out.println("i : " + i + " - j : " + j);
                     TuilePanel tuile = new TuilePanel(nomsTuiles.get(index), ETAT_TUILE.SECHE, null);
+                    tuile.addMouseListener(new MouseListener() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {}
+
+                        @Override
+                        public void mousePressed(MouseEvent e) {}
+
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                            setChanged();
+                            Message_Coche m = new Message_Coche(tuile.getNomTuile());
+                            notifyObservers(m);
+                            clearChanged();
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {}
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {}
+                    });
+
                     panelPlateau.add(tuile, c);
                     this.tableauTuile[i][j] = tuile;
                     index++;
@@ -197,6 +237,13 @@ public class VuePlateau extends Vue {
             c.gridx = 0;
             c.gridy++;
         }
+
+        ArrayList<PION>pions = new ArrayList<>();
+        pions.add(PION.BLEU);
+        tableauTuile[1][1].update(ETAT_TUILE.SECHE, pions);
+        pions.clear();
+        tableauTuile[1][1].update(ETAT_TUILE.SECHE, pions);
+
         // ===
         window.setVisible(true);
     }
@@ -235,18 +282,25 @@ public class VuePlateau extends Vue {
         return cartesAventurier;
     }
 
-    public void setAvailableTuiles (ArrayList<Integer> coordonnesTuiles){
+    public void highlightTuiles (boolean hightlightOn, ArrayList<Integer> coordonnesTuiles){
         int i = 0;
 
         while (i < coordonnesTuiles.size()-1){
             System.out.print(coordonnesTuiles.get(i));System.out.println(coordonnesTuiles.get(i+1) + " -");
-            getTableauTuile()[coordonnesTuiles.get(i)][coordonnesTuiles.get(i+1)].highlight();
-            getTableauTuile()[coordonnesTuiles.get(i)][coordonnesTuiles.get(i+1)].repaint(); // On repaint (nécessaire pour que la vue actualise le JPanel)
+            getTableauTuile()[coordonnesTuiles.get(i)][coordonnesTuiles.get(i+1)].highlight(hightlightOn);
             i += 2;
         }
-
     }
 
+    public void highlightOff(){
+        for(int i = 0; i < getTableauTuile().length; i++){
+            for(int j = 0; j < getTableauTuile().length; j++){
+                if((!((i == 0 || i == 5) && (j == 1 || j == 4 || j == 5) || j == 0) || ((i == 1 || i == 4) && (j==0 || j == 5))) && getTableauTuile()[i][j] != null) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
+                    getTableauTuile()[i][j].highlight(false);
+                }
+            }
+        }
+    }
     @Override
     public void setVisible(Boolean b) {
         window.setVisible(b);

@@ -15,7 +15,7 @@ public class Pilote extends Aventurier {
         setPion(PION.BLEU);
     }
 
-    public ArrayList getTuilesAccesibles(Grille g, Boolean specialUtilisé){
+    public ArrayList<Integer> getTuilesAccesibles(Grille g, Boolean specialUtilisé){
         if (!specialUtilisé) {
             return g.getTuilesNonCoulee(getPosition());
         } else {

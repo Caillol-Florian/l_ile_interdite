@@ -74,6 +74,8 @@ public class TuilePanel extends JPanel {
 
     public void update(ETAT_TUILE etatTuile, ArrayList<PION> pions){
         try {
+
+
             // Actualisation de l'état de la tuile
             // On récupère l'image de la tuile correspondant à son état
             if (etatTuile == ETAT_TUILE.SECHE){
@@ -82,17 +84,18 @@ public class TuilePanel extends JPanel {
                 this.imageTuile = ImageIO.read(new File(nomTuile.getPathInonde()));
             }
 
-            // Actualisation des pions
-            this.imagesPions.clear();
-            for(PION pion : pions) {
-                this.imagesPions.add(ImageIO.read(new File(pion.getPath())));
-            }
-
-            // Affichage du nouvel état de la tuile
-            imageTuile.getGraphics().drawImage(imageTuile, 0, 0, null);
-
             // Affichage des pions
-            drawPions(this.imagesPions);
+                // Actualisation des pions
+                this.imagesPions.clear();
+                if(!pions.isEmpty()) {
+                    for (PION pion : pions) {
+                        this.imagesPions.add(ImageIO.read(new File(pion.getPath())));
+                    }
+                }
+
+            Image image = new BufferedImage(150, 150, BufferedImage.TYPE_INT_ARGB);
+            paintComponent(image.getGraphics());
+            repaint();
 
         } catch (IOException e) {
             System.out.println("Impossible de récupérer l'image.");
@@ -109,16 +112,25 @@ public class TuilePanel extends JPanel {
         }
     }
 
-    public void highlight(){
+    public void highlight(Boolean hightlightOn){
         // Affichage du nouvel état de la tuile
         imageTuile.getGraphics().drawImage(imageTuile, 0, 0, null);
 
         // Highlight
+        if (hightlightOn) {
             imageTuile.getGraphics().drawImage(resize(highlight, 503, 502), 0, 0, null);
-
+        } else {
+            update(ETAT_TUILE.SECHE, this.pions);
+        }
 
         // Affichage des pions
         drawPions(this.imagesPions);
+
+        repaint();
+    }
+
+    public NOM_TUILE getNomTuile() {
+        return nomTuile;
     }
 
     public ArrayList<PION> getPions(){
