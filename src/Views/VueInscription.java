@@ -104,6 +104,7 @@ public class VueInscription extends Vue {
         gc.insets = new Insets(0,55,0,0);
 
         JLabel titre = new JLabel("Veuillez séléctionner le nombre de joueur");
+        titre.setForeground(Color.WHITE);
         titre.setFont(regular);
         mainPanel.add(titre,gc);
 
@@ -180,6 +181,7 @@ public class VueInscription extends Vue {
         gc.insets = new Insets(0,55,0,0);
 
         JLabel pseudoLabel = new JLabel("Veuillez entrer vos pseudos (obligatoire)");
+        pseudoLabel.setForeground(Color.WHITE);
         pseudoLabel.setFont(regular);
         mainPanel.add(pseudoLabel,gc);
 
@@ -210,6 +212,7 @@ public class VueInscription extends Vue {
         gc.insets = new Insets(0,55,0,0);
 
         JLabel difficulteChoix = new JLabel("Veuillez séléctionner le niveau de difficulté");
+        difficulteChoix.setForeground(Color.WHITE);
         difficulteChoix.setFont(regular);
         mainPanel.add(difficulteChoix,gc);
 

@@ -31,7 +31,9 @@ public class Controleur implements Observer {
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
     private Grille grille = new Grille();
     private ArrayList<CarteAction>pileCartesAction = new ArrayList<>();
+    private ArrayList<CarteAction>défausseCarteAction = new ArrayList<>();
     private ArrayList<CarteInondation>pileCartesInondations = new ArrayList<>();
+    private ArrayList<CarteInondation>défausseCarteInondations = new ArrayList<>();
 
     private ArrayList<NOM_AVENTURIER>roles = new ArrayList<>();
 
@@ -102,8 +104,6 @@ public class Controleur implements Observer {
             pileCartesInondations.add(carteInondation);
         }
 
-
-
         // Initialisation de la pile de Carte Actions
         // Carte trésors (5 de chaque)
         for (int i=0; i<5; i++){
@@ -163,6 +163,27 @@ public class Controleur implements Observer {
         jeuLance = true;
         //Création de la Vue niveau avec la difficulté
         vueNiveau = new VueNiveau(difficulte);
+
+        // Tirage des 6 premières tuiles inondées
+        Tuile tuileInondée;
+        int[] coordonneeTuile = new int[2];
+        for(int i = 0; i < 6; i++){
+            // Récupération de la tuile correspondante et ses coordonnées
+            tuileInondée = pileCartesInondations.get(0).getTuile();
+            // Actualisation modèle
+            getGrille().getTuile(tuileInondée.getNom()).setEtat(ETAT_TUILE.INONDEE);
+            coordonneeTuile[0] = getGrille().getCordonneesTuiles(tuileInondée)[0];
+            coordonneeTuile[1] = getGrille().getCordonneesTuiles(tuileInondée)[1];
+            // Actualisation visuelle
+            vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].setEtatTuile(ETAT_TUILE.INONDEE);
+            vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].update(vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].getPions());
+
+            // Ajout à la défausse
+            défausseCarteInondations.add(pileCartesInondations.get(0));
+            pileCartesInondations.remove(pileCartesInondations.get(0));
+
+            System.out.println(tuileInondée.getNom());
+        }
     }
 
     @Override
@@ -243,35 +264,14 @@ public class Controleur implements Observer {
         // --------- VUE AVENTURIER  -------- //
         // ---------------------------------- //
 
-            // Ouverture de la vue Assèchement
+            // Mise en évidence des tuiles pour assécher
         if (arg == Messages.ASSECHER) {
             vuePlateau.highlightTuiles(true, aventuriers.get(joueurActif % aventuriers.size()).getTuilesAssechables(grille));
             deplacementActif = false;
             assechementActif = true;
         }
 
-            // Validation de la case à assécher
-        if (arg == Messages.VALIDERASSECHEMENT) {
-            if(((Vue) o).getTuileSelectionnee() != null) {
-                getGrille().getTuile(((Vue) o).getTuileSelectionnee()).setEtat(ETAT_TUILE.SECHE);
-                closeView((Vue) o);
-
-                // Si l'aventurier qui assèche est un ingénieur et qu'il n'a pas déjà asseché
-                if (aventuriers.get(joueurActif % aventuriers.size()).getNomRole() == NOM_AVENTURIER.INGENIEUR && !aAsseché) {
-                aAsseché = true; // On change la valeur aAsseché en true
-                } else if (aAsseché) { // S'il a déjà asseché
-                    nbActions++; // On augmente le nombre d'action effectué
-                    aAsseché = false; // On remet la valeur aAsseché en false
-                } else {
-                    nbActions++; // Sinon s'il s'agit pas d'un ingénieur on augmente le nombre d'action
-                }
-            } else {
-
-                Utils.afficherInformation("Aucune tuile sélectionnée !");
-            }
-        }
-
-            // Ouverture de la vue Déplacement
+            // Mise en évidence des tuiles pour se déplacer
         if (arg == Messages.DEPLACER) {
             // Afin de traiter le déplacement du pilote :
             // On vérifie que le joueur actif est un pilote
@@ -287,12 +287,17 @@ public class Controleur implements Observer {
             deplacementActif = true;
         }
 
-
+        // ===============================================
+        // VALIDATION DEPLACEMENT / ASSECHEMENT
         if(arg instanceof Message_Coche){
             // Récupération du nom de la tuile sélectionnée
             NOM_TUILE tuileSelectionnee = ((Message_Coche)arg).getNomTuile();
-            System.out.println(tuileSelectionnee);
+            int[] coordSelectionnee = new int[2];
+            coordSelectionnee[0] = getGrille().getCordonneesTuiles(getGrille().getTuile(tuileSelectionnee))[0];
+            coordSelectionnee[1] = getGrille().getCordonneesTuiles(getGrille().getTuile(tuileSelectionnee))[1];
 
+            // ==========================================
+            // DEPLACEMENT
             if (deplacementActif){
                 // Désactivation du highlight
                 if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
@@ -302,49 +307,74 @@ public class Controleur implements Observer {
                 }
 
 
-                // Ancienne tuile
+                // ============================
+                // UPDATE MODELE / VUE
+
+                // ===================================
+                // RETIRER LE PION DE L'ANCIENNE TUILE
                 // Ancienne coordonnées
                 int[] coordAncienne = new int[2];
                 coordAncienne[0] = getGrille().getCordonneesTuiles(aventuriers.get(joueurActif % aventuriers.size()).getPosition())[0];
                 coordAncienne[1] = getGrille().getCordonneesTuiles(aventuriers.get(joueurActif % aventuriers.size()).getPosition())[1];
                 // Update visuelle
-                ETAT_TUILE etatTuile = getGrille().getTuile(tuileSelectionnee).getEtat();
                 ArrayList<PION> pionsTuile = vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].getPions();
                 pionsTuile.remove(aventuriers.get(joueurActif%aventuriers.size()).getPion());
-                vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].update(etatTuile, pionsTuile);
+                vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].update(pionsTuile);
 
-                // Déplacement modèle
-                aventuriers.get(joueurActif % aventuriers.size()).setPosition(getGrille().getTuile(tuileSelectionnee));
-
-                // Nouvelle tuile
+                // =====================================
+                // AJOUTER LE PION SUR L'ANCIENNE TUILE
                 // Coordonnées sélectionnées
-                int[] coordSelectionnee = new int[2];
-                coordSelectionnee[0] = getGrille().getCordonneesTuiles(getGrille().getTuile(tuileSelectionnee))[0];
-                coordSelectionnee[1] = getGrille().getCordonneesTuiles(getGrille().getTuile(tuileSelectionnee))[1];
-
                 // Update visuelle
-                etatTuile = getGrille().getTuile(tuileSelectionnee).getEtat();
                 ArrayList<PION> newPions = vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions();
                 newPions.add(aventuriers.get(joueurActif%aventuriers.size()).getPion());
-                vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(etatTuile, newPions);
+                vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(newPions);
 
-                nbActions++;
-                deplacementActif = false;
+
+                // ====================================
                 // Vérification si le pilote a utilisé son déplacement spécial :
                 // Si la tuile sélectionnée n'est pas une tuile adjacente au pilote alors il a utilisé son pouvoir
                 if (aventuriers.get(joueurActif % aventuriers.size()) instanceof Pilote){
-                    boolean specialUtilisé = false;
                     int i = 0;
-                    while(i < ((Pilote) aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial).size() && specialUtilisé == false){
-                        if(((Pilote) aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial).get(i) != coordSelectionnee[0] && ((Pilote) aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial).get(i+1) != coordSelectionnee[1]){
-                            specialUtilisé = true;
+                    boolean dedans = false;
+                    while(i < ((aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille).size())-1 && dedans == false){
+                        if((aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille).get(i+1) == coordSelectionnee[1]){
+                            dedans = true;
                         }
                         i+=2;
                     }
-                    // if ( !((ArrayList<Tuile>) (aventuriers.get(joueurActif% aventuriers.size())).getTuilesAccesibles(grille)).contains(getGrille().getTuile(((Vue) o).getTuileSelectionnee()))){
-                    piloteSpecial = true;
+                    if(!dedans){
+                        piloteSpecial = true;
+                    }
+                }
+
+                // ====================================
+                // ACTUALISATION POSITION MODELE
+                aventuriers.get(joueurActif % aventuriers.size()).setPosition(getGrille().getTuile(tuileSelectionnee));
+                deplacementActif = false;
+                nbActions++;
+
+            } else if (assechementActif){
+                // Désactivation du highlight
+                vuePlateau.highlightTuiles(false, aventuriers.get(joueurActif % aventuriers.size()).getTuilesAssechables(grille));
+
+
+                getGrille().getTuiles()[coordSelectionnee[0]][coordSelectionnee[1]].setEtat(ETAT_TUILE.SECHE);
+                vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].setEtatTuile(ETAT_TUILE.SECHE);
+                vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions());
+                assechementActif = false;
+
+                // Assèchement bonus de l'ingénieur
+                // Si l'aventurier qui assèche est un ingénieur et qu'il n'a pas déjà asseché
+                if (aventuriers.get(joueurActif % aventuriers.size()).getNomRole() == NOM_AVENTURIER.INGENIEUR && !aAsseché) {
+                    aAsseché = true; // On change la valeur aAsseché en true
+                } else if (aAsseché) { // S'il a déjà asseché
+                    nbActions++; // On augmente le nombre d'action effectué
+                    aAsseché = false; // On remet la valeur aAsseché en false
+                } else {
+                    nbActions++; // Sinon s'il s'agit pas d'un ingénieur on augmente le nombre d'action
                 }
             }
+
         }
         if (arg == Messages.AUTRE) {
             Utils.afficherInformation("Cette fonctionnalité n'est pas encore disponible !");
@@ -364,7 +394,8 @@ public class Controleur implements Observer {
         // Si l'ingénieur a effectué 2 actions et qu'il a déjà asséché une fois, il n'a plus le choix que de profiter de son
         // assèchement bonus ou de passer le tour.
         if (nbActions == 2 & aAsseché){
-            vueAventuriers.get(joueurActif%aventuriers.size()).getBtnBouger().setEnabled(false);
+            vuePlateau.getBtnBouger().setEnabled(false);
+            vuePlateau.getBtnAutre().setEnabled(false);
         }
 
         // ---------------------------------- //
@@ -378,11 +409,21 @@ public class Controleur implements Observer {
 
             // tourPassé est true si on a atteint le nombre maximum d'actions possibles ou qu'on a appuyé sur le bouton Fin Tour
             if (tourPassé) {
+                // Désactivation du highlight si le joueur a cliqué sur le bouton déplacer / assécher mais n'a pas validé l'assèchement
+                if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
+                    vuePlateau.highlightTuiles(false, ((Pilote) aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial));
+                } else {
+                    vuePlateau.highlightTuiles(false, aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
+                    vuePlateau.highlightTuiles(false, aventuriers.get(joueurActif % aventuriers.size()).getTuilesAssechables(grille));
+                }
+
                 joueurActif++; // On passe au prochain joueur
                 nbActions = 0; // On remet le nombre d'actions effectuées à 0
                 tourPassé = false; // Le tour n'est plus passé
                 aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
                 piloteSpecial = false; // Reset de l'action spéciale du pilote
+
+                enableBoutons();
             }
         }
     }
@@ -393,7 +434,15 @@ public class Controleur implements Observer {
         ArrayList<PION>pions;
         pions = vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].getPions();
         pions.add(pion);
-        vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].update(ETAT_TUILE.SECHE, pions);
+        vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].update(pions);
+
+    }
+
+    public void enableBoutons(){
+        vuePlateau.getBtnAssecher().setEnabled(true);
+        vuePlateau.getBtnFinir().setEnabled(true);
+        vuePlateau.getBtnAutre().setEnabled(true);
+        vuePlateau.getBtnBouger().setEnabled(true);
     }
 
     public Grille getGrille(){

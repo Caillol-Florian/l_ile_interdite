@@ -16,6 +16,7 @@ public class TuilePanel extends JPanel {
 
     private BufferedImage imageTuile;
     private NOM_TUILE nomTuile;
+    private ETAT_TUILE etatTuile;
     private ArrayList<BufferedImage>imagesPions = new ArrayList<>();
     private ArrayList<PION> pions;
     BufferedImage highlight;
@@ -23,26 +24,28 @@ public class TuilePanel extends JPanel {
 
     public TuilePanel(NOM_TUILE nomTuile, ETAT_TUILE etatTuile, ArrayList<PION>pions) {
         if(pions == null){
-            this.pions = new ArrayList<>();
+            this.setPions(new ArrayList<>());
         } else {
-            this.pions = pions;
+            this.setPions(pions);
         }
 
-        this.nomTuile = nomTuile;
+        setEtatTuile(etatTuile);
+        setNomTuile(nomTuile);
+        setNomTuile(nomTuile);
 
         try {
             // Récupération de l'image highlight
             this.highlight = ImageIO.read(new File("images/tuiles/highlight.png"));
 
             // Récupération de l'image de la tuile en fonction de son état.
-            if (etatTuile == ETAT_TUILE.SECHE){
-                this.imageTuile = ImageIO.read(new File(nomTuile.getPath()));
+            if (getEtatTuile() == ETAT_TUILE.SECHE){
+                this.setImageTuile(ImageIO.read(new File(nomTuile.getPath())));
             } else {
-                this.imageTuile = ImageIO.read(new File(nomTuile.getPathInonde()));
+                this.setImageTuile(ImageIO.read(new File(nomTuile.getPathInonde())));
             }
             if (pions != null) {
                 for (PION pion : pions) {
-                    this.imagesPions.add(ImageIO.read(new File(pion.getPath())));
+                    this.getImagesPions().add(ImageIO.read(new File(pion.getPath())));
                 }
             }
         } catch (IOException e) {
@@ -52,7 +55,7 @@ public class TuilePanel extends JPanel {
 
     public TuilePanel(String path){
         try {
-            this.imageTuile = ImageIO.read(new File(path));
+            this.setImageTuile(ImageIO.read(new File(path)));
         } catch (IOException e) {
             System.out.println("Impossible de récupérer l'image.");
         }
@@ -60,8 +63,8 @@ public class TuilePanel extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(resize(imageTuile, 150, 150), 0, 0, null);
-        drawPions(this.imagesPions);
+        g.drawImage(resize(getImageTuile(), 150, 150), 0, 0, null);
+        drawPions(this.getImagesPions());
     }
 
     public static BufferedImage resize(BufferedImage img, int newW, int newH){
@@ -73,26 +76,25 @@ public class TuilePanel extends JPanel {
         return dimg;
     }
 
-    public void update(ETAT_TUILE etatTuile, ArrayList<PION> pions){
+    public void update(ArrayList<PION> pions){
         try {
             // Actualisation de l'état de la tuile
             // On récupère l'image de la tuile correspondant à son état
-            if (etatTuile == ETAT_TUILE.SECHE){
-                this.imageTuile = ImageIO.read(new File(nomTuile.getPath()));
-            } else {
-                this.imageTuile = ImageIO.read(new File(nomTuile.getPathInonde()));
+            if (getEtatTuile() == ETAT_TUILE.SECHE){
+                this.setImageTuile(ImageIO.read(new File(getNomTuile().getPath())));
+            } else if (getEtatTuile() == ETAT_TUILE.INONDEE) {
+                this.setImageTuile(ImageIO.read(new File(getNomTuile().getPathInonde())));
             }
 
             // Affichage des pions
                 // Actualisation des pions
-                this.imagesPions.clear();
+                this.getImagesPions().clear();
                 if(!pions.isEmpty()) {
                     for (PION pion : pions) {
-                        this.imagesPions.add(ImageIO.read(new File(pion.getPath())));
+                        this.getImagesPions().add(ImageIO.read(new File(pion.getPath())));
                     }
                 }
 
-            System.out.println(nomTuile + " "+ imagesPions.size());
             Image image = new BufferedImage(150, 150, BufferedImage.TYPE_INT_ARGB);
             paintComponent(image.getGraphics());
             repaint();
@@ -105,8 +107,8 @@ public class TuilePanel extends JPanel {
     public void drawPions(ArrayList<BufferedImage> pions){
         if(!pions.isEmpty()) {
             int index = 15;
-            for (BufferedImage pion : this.imagesPions) {
-                imageTuile.getGraphics().drawImage(pion, index, pion.getHeight(this) / 4, null);
+            for (BufferedImage pion : this.getImagesPions()) {
+                getImageTuile().getGraphics().drawImage(pion, index, pion.getHeight(this) / 4, null);
                 index += pion.getWidth(null);
             }
         }
@@ -114,13 +116,13 @@ public class TuilePanel extends JPanel {
 
     public void highlight(Boolean hightlightOn){
         // Affichage du nouvel état de la tuile
-        imageTuile.getGraphics().drawImage(imageTuile, 0, 0, null);
+        getImageTuile().getGraphics().drawImage(getImageTuile(), 0, 0, null);
 
         // Highlight
         if (hightlightOn) {
-            imageTuile.getGraphics().drawImage(resize(highlight, 503, 502), 0, 0, null);
+            getImageTuile().getGraphics().drawImage(resize(highlight, 503, 502), 0, 0, null);
         } else {
-            update(ETAT_TUILE.SECHE, this.pions);
+            update(getPions());
         }
 
         repaint();
@@ -132,5 +134,33 @@ public class TuilePanel extends JPanel {
 
     public ArrayList<PION> getPions(){
             return pions;
+    }
+
+    public void setEtatTuile(ETAT_TUILE etatTuile) {
+        this.etatTuile = etatTuile;
+    }
+
+    public ETAT_TUILE getEtatTuile() {
+        return etatTuile;
+    }
+
+    public BufferedImage getImageTuile() {
+        return imageTuile;
+    }
+
+    public void setImageTuile(BufferedImage imageTuile) {
+        this.imageTuile = imageTuile;
+    }
+
+    public void setNomTuile(NOM_TUILE nomTuile) {
+        this.nomTuile = nomTuile;
+    }
+
+    public ArrayList<BufferedImage> getImagesPions() {
+        return imagesPions;
+    }
+
+    public void setPions(ArrayList<PION> pions) {
+        this.pions = pions;
     }
 }

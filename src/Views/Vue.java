@@ -19,7 +19,6 @@ public abstract class Vue extends Observable {
     public NOM_AVENTURIER getRoleSelectionne(){return null;}
     public String getNom(){return null;}
     public void resetInscription(NOM_AVENTURIER nom_aventurier){}
-    public JButton getBtnFinir(){return null;}
 
     // =============================
     // Vue Aventurier

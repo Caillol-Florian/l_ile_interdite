@@ -34,6 +34,7 @@ public class VueNiveau {
         window = new JFrame();
         window.setSize(cellWidth * 2 + Parameters.SWING_BORDERS_HEIGHT, Parameters.HAUTEUR_AUTRES_VUES);
         window.setLocation(1450, 0);
+
         window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 
         window.setUndecorated(Parameters.UNDECORATED);

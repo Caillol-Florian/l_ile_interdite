@@ -17,14 +17,10 @@ public class Plongeur extends Aventurier {
     @Override
     public ArrayList getTuilesAccesibles(Grille g) {
 
-        ArrayList<Integer> tuilesAccessibleDirect = g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER);
+        ArrayList<Integer> tuilesAccessibleAdjacentes = g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER);
         ArrayList<Integer> tuilesAccessiblePlongeur = g.getTuilesPlongeur(getPosition());
 
-        for (Integer tuileAccessibleDirect : tuilesAccessibleDirect) {
-            if (!tuilesAccessiblePlongeur.contains(tuileAccessibleDirect)){
-                tuilesAccessiblePlongeur.add(tuileAccessibleDirect);
-            }
-        }
+        tuilesAccessiblePlongeur.addAll(tuilesAccessibleAdjacentes);
 
         return tuilesAccessiblePlongeur;
     }

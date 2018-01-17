@@ -27,6 +27,11 @@ public class VuePlateau extends Vue {
     // Array contenant l'Array des cartes de chaque aventurier.
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
 
+    private JButton btnBouger;
+    private JButton btnAssecher;
+    private JButton btnFinir;
+    private JButton btnAutre;
+
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles) {
 
         window = new JFrame();
@@ -76,7 +81,6 @@ public class VuePlateau extends Vue {
             cAventurier.fill = GridBagConstraints.BOTH;
 
             CartePanel cartePersonnage = new CartePanel("images/personnages/"+nomRoles.get(i).toLowerCase()+".png");
-            System.out.println("images/personnages/"+nomRoles.get(i).toLowerCase()+".png");
             cartePersonnage.setPreferredSize(new Dimension(90,120));
             panelAventurier.add(cartePersonnage, cAventurier);
 
@@ -124,7 +128,7 @@ public class VuePlateau extends Vue {
         JPanel panelBoutons = new JPanel(new GridLayout(2,2));
         cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
         panelAventuriers.add(panelBoutons, cColonneAventurier);
-        JButton btnBouger = new JButton("Se déplacer");
+        btnBouger = new JButton("Se déplacer");
         btnBouger.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,7 +139,7 @@ public class VuePlateau extends Vue {
         });
         panelBoutons.add(btnBouger);
 
-        JButton btnAssecher = new JButton("Se Assécher");
+        btnAssecher = new JButton("Assécher");
         btnAssecher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,9 +150,10 @@ public class VuePlateau extends Vue {
         });
         panelBoutons.add(btnAssecher);
 
-        panelBoutons.add(new JButton("Autre action"));
+        btnAutre  = new JButton("Autre action");
+        panelBoutons.add(btnAutre);
 
-        JButton btnFinir = new JButton("Finir Tour");
+        btnFinir = new JButton("Finir Tour");
         btnFinir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,6 +162,8 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
+        panelBoutons.add(btnFinir);
+
 
         // =============================================================
         // Panel Grille
@@ -197,7 +204,6 @@ public class VuePlateau extends Vue {
                     indexTresor++;
                 }
                 else{ // Tuiles
-                    System.out.println("i : " + i + " - j : " + j);
                     TuilePanel tuile = new TuilePanel(nomsTuiles.get(index), ETAT_TUILE.SECHE, null);
                     tuile.addMouseListener(new MouseListener() {
                         @Override
@@ -232,13 +238,6 @@ public class VuePlateau extends Vue {
             c.gridx = 0;
             c.gridy++;
         }
-
-        ArrayList<PION>pions = new ArrayList<>();
-        pions.add(PION.BLEU);
-        tableauTuile[1][1].update(ETAT_TUILE.SECHE, pions);
-        pions.clear();
-        tableauTuile[1][1].update(ETAT_TUILE.SECHE, pions);
-
         // ===
         window.setVisible(true);
     }
@@ -281,11 +280,27 @@ public class VuePlateau extends Vue {
         int i = 0;
 
         while (i < coordonnesTuiles.size()-1){
-            System.out.print(coordonnesTuiles.get(i));System.out.println(coordonnesTuiles.get(i+1) + " -");
             getTableauTuile()[coordonnesTuiles.get(i)][coordonnesTuiles.get(i+1)].highlight(hightlightOn);
             i += 2;
         }
     }
+
+    public JButton getBtnAssecher() {
+        return btnAssecher;
+    }
+
+    public JButton getBtnAutre() {
+        return btnAutre;
+    }
+
+    public JButton getBtnFinir() {
+        return btnFinir;
+    }
+
+    public JButton getBtnBouger() {
+        return btnBouger;
+    }
+
     @Override
     public void setVisible(Boolean b) {
         window.setVisible(b);
