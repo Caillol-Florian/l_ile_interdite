@@ -141,6 +141,7 @@ public class Grille {
         ArrayList<Tuile>tuilesPlongeur = new ArrayList<>();
         ArrayList<Tuile>tuilesPlongeurIntermediaire = new ArrayList<>();
         ArrayList<Tuile>tuilesPlongeurIntermediaire2 = new ArrayList<>();
+        ArrayList<Integer>cordonneesFinales = new ArrayList<>();
         Boolean rechercheDeTuile = false;
 
         int[] coordonnes = this.getCordonneesTuiles(tuile);
@@ -223,7 +224,6 @@ public class Grille {
                     if (!tuilesPlongeur.contains(tuiles[coordonnes[0]][coordonnes[1]+1])){
                         tuilesPlongeur.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
                     }
-
                 }
             }
 
@@ -236,22 +236,28 @@ public class Grille {
 
         tuilesPlongeur.remove(tuile);
 
-        return tuilesPlongeur;
+        for(Tuile tuileP : tuilesPlongeur){
+            cordonneesFinales.add(getCordonneesTuiles(tuileP)[0]);
+            cordonneesFinales.add(getCordonneesTuiles(tuileP)[1]);
+        }
+
+        return cordonneesFinales;
 
 
     }
 
-    public ArrayList getTuilesNonCoulee(Tuile tuile){
-        ArrayList<Tuile>tuilesSeches = new ArrayList<>();
+    public ArrayList<Integer> getTuilesNonCoulee(Tuile tuile){
+        ArrayList<Integer>tuilesSeches = new ArrayList<>();
 
         for(int i = 0; i < tuiles.length ; i++) { // Lignes
             for (int j = 0; j < tuiles.length; j++) { // Colonnes
-                if (!tuiles[i][j].estCoulee()){
-                    tuilesSeches.add(tuiles[i][j]);
+                if (!tuiles[i][j].estCoulee() && tuiles[i][j] != tuile){
+                    tuilesSeches.add(getCordonneesTuiles(tuiles[i][j])[0]);
+                    tuilesSeches.add(getCordonneesTuiles(tuiles[i][j])[1]);
                 }
             }
         }
-        tuilesSeches.remove(tuile);
+
         return tuilesSeches;
     }
 

@@ -243,8 +243,7 @@ public class Controleur implements Observer {
 
             // Ouverture de la vue Assèchement
         if (arg == Messages.ASSECHER) {
-            //openView(vues.get(1));
-            //vues.get(1).setAvailableTuile(aventuriers.get(joueurActif%aventuriers.size()).getTuilesAssechables(grille));
+            vuePlateau.setAvailableTuiles(aventuriers.get(joueurActif % aventuriers.size()).getTuilesAssechables(grille));
         }
 
             // Validation de la case à assécher
@@ -281,9 +280,9 @@ public class Controleur implements Observer {
                 // S'il est pilote, on affiche les tuiles disponibles en fonction de s'il a utilisé son déplacement spécial
             // SINON, on affiche les tuiles des autres aventuriers.
             if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
-               //vues.get(2).setAvailableTuile(((Pilote) aventuriers.get(joueurActif%aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial));
+                vuePlateau.setAvailableTuiles(((Pilote) aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial));
             } else {
-               // vues.get(2).setAvailableTuile(aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
+                vuePlateau.setAvailableTuiles(aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
             }
             //openView(vues.get(2));
         }
