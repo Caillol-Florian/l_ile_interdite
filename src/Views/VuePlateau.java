@@ -18,10 +18,13 @@ import static javax.swing.SwingConstants.CENTER;
 public class VuePlateau extends Vue {
     private final JFrame window;
     private final JPanel mainPanel;
+    // Array contenant chaque panel de chaque aventurier
     private final ArrayList<JPanel>arrayPanelsAventurier = new ArrayList<>();
-    private final ArrayList<JTextField>positions = new ArrayList<>();
+    // Grille des tuiles
     private final TuilePanel[][] tableauTuile;
+    // Array contenant l'Array des cartes de chaque aventurier.
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
+
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles) {
 
         window = new JFrame();
@@ -117,7 +120,6 @@ public class VuePlateau extends Vue {
             panelAventurier.add(panelCarte, cAventurier);
 
             panelAventuriers.add(panelAventurier, cColonneAventurier);
-            positions.add(position);
             arrayPanelsAventurier.add(panelAventurier);
             cColonneAventurier.gridy++;
         }
@@ -217,8 +219,8 @@ public class VuePlateau extends Vue {
         return tableauTuile;
     }
 
-    public ArrayList<JTextField> getPositions(){
-        return positions;
+    public ArrayList<ArrayList<CartePanel>> getCartesAventurier() {
+        return cartesAventurier;
     }
 
     public static void main(String[] args){

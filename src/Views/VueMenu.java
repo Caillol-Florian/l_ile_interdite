@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class VueMenu extends Vue {
 
-    private Window window = new JFrame("Menu Principal");
+    private JFrame window = new JFrame("Menu Principal");
     private PanelAvecImage mainPanel;
     private Font regular = new Font("Gill Sans",0,16);
     private Font bold = new Font("Gill Sans", 0, 30);
@@ -21,13 +21,13 @@ public class VueMenu extends Vue {
 
     public VueMenu(){
 
-        window.setSize(1920, 1080);
+        window.setSize(1024, 720);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
-        //window.setResizable(false);
-        //window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new PanelAvecImage(1450,900, "images/backgrounds/bg_menu.png") ;
+        mainPanel = new PanelAvecImage(1024,720, "images/backgrounds/bg_menu.png") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 

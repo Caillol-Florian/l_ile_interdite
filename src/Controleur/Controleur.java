@@ -69,6 +69,9 @@ public class Controleur implements Observer {
         //Lancement du jeu
         openView(vueMenu);
 
+        // =========================
+        // Musique
+
         //pour l'exécuter au moment ou la fenêtre s'ouvre
         //AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/src/Controleur/1055.wav"));
         //Get a sound clip resource.
@@ -81,35 +84,26 @@ public class Controleur implements Observer {
 
 
     public void startGame(){
-        /* // Pour chaque aventurier on ouvre sa vue correspondante en mettant à jour la position affichée
-        // On active/désactive les boutons de la vue s'il s'agit du joueurActif (Dans ce cas là joueurActif = 0 donc la seule vue avec les boutons activés est celui du Joueur n°1
-        for(int i = 0; i < vueAventuriers.size() ; i++){
-            openView(vueAventuriers.get(i));
-            updatePos(i);
-            enableBouton(i == joueurActif, i);
-            jeuLance = true;
-        }*/
 
-        //construction trésor
+        // ================================
+        // Initialisation des modèles
 
+        // Initialisation des trésors
         Tresor calice = new Tresor(TYPE_TRESOR.CALICE);
         Tresor cristal = new Tresor(TYPE_TRESOR.CRISTAL);
         Tresor pierre = new Tresor(TYPE_TRESOR.PIERRE);
         Tresor zephyr = new Tresor(TYPE_TRESOR.ZEPHYR);
 
-        //construction pioche carte inondation
-
+        // Initialisation de la pile de Carte Inondations
         for (NOM_TUILE nom_tuile : NOM_TUILE.values()){
             CarteInondation carteInondation = new CarteInondation(getGrille().getTuile(nom_tuile));
             pileCartesInondations.add(carteInondation);
         }
 
-        if (ALEAS){
-            Collections.shuffle(pileCartesInondations);
-        }
 
-        //construire pioche cartes trésor (actions)
 
+        // Initialisation de la pile de Carte Actions
+        // Carte trésors (5 de chaque)
         for (int i=0; i<5; i++){
             CarteTresor carteTresorCalice = new CarteTresor(TYPE_TRESOR.CALICE.toString());
             pileCartesAction.add(carteTresorCalice);
@@ -121,6 +115,7 @@ public class Controleur implements Observer {
             pileCartesAction.add(carteTresorZephyr);
         }
 
+        // Cartes hélicoptère et montée des eaux (3 de chaque)
         for (int i=0; i<3; i++){
             CarteHelicoptere carteHelicoptere = new CarteHelicoptere("Helicoptere");
             pileCartesAction.add(carteHelicoptere);
@@ -128,17 +123,23 @@ public class Controleur implements Observer {
             pileCartesAction.add(carteMonteeEaux);
         }
 
+        // Cartes sac de sable (2)
         for (int i=0; i<2; i++){
             CarteSacDeSable carteSacDeSable = new CarteSacDeSable("Sac de sable");
             pileCartesAction.add(carteSacDeSable);
         }
 
+        // Mélange des piles
         if (ALEAS){
+            Collections.shuffle(pileCartesInondations);
             Collections.shuffle(pileCartesAction);
+
         }
 
+        // =================================
         // Création Vue Plateau
-        // ArrayList des couleurs
+
+        // ArrayList des couleurs et des roles nécessaires à la création de la vue
         ArrayList<Color>couleurs = new ArrayList<>();
         ArrayList<String>roles = new ArrayList<>();
         for(Aventurier aventurier : aventuriers){
@@ -147,32 +148,42 @@ public class Controleur implements Observer {
         }
 
         this.vuePlateau = new VuePlateau(pseudos, couleurs, roles);
-        vuePlateau.abonner(this);
+        vuePlateau.abonner(this); // Abonnement
 
-        // Update position à l'ouverture de la vue
+        // Placement des pions
         for(int i = 0; i< aventuriers.size(); i++){
             updatePos(getGrille().getCordonneesTuiles(aventuriers.get(i).getPosition()), aventuriers.get(i).getPion());
         }
 
+        // Ouverture de la vue
+        closeView(vueInscription);
         openView(vuePlateau);
+        jeuLance = true;
+        //Création de la Vue niveau avec la difficulté
+        vueNiveau = new VueNiveau(difficulte);
     }
 
     @Override
     public void update(Observable o, Object arg) {
 
         // ---------------------------------- //
-        // -------- MENU PRINCIPALE --------- //
+        // -------- MENU PRINCIPAL --------- //
         // ---------------------------------- //
 
         if (arg == Messages.INSCRPTION){
-            openView(vueInscription);
             closeView((Vue)o);
+            openView(vueInscription);
         }
 
         // Ajout Vue règles
 
         if (arg == Messages.QUITTER){
             closeView(((Vue)o));
+        }
+
+        if (arg == Messages.RETOUR){
+            closeView(((Vue)o));
+            openView(vueMenu);
         }
 
         // ---------------------------------- //
@@ -185,7 +196,7 @@ public class Controleur implements Observer {
             difficulte = ((VueInscription)o).getNiveauDifficulte();
             pseudos = ((VueInscription)o).getPseudos();
 
-            // On créer les aventuriers en leur attribbuant alétoirement un role
+            // On créer les aventuriers en leur attribbuant aléatoirement un role
             for (NOM_AVENTURIER role : NOM_AVENTURIER.values()){
                 roles.add(role);
             }
@@ -222,11 +233,6 @@ public class Controleur implements Observer {
                 }
                 i++;
             }
-
-            //Création de la Vue niveau avec la difficulté
-            vueNiveau = new VueNiveau(difficulte);
-
-            closeView((Vue)o);
             startGame();
         }
 

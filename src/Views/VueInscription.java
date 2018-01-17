@@ -17,7 +17,7 @@ import static Modèles.Utils.afficherInformation;
 public class VueInscription extends Vue {
 
 
-    private Window window = new JFrame("Inscription");
+    private JFrame window = new JFrame("Inscription");
     private PanelAvecImage mainPanel;
     private Font regular = new Font("Gill Sans",0,22);
     private Font bold = new Font("Gill Sans", 1, 50);
@@ -43,15 +43,12 @@ public class VueInscription extends Vue {
 
     public VueInscription(){
 
-        window.setSize(1920, 1080);
+        window.setSize(1024, 720);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
-        //window.setResizable(false);
-        //window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new PanelAvecImage(1920,1080, "images/backgrounds/bg_plateau.png") ;
-        //JPanel mainPanel = new JPanel();
-        //mainPanel.setBackground(Color.DARK_GRAY);
+        mainPanel = new PanelAvecImage(1024,720, "images/backgrounds/bg_inscription.png") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
@@ -93,6 +90,7 @@ public class VueInscription extends Vue {
 
         JLabel titreLabel = new JLabel(icone0);
         titreLabel.setText("   Paramètres de la partie");
+        titreLabel.setForeground(Color.WHITE);
         titreLabel.setFont(bold);
         mainPanel.add(titreLabel,gc);
 
@@ -196,7 +194,7 @@ public class VueInscription extends Vue {
             gc.anchor = GridBagConstraints.CENTER;
             gc.insets = new Insets(0,0,0,0);
 
-            JTextField pseudo = new JTextField();
+            JTextField pseudo = new JTextField("Joueur " + i);
             JTextFields.add(pseudo);
             pseudo.setPreferredSize(new Dimension(200,40));
             mainPanel.add(pseudo, gc);
@@ -290,26 +288,46 @@ public class VueInscription extends Vue {
 
         gc.gridwidth = 4;
         gc.gridheight = 1;
-        gc.gridx = 1;
+        gc.gridx = 0;
         gc.gridy = 9;
-        gc.anchor = GridBagConstraints.CENTER;
 
-        JButton jButtonSuivant = new JButton();
-        jButtonSuivant.setPreferredSize(new Dimension(250,60));
-        jButtonSuivant.setText("Jouer");
-        jButtonSuivant.setFont(jouer);
-        mainPanel.add(jButtonSuivant,gc);
-
-        jButtonSuivant.addActionListener(new ActionListener() {
+        // Bouton retour
+        JButton jButtonRetour = new JButton();
+        jButtonRetour.setPreferredSize(new Dimension(250,60));
+        jButtonRetour.setText("Retour");
+        jButtonRetour.setFont(jouer);
+        mainPanel.add(jButtonRetour,gc);
+        jButtonRetour.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setChanged();
-                if (getPseudos().get(0).contentEquals("")){
+                    setChanged();
+                    notifyObservers(Messages.RETOUR);
+                    clearChanged();
+            }
+        });
+
+        // Bouton jouer
+        gc.gridx = 2;
+        JButton jButtonValider = new JButton();
+        jButtonValider.setPreferredSize(new Dimension(250,60));
+        jButtonValider.setText("Jouer");
+        jButtonValider.setFont(jouer);
+        mainPanel.add(jButtonValider,gc);
+
+        jButtonValider.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Boolean pseudosRemplis = true;
+                for(int i = 0; i < getPseudos().size(); i++){
+                    if (getPseudos().get(i).contentEquals("")) pseudosRemplis = false;
+                }
+                if (!pseudosRemplis){
                     afficherInformation("Veuillez écrire vos pseudos pour commencer la partie");
                 } else {
+                    setChanged();
                     notifyObservers(Messages.VALIDERINSCRIPTION);
+                    clearChanged();
                 }
-                clearChanged();
             }
         });
     }
