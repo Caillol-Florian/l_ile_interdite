@@ -381,15 +381,15 @@ public class VueInscription extends Vue {
         return pseudos;
     }
 
-    public NIVEAU_DIFFICULTE getNiveauDifficulte(){
+    public int getNiveauDifficulte(){
         if (btnD1) {
-            return NIVEAU_DIFFICULTE.NOVICE;
+            return 1;
         } else if (btnD2) {
-            return NIVEAU_DIFFICULTE.NORMAL;
+            return 2;
         } else if (btnD3) {
-            return NIVEAU_DIFFICULTE.ELITE;
+            return 3;
         } else {
-            return NIVEAU_DIFFICULTE.LEGENDAIRE;
+            return 4;
         }
     }
 

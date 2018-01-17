@@ -11,11 +11,12 @@ import java.util.*;
 import Enums.*;
 import Modèles.*;
 import Modèles.Aventurier.*;
-import Modèles.Carte.CarteAction;
-import Modèles.Carte.CarteInondation;
+import Modèles.Carte.*;
 import Views.*;
 
 import javax.sound.sampled.*;
+
+import static Modèles.Parameters.ALEAS;
 
 /**
  *
@@ -43,7 +44,7 @@ public class Controleur implements Observer {
     boolean piloteSpecial = false; // Déplacement spécial du pilote
 
     private int nbJoueurs;
-    private NIVEAU_DIFFICULTE difficulte;
+    private int difficulte;
     private ArrayList<String> pseudos;
 
     // =============================
@@ -55,6 +56,7 @@ public class Controleur implements Observer {
     // Vues
     private VueMenu vueMenu = new VueMenu();
     private VueInscription vueInscription = new VueInscription();
+    private VueNiveau vueNiveau;
 
     public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 
@@ -120,7 +122,10 @@ public class Controleur implements Observer {
             for (NOM_AVENTURIER role : NOM_AVENTURIER.values()){
                 roles.add(role);
             }
-            Collections.shuffle(roles);
+
+            if (ALEAS){
+                Collections.shuffle(roles);
+            }
 
             int i=0;
             while (i<nbJoueurs){
@@ -151,13 +156,54 @@ public class Controleur implements Observer {
                 i++;
             }
 
+            //setup la Vue niveau avec la difficulté
+            vueNiveau = new VueNiveau(difficulte);
+
             closeView((Vue)o);
             startGame();
         }
 
-        //setup la Vue niveau avec la difficulté
+        //construction pioche carte inondation
 
-        //construite les p
+        for (NOM_TUILE nom_tuile : NOM_TUILE.values()){
+            CarteInondation carteInondation = new CarteInondation(getGrille().getTuile(nom_tuile));
+            pileCartesInondations.add(carteInondation);
+        }
+
+        if (ALEAS){
+            Collections.shuffle(pileCartesInondations);
+        }
+
+        //construire pioche cartes trésor (actions)
+
+        for (int i=0; i<5; i++){
+            CarteTresor carteTresorCalice = new CarteTresor(TYPE_TRESOR.CALICE.toString(),null);
+            pileCartesAction.add(carteTresorCalice);
+            CarteTresor carteTresorCristal = new CarteTresor(TYPE_TRESOR.CRISTAL.toString(),null);
+            pileCartesAction.add(carteTresorCristal);
+            CarteTresor carteTresorPierre = new CarteTresor(TYPE_TRESOR.PIERRE.toString(),null);
+            pileCartesAction.add(carteTresorPierre);
+            CarteTresor carteTresorZephyr = new CarteTresor(TYPE_TRESOR.ZEPHYR.toString(),null);
+            pileCartesAction.add(carteTresorZephyr);
+        }
+
+        for (int i=0; i<3; i++){
+            CarteHelicoptere carteHelicoptere = new CarteHelicoptere("Helicoptere");
+            pileCartesAction.add(carteHelicoptere);
+            CarteMonteeEaux carteMonteeEaux = new CarteMonteeEaux();
+            pileCartesAction.add(carteMonteeEaux);
+        }
+
+        for (int i=0; i<2; i++){
+            CarteSacDeSable carteSacDeSable = new CarteSacDeSable("Sac de sable");
+            pileCartesAction.add(carteSacDeSable);
+        }
+
+        if (ALEAS){
+            Collections.shuffle(pileCartesAction);
+        }
+
+
 
 
         // ---------------------------------- //
