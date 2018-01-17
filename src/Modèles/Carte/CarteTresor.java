@@ -4,10 +4,7 @@ import Modèles.Tresor;
 
 public class CarteTresor extends CarteStockable {
 
-    private Tresor tresor;
-
-    public CarteTresor(String nom, Tresor tresor){
+    public CarteTresor(String nom){
         super(nom);
-        this.tresor = tresor;
     }
 }

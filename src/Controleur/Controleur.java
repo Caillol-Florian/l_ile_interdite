@@ -87,6 +87,53 @@ public class Controleur implements Observer {
             enableBouton(i == joueurActif, i);
             jeuLance = true;
         }*/
+
+        //construction trésor
+
+        Tresor calice = new Tresor(TYPE_TRESOR.CALICE);
+        Tresor cristal = new Tresor(TYPE_TRESOR.CRISTAL);
+        Tresor pierre = new Tresor(TYPE_TRESOR.PIERRE);
+        Tresor zephyr = new Tresor(TYPE_TRESOR.ZEPHYR);
+
+        //construction pioche carte inondation
+
+        for (NOM_TUILE nom_tuile : NOM_TUILE.values()){
+            CarteInondation carteInondation = new CarteInondation(getGrille().getTuile(nom_tuile));
+            pileCartesInondations.add(carteInondation);
+        }
+
+        if (ALEAS){
+            Collections.shuffle(pileCartesInondations);
+        }
+
+        //construire pioche cartes trésor (actions)
+
+        for (int i=0; i<5; i++){
+            CarteTresor carteTresorCalice = new CarteTresor(TYPE_TRESOR.CALICE.toString());
+            pileCartesAction.add(carteTresorCalice);
+            CarteTresor carteTresorCristal = new CarteTresor(TYPE_TRESOR.CRISTAL.toString());
+            pileCartesAction.add(carteTresorCristal);
+            CarteTresor carteTresorPierre = new CarteTresor(TYPE_TRESOR.PIERRE.toString());
+            pileCartesAction.add(carteTresorPierre);
+            CarteTresor carteTresorZephyr = new CarteTresor(TYPE_TRESOR.ZEPHYR.toString());
+            pileCartesAction.add(carteTresorZephyr);
+        }
+
+        for (int i=0; i<3; i++){
+            CarteHelicoptere carteHelicoptere = new CarteHelicoptere("Helicoptere");
+            pileCartesAction.add(carteHelicoptere);
+            CarteMonteeEaux carteMonteeEaux = new CarteMonteeEaux();
+            pileCartesAction.add(carteMonteeEaux);
+        }
+
+        for (int i=0; i<2; i++){
+            CarteSacDeSable carteSacDeSable = new CarteSacDeSable("Sac de sable");
+            pileCartesAction.add(carteSacDeSable);
+        }
+
+        if (ALEAS){
+            Collections.shuffle(pileCartesAction);
+        }
     }
 
     @Override
@@ -163,45 +210,7 @@ public class Controleur implements Observer {
             startGame();
         }
 
-        //construction pioche carte inondation
 
-        for (NOM_TUILE nom_tuile : NOM_TUILE.values()){
-            CarteInondation carteInondation = new CarteInondation(getGrille().getTuile(nom_tuile));
-            pileCartesInondations.add(carteInondation);
-        }
-
-        if (ALEAS){
-            Collections.shuffle(pileCartesInondations);
-        }
-
-        //construire pioche cartes trésor (actions)
-
-        for (int i=0; i<5; i++){
-            CarteTresor carteTresorCalice = new CarteTresor(TYPE_TRESOR.CALICE.toString(),null);
-            pileCartesAction.add(carteTresorCalice);
-            CarteTresor carteTresorCristal = new CarteTresor(TYPE_TRESOR.CRISTAL.toString(),null);
-            pileCartesAction.add(carteTresorCristal);
-            CarteTresor carteTresorPierre = new CarteTresor(TYPE_TRESOR.PIERRE.toString(),null);
-            pileCartesAction.add(carteTresorPierre);
-            CarteTresor carteTresorZephyr = new CarteTresor(TYPE_TRESOR.ZEPHYR.toString(),null);
-            pileCartesAction.add(carteTresorZephyr);
-        }
-
-        for (int i=0; i<3; i++){
-            CarteHelicoptere carteHelicoptere = new CarteHelicoptere("Helicoptere");
-            pileCartesAction.add(carteHelicoptere);
-            CarteMonteeEaux carteMonteeEaux = new CarteMonteeEaux();
-            pileCartesAction.add(carteMonteeEaux);
-        }
-
-        for (int i=0; i<2; i++){
-            CarteSacDeSable carteSacDeSable = new CarteSacDeSable("Sac de sable");
-            pileCartesAction.add(carteSacDeSable);
-        }
-
-        if (ALEAS){
-            Collections.shuffle(pileCartesAction);
-        }
 
 
 
