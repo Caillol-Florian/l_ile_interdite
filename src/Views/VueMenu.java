@@ -146,17 +146,6 @@ public class VueMenu extends Vue {
             }
         }
 
-        //si jamais on fait des backgrounds tournants
-
-        //public void setImage(String imageFile) {
-        //    try {
-        //this.image = ImageIO.read(new File(imageFile));
-        //} catch (IOException ex) {
-        //        System.err.println("Erreur de lecture ");
-        //    }
-        //    repaint();
-        //}
-
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
