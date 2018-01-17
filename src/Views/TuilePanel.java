@@ -109,14 +109,13 @@ public class TuilePanel extends JPanel {
         }
     }
 
-    public void highlight(boolean onHighlight){
+    public void highlight(){
         // Affichage du nouvel état de la tuile
         imageTuile.getGraphics().drawImage(imageTuile, 0, 0, null);
 
         // Highlight
-        if(onHighlight) {
             imageTuile.getGraphics().drawImage(resize(highlight, 503, 502), 0, 0, null);
-        }
+
 
         // Affichage des pions
         drawPions(this.imagesPions);

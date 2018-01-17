@@ -271,6 +271,11 @@ public class Controleur implements Observer {
             // Ouverture de la vue Déplacement
 
         if (arg == Messages.DEPLACER) {
+
+            vuePlateau.setAvailableTuiles(aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
+
+
+
             // Afin de traiter le déplacement du pilote :
             // On vérifie que le joueur actif est un pilote
                 // S'il est pilote, on affiche les tuiles disponibles en fonction de s'il a utilisé son déplacement spécial
@@ -290,9 +295,9 @@ public class Controleur implements Observer {
                 // Vérification si le pilote a utilisé son déplacement spécial :
                 // Si la tuile sélectionnée n'est pas une tuile adjacente au pilote alors il a utilisé son pouvoir
                 if (aventuriers.get(joueurActif % aventuriers.size()) instanceof Pilote){
-                    if ( !((ArrayList<Tuile>) (aventuriers.get(joueurActif% aventuriers.size())).getTuilesAccesibles(grille)).contains(getGrille().getTuile(((Vue) o).getTuileSelectionnee()))){
+                   // if ( !((ArrayList<Tuile>) (aventuriers.get(joueurActif% aventuriers.size())).getTuilesAccesibles(grille)).contains(getGrille().getTuile(((Vue) o).getTuileSelectionnee()))){
                         piloteSpecial = true;
-                    }
+
                 }
 
                 // Update visuel de la position

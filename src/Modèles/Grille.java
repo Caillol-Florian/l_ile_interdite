@@ -23,15 +23,21 @@ public class Grille {
     private ArrayList <NOM_TUILE> nomTuiles = new ArrayList<>();
     public Grille() {
 
-        // Génération aléatoire de la grille
+        // ======================================
+        // Génération aléatoire
+
+        // Récupération des noms des tuiles
         for(NOM_TUILE nomTuile : NOM_TUILE.values()){
             this.getNomTuiles().add(nomTuile);
         }
 
         // On retire l'eau.
         nomTuiles.remove(NOM_TUILE.EAU);
+        // On mélange aléatoirement
         Collections.shuffle(getNomTuiles());
 
+        // ======================================
+        // Création de la grille
          int indexEnum = 0;
          for(int j = 0; j < tuiles.length ; j++){ // Lignes
              for(int i = 0; i < tuiles.length; i++){ // Colonnes
@@ -51,39 +57,40 @@ public class Grille {
 
     public ArrayList getTuilesAdjacentes(Tuile tuile, Messages messages){
 
-        ArrayList<Tuile> tuilesAdjacentes = new ArrayList<>();
+        ArrayList<Integer> tuilesAdjacentes = new ArrayList<>();
         int[] coordonnes = this.getCordonneesTuiles(tuile);
 
         if (messages == Messages.DEPLACER) {
             if (coordonnes[0]!=0 && !tuiles[coordonnes[0]-1][coordonnes[1]].estCoulee()){
-                tuilesAdjacentes.add(tuiles[coordonnes[0]-1][coordonnes[1]]);
+                tuilesAdjacentes.add(coordonnes[0]-1); tuilesAdjacentes.add(coordonnes[1]);
             }
+
             if (coordonnes[0]!=5 && !tuiles[coordonnes[0]+1][coordonnes[1]].estCoulee()){
-                tuilesAdjacentes.add(tuiles[coordonnes[0]+1][coordonnes[1]]);
+                tuilesAdjacentes.add(coordonnes[0]+1); tuilesAdjacentes.add(coordonnes[1]);
             }
             if (coordonnes[1]!=0 && !tuiles[coordonnes[0]][coordonnes[1]-1].estCoulee()){
-                tuilesAdjacentes.add(tuiles[coordonnes[0]][coordonnes[1]-1]);
+                tuilesAdjacentes.add(coordonnes[0]); tuilesAdjacentes.add(coordonnes[1]-1);
             }
             if (coordonnes[1]!=5 && !tuiles[coordonnes[0]][coordonnes[1]+1].estCoulee()){
-                tuilesAdjacentes.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
+                tuilesAdjacentes.add(coordonnes[0]); tuilesAdjacentes.add(coordonnes[1]+1);
             }
         }
 
         if (messages == Messages.ASSECHER) {
             if (coordonnes[0]!=0 && tuiles[coordonnes[0]-1][coordonnes[1]].estInondee()) {
-                tuilesAdjacentes.add(tuiles[coordonnes[0]-1][coordonnes[1]]);
+                tuilesAdjacentes.add(coordonnes[0]-1); tuilesAdjacentes.add(coordonnes[1]);
             }
             if (coordonnes[0]!=5 && tuiles[coordonnes[0]+1][coordonnes[1]].estInondee()){
-                tuilesAdjacentes.add(tuiles[coordonnes[0]+1][coordonnes[1]]);
+                tuilesAdjacentes.add(coordonnes[0]+1); tuilesAdjacentes.add(coordonnes[1]);
             }
             if (coordonnes[1]!=0 && tuiles[coordonnes[0]][coordonnes[1]-1].estInondee()){
-                tuilesAdjacentes.add(tuiles[coordonnes[0]][coordonnes[1]-1]);
+                tuilesAdjacentes.add(coordonnes[0]); tuilesAdjacentes.add(coordonnes[1]-1);
             }
             if (coordonnes[1]!=5 && tuiles[coordonnes[0]][coordonnes[1]+1].estInondee()){
-                tuilesAdjacentes.add(tuiles[coordonnes[0]][coordonnes[1]+1]);
+                tuilesAdjacentes.add(coordonnes[0]); tuilesAdjacentes.add(coordonnes[1]+1);
             }
             if(tuile.estInondee()){
-                tuilesAdjacentes.add(tuile);
+                    tuilesAdjacentes.add(coordonnes[0]); tuilesAdjacentes.add(coordonnes[1]);
             }
         }
 
@@ -92,38 +99,37 @@ public class Grille {
 
     public ArrayList getTuilesDiagonales(Tuile tuile,Messages messages) {
 
-        ArrayList<Tuile> tuilesDiagonales = new ArrayList<>();
+        ArrayList<Integer> tuilesDiagonales = new ArrayList<>();
         int[] coordonnes = this.getCordonneesTuiles(tuile);
 
-        System.out.print(" | " + coordonnes[0]);
-        System.out.println(coordonnes[1] + " | ");
         if (messages == Messages.DEPLACER) {
             if (coordonnes[0] != 0 && coordonnes[1] != 0 && !tuiles[coordonnes[0] - 1][coordonnes[1] - 1].estCoulee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] - 1]);
+                tuilesDiagonales.add(coordonnes[0]-1); tuilesDiagonales.add(coordonnes[1]-1);
             }
             if (coordonnes[0] != 0 && coordonnes[1] != 5 && !tuiles[coordonnes[0] - 1][coordonnes[1] + 1].estCoulee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] + 1]);
+                tuilesDiagonales.add(coordonnes[0]-1); tuilesDiagonales.add(coordonnes[1]+1);
             }
             if (coordonnes[1] != 0 && coordonnes[0] != 5 && !tuiles[coordonnes[0] + 1][coordonnes[1] - 1].estCoulee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] - 1]);
+                tuilesDiagonales.add(coordonnes[0]+1); tuilesDiagonales.add(coordonnes[1]-1);
             }
             if (coordonnes[1] != 5 && coordonnes[0] != 5 && !tuiles[coordonnes[0] + 1][coordonnes[1] + 1].estCoulee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] + 1]);
+                tuilesDiagonales.add(coordonnes[0]+1); tuilesDiagonales.add(coordonnes[1]+1);
             }
         }
 
         if (messages == Messages.ASSECHER) {
             if (coordonnes[0] != 0 && coordonnes[1] != 0 && tuiles[coordonnes[0] - 1][coordonnes[1] - 1].estInondee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] - 1]);
+                tuilesDiagonales.add(coordonnes[0]-1); tuilesDiagonales.add(coordonnes[1]-1);
             }
             if (coordonnes[0] != 0 && coordonnes[1] != 5 && tuiles[coordonnes[0] - 1][coordonnes[1] + 1].estInondee()) {
-                tuilesDiagonales.add(tuiles[coordonnes[0] - 1][coordonnes[1] + 1]);
+                tuilesDiagonales.add(coordonnes[0]-1); tuilesDiagonales.add(coordonnes[1]+1);
+
             }
             if (coordonnes[1]!= 0 && coordonnes[0] != 5 && tuiles[coordonnes[0] + 1][coordonnes[1]-1].estInondee()){
-                tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] - 1]);
+                tuilesDiagonales.add(coordonnes[0]+1); tuilesDiagonales.add(coordonnes[1]-1);
             }
             if (coordonnes[1]!= 5 && coordonnes[0] != 5 && tuiles[coordonnes[0] + 1][coordonnes[1]+1].estInondee()){
-                tuilesDiagonales.add(tuiles[coordonnes[0] + 1][coordonnes[1] + 1]);
+                tuilesDiagonales.add(coordonnes[0]+1); tuilesDiagonales.add(coordonnes[1]+1);
             }
         }
 

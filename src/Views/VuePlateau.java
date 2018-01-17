@@ -1,12 +1,15 @@
 package Views;
 
 import Enums.ETAT_TUILE;
+import Enums.Messages;
 import Enums.NOM_TUILE;
 import Enums.PION;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.awt.*;
@@ -127,7 +130,17 @@ public class VuePlateau extends Vue {
         JPanel panelBoutons = new JPanel(new GridLayout(2,2));
         cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
         panelAventuriers.add(panelBoutons, cColonneAventurier);
-        panelBoutons.add(new JButton("Se déplacer"));
+        JButton btnBouger = new JButton("Se déplacer");
+        btnBouger.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.DEPLACER);
+                clearChanged();
+            }
+        });
+        panelBoutons.add(btnBouger);
+
         panelBoutons.add(new JButton("Assécher"));
         panelBoutons.add(new JButton("Autre action"));
         panelBoutons.add(new JButton("Passer son tour"));
@@ -158,13 +171,13 @@ public class VuePlateau extends Vue {
         for(int i = 0; i < 6; i++){
             for (int j = 0; j < 6; j++){
                 if(((i == 0 || i == 5) && (j == 1 || j == 4)) || ((i == 1 || i == 4) && (j==0 || j == 5))) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
-                    tableauTuile[i][j] = null;
+                    this.tableauTuile[i][j] = null;
                     panelPlateau.add(new JLabel(),c);
 
                 } else if((i == 0 || i == 5) && (j==0 || j == 5)){
 
                     TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
-                    tableauTuile[i][j] = tresor;
+                    this.tableauTuile[i][j] = tresor;
                     panelPlateau.add(tresor, c);
                     tresor.setPreferredSize(size);
                     tresor.setOpaque(false);
@@ -172,20 +185,18 @@ public class VuePlateau extends Vue {
                 }
                 else{
                     System.out.println("i : " + i + " - j : " + j);
-                    TuilePanel test = new TuilePanel(nomsTuiles.get(index), ETAT_TUILE.SECHE, null);
-                    panelPlateau.add(test, c);
-                    tableauTuile[i][j] = test;
+                    TuilePanel tuile = new TuilePanel(nomsTuiles.get(index), ETAT_TUILE.SECHE, null);
+                    panelPlateau.add(tuile, c);
+                    this.tableauTuile[i][j] = tuile;
                     index++;
-                    test.setOpaque(false);
-                    test.setPreferredSize(size);
+                    tuile.setOpaque(false);
+                    tuile.setPreferredSize(size);
                 }
                 c.gridx++;
             }
             c.gridx = 0;
             c.gridy++;
         }
-
-        tableauTuile[3][4].highlight(true);
         // ===
         window.setVisible(true);
     }
@@ -224,13 +235,15 @@ public class VuePlateau extends Vue {
         return cartesAventurier;
     }
 
-    public static void main(String[] args){
-        ArrayList<String>pseudos = new ArrayList<>();
-        ArrayList<Color>couleurs = new ArrayList<>();
-        pseudos.add("Jean"); pseudos.add("jacques"); pseudos.add("françois"); pseudos.add("théophile fdp");
-        couleurs.add(Color.BLUE);couleurs.add(Color.RED);couleurs.add(Color.ORANGE);couleurs.add(Color.GREEN);
-        ArrayList<String>roles = new ArrayList<>();
-        roles.add("Explorateur"); roles.add("Ingénieur"); roles.add("ntm"); roles.add("Pilote");
+    public void setAvailableTuiles (ArrayList<Integer> coordonnesTuiles){
+        int i = 0;
+
+        while (i < coordonnesTuiles.size()-1){
+            System.out.print(coordonnesTuiles.get(i));System.out.println(coordonnesTuiles.get(i+1) + " -");
+            getTableauTuile()[coordonnesTuiles.get(i)][coordonnesTuiles.get(i+1)].highlight();
+            getTableauTuile()[coordonnesTuiles.get(i)][coordonnesTuiles.get(i+1)].repaint(); // On repaint (nécessaire pour que la vue actualise le JPanel)
+            i += 2;
+        }
 
     }
 

@@ -32,11 +32,11 @@ public abstract class Aventurier {
         return tuile;
     }
 
-    public ArrayList getTuilesAccesibles(Grille g){
+    public ArrayList<Integer> getTuilesAccesibles(Grille g){
         return g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER);
     }
 
-    public ArrayList getTuilesAssechables(Grille g){
+    public ArrayList<Integer> getTuilesAssechables(Grille g){
         return g.getTuilesAdjacentes(getPosition(), Messages.ASSECHER);
     }
 

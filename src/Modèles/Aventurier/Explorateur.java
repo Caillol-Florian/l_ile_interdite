@@ -16,15 +16,15 @@ public class Explorateur extends Aventurier {
     }
 
     @Override
-    public ArrayList getTuilesAccesibles(Grille g){
-        ArrayList<Tuile>tuilesAccessibles = g.getTuilesDiagonales(getPosition(), Messages.DEPLACER);
+    public ArrayList<Integer> getTuilesAccesibles(Grille g){
+        ArrayList<Integer>tuilesAccessibles = g.getTuilesDiagonales(getPosition(), Messages.DEPLACER);
         tuilesAccessibles.addAll(g.getTuilesAdjacentes(getPosition(), Messages.DEPLACER));
         return tuilesAccessibles;
     }
 
     @Override
     public ArrayList getTuilesAssechables(Grille g){
-        ArrayList<Tuile>tuilesAssechables = g.getTuilesDiagonales(getPosition(), Messages.ASSECHER);
+        ArrayList<Integer>tuilesAssechables = g.getTuilesDiagonales(getPosition(), Messages.ASSECHER);
         tuilesAssechables.addAll(g.getTuilesAdjacentes(getPosition(), Messages.ASSECHER));
         return tuilesAssechables;
     }
