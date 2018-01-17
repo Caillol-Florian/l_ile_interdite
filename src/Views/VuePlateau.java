@@ -55,7 +55,7 @@ public class VuePlateau extends Vue {
         GridBagConstraints cColonneAventurier = new GridBagConstraints();
         cColonneAventurier.gridy = 0;
         cColonneAventurier.fill = GridBagConstraints.BOTH;
-        cColonneAventurier.insets = new Insets(10,0,0,0);
+        cColonneAventurier.insets = new Insets(25,0,0,0);
 
         Dimension sizeCarte = new Dimension(60,  84);
         for(int i = 0; i < pseudosJoueurs.size(); i++){
