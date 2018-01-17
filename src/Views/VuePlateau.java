@@ -286,16 +286,6 @@ public class VuePlateau extends Vue {
             i += 2;
         }
     }
-
-    public void highlightOff(){
-        for(int i = 0; i < getTableauTuile().length; i++){
-            for(int j = 0; j < getTableauTuile().length; j++){
-                if((!((i == 0 || i == 5) && (j == 1 || j == 4 || j == 5) || j == 0) || ((i == 1 || i == 4) && (j==0 || j == 5))) && getTableauTuile()[i][j] != null) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
-                    getTableauTuile()[i][j].highlight(false);
-                }
-            }
-        }
-    }
     @Override
     public void setVisible(Boolean b) {
         window.setVisible(b);

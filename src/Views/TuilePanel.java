@@ -20,6 +20,7 @@ public class TuilePanel extends JPanel {
     private ArrayList<PION> pions;
     BufferedImage highlight;
 
+
     public TuilePanel(NOM_TUILE nomTuile, ETAT_TUILE etatTuile, ArrayList<PION>pions) {
         if(pions == null){
             this.pions = new ArrayList<>();
@@ -74,8 +75,6 @@ public class TuilePanel extends JPanel {
 
     public void update(ETAT_TUILE etatTuile, ArrayList<PION> pions){
         try {
-
-
             // Actualisation de l'état de la tuile
             // On récupère l'image de la tuile correspondant à son état
             if (etatTuile == ETAT_TUILE.SECHE){
@@ -93,6 +92,7 @@ public class TuilePanel extends JPanel {
                     }
                 }
 
+            System.out.println(nomTuile + " "+ imagesPions.size());
             Image image = new BufferedImage(150, 150, BufferedImage.TYPE_INT_ARGB);
             paintComponent(image.getGraphics());
             repaint();
@@ -122,9 +122,6 @@ public class TuilePanel extends JPanel {
         } else {
             update(ETAT_TUILE.SECHE, this.pions);
         }
-
-        // Affichage des pions
-        drawPions(this.imagesPions);
 
         repaint();
     }

@@ -295,10 +295,12 @@ public class Controleur implements Observer {
 
             if (deplacementActif){
                 // Désactivation du highlight
-                vuePlateau.highlightOff();
+                if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
+                    vuePlateau.highlightTuiles(false, ((Pilote) aventuriers.get(joueurActif % aventuriers.size())).getTuilesAccesibles(grille, piloteSpecial));
+                } else {
+                    vuePlateau.highlightTuiles(false, aventuriers.get(joueurActif % aventuriers.size()).getTuilesAccesibles(grille));
+                }
 
-                // Déplacement modèle
-                aventuriers.get(joueurActif % aventuriers.size()).setPosition(getGrille().getTuile(tuileSelectionnee));
 
                 // Ancienne tuile
                 // Ancienne coordonnées
@@ -309,9 +311,10 @@ public class Controleur implements Observer {
                 ETAT_TUILE etatTuile = getGrille().getTuile(tuileSelectionnee).getEtat();
                 ArrayList<PION> pionsTuile = vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].getPions();
                 pionsTuile.remove(aventuriers.get(joueurActif%aventuriers.size()).getPion());
-                System.out.println(pionsTuile.isEmpty());
                 vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].update(etatTuile, pionsTuile);
 
+                // Déplacement modèle
+                aventuriers.get(joueurActif % aventuriers.size()).setPosition(getGrille().getTuile(tuileSelectionnee));
 
                 // Nouvelle tuile
                 // Coordonnées sélectionnées
