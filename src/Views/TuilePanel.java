@@ -18,6 +18,7 @@ public class TuilePanel extends JPanel {
     private NOM_TUILE nomTuile;
     private ArrayList<BufferedImage>imagesPions = new ArrayList<>();
     private ArrayList<PION> pions;
+    BufferedImage highlight;
 
     public TuilePanel(NOM_TUILE nomTuile, ETAT_TUILE etatTuile, ArrayList<PION>pions) {
         if(pions == null){
@@ -29,6 +30,10 @@ public class TuilePanel extends JPanel {
         this.nomTuile = nomTuile;
 
         try {
+            // Récupération de l'image highlight
+            this.highlight = ImageIO.read(new File("images/tuiles/highlight.png"));
+
+            // Récupération de l'image de la tuile en fonction de son état.
             if (etatTuile == ETAT_TUILE.SECHE){
                 this.imageTuile = ImageIO.read(new File(nomTuile.getPath()));
             } else {
@@ -69,7 +74,6 @@ public class TuilePanel extends JPanel {
 
     public void update(ETAT_TUILE etatTuile, ArrayList<PION> pions){
         try {
-
             // Actualisation de l'état de la tuile
             // On récupère l'image de la tuile correspondant à son état
             if (etatTuile == ETAT_TUILE.SECHE){
@@ -103,6 +107,19 @@ public class TuilePanel extends JPanel {
                 index += pion.getWidth(null);
             }
         }
+    }
+
+    public void highlight(boolean onHighlight){
+        // Affichage du nouvel état de la tuile
+        imageTuile.getGraphics().drawImage(imageTuile, 0, 0, null);
+
+        // Highlight
+        if(onHighlight) {
+            imageTuile.getGraphics().drawImage(resize(highlight, 503, 502), 0, 0, null);
+        }
+
+        // Affichage des pions
+        drawPions(this.imagesPions);
     }
 
     public ArrayList<PION> getPions(){

@@ -147,7 +147,7 @@ public class Controleur implements Observer {
             roles.add(aventurier.getNomRole().toString());
         }
 
-        this.vuePlateau = new VuePlateau(pseudos, couleurs, roles);
+        this.vuePlateau = new VuePlateau(pseudos, couleurs, roles, getGrille().getNomTuiles());
         vuePlateau.abonner(this); // Abonnement
 
         // Placement des pions

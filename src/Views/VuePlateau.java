@@ -25,7 +25,7 @@ public class VuePlateau extends Vue {
     // Array contenant l'Array des cartes de chaque aventurier.
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
 
-    public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles) {
+    public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles) {
 
         window = new JFrame();
         window.setTitle("Ile Interdite");
@@ -153,7 +153,7 @@ public class VuePlateau extends Vue {
         this.tableauTuile = new TuilePanel[6][6];
         Dimension size = new Dimension(150,150);
         String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"};
-        int index = 1;
+        int index = 0;
         int indexTresor = 0;
         for(int i = 0; i < 6; i++){
             for (int j = 0; j < 6; j++){
@@ -172,7 +172,7 @@ public class VuePlateau extends Vue {
                 }
                 else{
                     System.out.println("i : " + i + " - j : " + j);
-                    TuilePanel test = new TuilePanel(NOM_TUILE.values()[index], ETAT_TUILE.SECHE, null);
+                    TuilePanel test = new TuilePanel(nomsTuiles.get(index), ETAT_TUILE.SECHE, null);
                     panelPlateau.add(test, c);
                     tableauTuile[i][j] = test;
                     index++;
@@ -185,6 +185,7 @@ public class VuePlateau extends Vue {
             c.gridy++;
         }
 
+        tableauTuile[3][4].highlight(true);
         // ===
         window.setVisible(true);
     }
@@ -230,7 +231,7 @@ public class VuePlateau extends Vue {
         couleurs.add(Color.BLUE);couleurs.add(Color.RED);couleurs.add(Color.ORANGE);couleurs.add(Color.GREEN);
         ArrayList<String>roles = new ArrayList<>();
         roles.add("Explorateur"); roles.add("Ingénieur"); roles.add("ntm"); roles.add("Pilote");
-        VuePlateau vue = new VuePlateau(pseudos, couleurs, roles);
+
     }
 
     @Override

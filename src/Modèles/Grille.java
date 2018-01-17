@@ -11,6 +11,7 @@ import Enums.Messages;
 import Enums.NOM_TUILE;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -19,15 +20,25 @@ import java.util.ArrayList;
 public class Grille {
 
     private Tuile tuiles[][] = new Tuile[6][6];
-    
+    private ArrayList <NOM_TUILE> nomTuiles = new ArrayList<>();
     public Grille() {
-         int indexEnum = 1; // L'index commence à 1 et non 0 car l'ordinal 0 de l'enum est la tuile eau
+
+        // Génération aléatoire de la grille
+        for(NOM_TUILE nomTuile : NOM_TUILE.values()){
+            this.getNomTuiles().add(nomTuile);
+        }
+
+        // On retire l'eau.
+        nomTuiles.remove(NOM_TUILE.EAU);
+        Collections.shuffle(getNomTuiles());
+
+         int indexEnum = 0;
          for(int j = 0; j < tuiles.length ; j++){ // Lignes
              for(int i = 0; i < tuiles.length; i++){ // Colonnes
                 if(((j == 0 || j == 5) && (i == 0 || i == 1 || i == 4 || i == 5)) || ((j == 1 || j == 4) && (i==0 || i == 5))){ // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
                     tuiles[j][i] = new Tuile(NOM_TUILE.EAU, ETAT_TUILE.COULEE); // On créé une tuile d'eau qu'on ajoute au tableau des tuiles.
                  } else {
-                    tuiles[j][i] = new Tuile(NOM_TUILE.values()[indexEnum], ETAT_TUILE.SECHE); // Sinon, on créé une tuile normale (le nom étant la valeur de indexEnum dans la liste de l'enum)
+                    tuiles[j][i] = new Tuile(getNomTuiles().get(indexEnum), ETAT_TUILE.SECHE); // Sinon, on créé une tuile normale (le nom étant la valeur de indexEnum dans la liste de l'enum)
                     indexEnum++; // On augmente l'index pour la prochaine tuile à créer
                 }
              }
@@ -261,5 +272,9 @@ public class Grille {
             }
         }
         return coordonnees;
+    }
+
+    public ArrayList<NOM_TUILE> getNomTuiles() {
+        return nomTuiles;
     }
 }
