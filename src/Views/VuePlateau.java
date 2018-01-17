@@ -7,6 +7,7 @@ import Enums.PION;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.awt.*;
 import java.io.File;
@@ -14,17 +15,21 @@ import java.io.IOException;
 
 import static javax.swing.SwingConstants.CENTER;
 
-public class VueTest {
+public class VuePlateau extends Vue {
     private final JFrame window;
     private final JPanel mainPanel;
     private final ArrayList<JPanel>arrayPanelsAventurier = new ArrayList<>();
-    public VueTest(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs) {
+    private final ArrayList<JTextField>positions = new ArrayList<>();
+    private final TuilePanel[][] tableauTuile;
+    private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
+    public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles) {
 
         window = new JFrame();
         window.setTitle("Ile Interdite");
         window.setSize(1350, 1000);
         window.setLocation(0, 0);
         window.setResizable(false);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // =============================================================
         // Création du panel principal
@@ -34,7 +39,8 @@ public class VueTest {
 
         // =============================================================
         // Panel Aventuriers
-        JPanel panelAventuriers = new JPanel(new GridBagLayout());
+        PanelAvecImage panelAventuriers =new PanelAvecImage(1500,1500,"images/backgrounds/bg_plateau.png");
+        panelAventuriers.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.fill = GridBagConstraints.BOTH;
@@ -44,6 +50,7 @@ public class VueTest {
         GridBagConstraints cColonneAventurier = new GridBagConstraints();
         cColonneAventurier.gridy = 0;
         cColonneAventurier.fill = GridBagConstraints.BOTH;
+        cColonneAventurier.insets = new Insets(10,0,0,0);
 
         Dimension sizeCarte = new Dimension(60,  84);
         for(int i = 0; i < pseudosJoueurs.size(); i++){
@@ -67,7 +74,7 @@ public class VueTest {
             cAventurier.gridy = 1;
             JPanel panelRole = new JPanel();
             panelRole.setBackground(couleurs.get(i));
-            JLabel labelNomRole = new JLabel("Explorateur",SwingConstants.CENTER);
+            JLabel labelNomRole = new JLabel(nomRoles.get(i),SwingConstants.CENTER);
             labelNomRole.setForeground(Color.WHITE);
             panelRole.add(labelNomRole);
 
@@ -92,12 +99,25 @@ public class VueTest {
             cCarte.gridx = 0;
             panelCarte.add(new JLabel("Cartes"), cCarte);
             cCarte.gridy = 1;
-            CartePanel carte = new CartePanel("images/cartes/Calice.png");
-            carte.setPreferredSize(sizeCarte);
-            panelCarte.add(carte, cCarte);
+            cCarte.insets = new Insets(3,3,3,3);
+
+            ArrayList<CartePanel>cartes = new ArrayList<>();
+            for(int j = 0; j < 5; j++){
+                CartePanel carte = new CartePanel("images/cartes/Fond rouge.png");
+
+                carte.setPreferredSize(sizeCarte);
+                panelCarte.add(carte, cCarte);
+                cCarte.gridx++;
+
+                cartes.add(carte);
+            }
+            cartesAventurier.add(cartes);
+
+            //
             panelAventurier.add(panelCarte, cAventurier);
 
             panelAventuriers.add(panelAventurier, cColonneAventurier);
+            positions.add(position);
             arrayPanelsAventurier.add(panelAventurier);
             cColonneAventurier.gridy++;
         }
@@ -128,20 +148,33 @@ public class VueTest {
         c.insets = new Insets(5,5,5,5);
         // ===========================================
         // Grille
-        TuilePanel[][] tableauTuile = new TuilePanel[6][6];
+        this.tableauTuile = new TuilePanel[6][6];
         Dimension size = new Dimension(150,150);
+        String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"};
         int index = 1;
+        int indexTresor = 0;
         for(int i = 0; i < 6; i++){
             for (int j = 0; j < 6; j++){
-                if(((i == 0 || i == 5) && (j == 0 || j == 1 || j == 4 || j == 5)) || ((i == 1 || i == 4) && (j==0 || j == 5))) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
+                if(((i == 0 || i == 5) && (j == 1 || j == 4)) || ((i == 1 || i == 4) && (j==0 || j == 5))) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
                     tableauTuile[i][j] = null;
                     panelPlateau.add(new JLabel(),c);
-                } else {
+
+                } else if((i == 0 || i == 5) && (j==0 || j == 5)){
+
+                    TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
+                    tableauTuile[i][j] = tresor;
+                    panelPlateau.add(tresor, c);
+                    tresor.setPreferredSize(size);
+                    tresor.setOpaque(false);
+                    indexTresor++;
+                }
+                else{
                     System.out.println("i : " + i + " - j : " + j);
                     TuilePanel test = new TuilePanel(NOM_TUILE.values()[index], ETAT_TUILE.SECHE, null);
                     panelPlateau.add(test, c);
                     tableauTuile[i][j] = test;
                     index++;
+                    test.setOpaque(false);
                     test.setPreferredSize(size);
                 }
                 c.gridx++;
@@ -150,18 +183,6 @@ public class VueTest {
             c.gridy++;
         }
 
-        ArrayList<PION>pions = new ArrayList<>();
-        pions.add(PION.BLEU);
-        pions.add(PION.ROUGE);
-
-        tableauTuile[4][3].update(ETAT_TUILE.SECHE, pions);
-        tableauTuile[4][3].update(ETAT_TUILE.INONDEE, pions);
-        tableauTuile[4][4].update(ETAT_TUILE.INONDEE, pions);
-
-        pions.clear();
-        pions.add(PION.VIOLET);
-        tableauTuile[4][3].update(ETAT_TUILE.INONDEE, pions);
-
         // ===
         window.setVisible(true);
     }
@@ -169,7 +190,7 @@ public class VueTest {
 
     private class PanelAvecImage extends JPanel {
 
-        private Image image ;
+        private Image image;
         private final Integer width ;
         private final Integer height ;
 
@@ -192,13 +213,27 @@ public class VueTest {
         }
     }
 
+    public TuilePanel[][] getTableauTuile() {
+        return tableauTuile;
+    }
+
+    public ArrayList<JTextField> getPositions(){
+        return positions;
+    }
 
     public static void main(String[] args){
         ArrayList<String>pseudos = new ArrayList<>();
         ArrayList<Color>couleurs = new ArrayList<>();
         pseudos.add("Jean"); pseudos.add("jacques"); pseudos.add("françois"); pseudos.add("théophile fdp");
         couleurs.add(Color.BLUE);couleurs.add(Color.RED);couleurs.add(Color.ORANGE);couleurs.add(Color.GREEN);
-        VueTest vue = new VueTest(pseudos, couleurs);
+        ArrayList<String>roles = new ArrayList<>();
+        roles.add("Explorateur"); roles.add("Ingénieur"); roles.add("ntm"); roles.add("Pilote");
+        VuePlateau vue = new VuePlateau(pseudos, couleurs, roles);
+    }
+
+    @Override
+    public void setVisible(Boolean b) {
+        window.setVisible(b);
     }
 
 }

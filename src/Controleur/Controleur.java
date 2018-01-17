@@ -5,6 +5,7 @@
  */
 package Controleur;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -57,6 +58,7 @@ public class Controleur implements Observer {
     private VueMenu vueMenu = new VueMenu();
     private VueInscription vueInscription = new VueInscription();
     private VueNiveau vueNiveau;
+    private VuePlateau vuePlateau;
 
     public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 
@@ -134,6 +136,25 @@ public class Controleur implements Observer {
         if (ALEAS){
             Collections.shuffle(pileCartesAction);
         }
+
+        // Création Vue Plateau
+        // ArrayList des couleurs
+        ArrayList<Color>couleurs = new ArrayList<>();
+        ArrayList<String>roles = new ArrayList<>();
+        for(Aventurier aventurier : aventuriers){
+            couleurs.add(aventurier.getPion().getCouleur());
+            roles.add(aventurier.getNomRole().toString());
+        }
+
+        this.vuePlateau = new VuePlateau(pseudos, couleurs, roles);
+        vuePlateau.abonner(this);
+
+        // Update position à l'ouverture de la vue
+        for(int i = 0; i< aventuriers.size(); i++){
+            updatePos(getGrille().getCordonneesTuiles(aventuriers.get(i).getPosition()), aventuriers.get(i).getPion());
+        }
+
+        openView(vuePlateau);
     }
 
     @Override
@@ -148,7 +169,7 @@ public class Controleur implements Observer {
             closeView((Vue)o);
         }
 
-        //Ajout vue règles
+        // Ajout Vue règles
 
         if (arg == Messages.QUITTER){
             closeView(((Vue)o));
@@ -158,14 +179,13 @@ public class Controleur implements Observer {
         // ----- INSCRIPTION DES JOUEURS ---- //
         // ---------------------------------- //
 
-
-        if (arg == Messages.SUIVANT) {
-            //récupération des paramètres de jeu
+        if (arg == Messages.VALIDERINSCRIPTION) {
+            // Récupération des paramètres de jeu
             nbJoueurs = ((VueInscription)o).getNombreJoueurs();
             difficulte = ((VueInscription)o).getNiveauDifficulte();
             pseudos = ((VueInscription)o).getPseudos();
 
-            //On créer les aventuriers en leur attribbuant alétoirement un role
+            // On créer les aventuriers en leur attribbuant alétoirement un role
             for (NOM_AVENTURIER role : NOM_AVENTURIER.values()){
                 roles.add(role);
             }
@@ -181,38 +201,34 @@ public class Controleur implements Observer {
                     aventuriers.add(aventurier);
                 }
                 if (roles.get(i).equals(NOM_AVENTURIER.INGENIEUR)){
-                    Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    Ingenieur aventurier = new Ingenieur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_BRONZE), pseudos.get(i));
                     aventuriers.add(aventurier);
                 }
                 if (roles.get(i).equals(NOM_AVENTURIER.MESSAGER)){
-                    Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    Messager aventurier = new Messager(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_FER), pseudos.get(i));
                     aventuriers.add(aventurier);
                 }
                 if (roles.get(i).equals(NOM_AVENTURIER.NAVIGATEUR)){
-                    Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    Navigateur aventurier = new Navigateur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_OR), pseudos.get(i));
                     aventuriers.add(aventurier);
                 }
                 if (roles.get(i).equals(NOM_AVENTURIER.PILOTE)){
-                    Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    Pilote aventurier = new Pilote(getGrille().getTuile(NOM_TUILE.HELIPORT), pseudos.get(i));
                     aventuriers.add(aventurier);
                 }
                 if (roles.get(i).equals(NOM_AVENTURIER.PLONGEUR)){
-                    Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_DE_CUIVRE), pseudos.get(i));
+                    Plongeur aventurier = new Plongeur(getGrille().getTuile(NOM_TUILE.LA_PORTE_D_ARGENT), pseudos.get(i));
                     aventuriers.add(aventurier);
                 }
                 i++;
             }
 
-            //setup la Vue niveau avec la difficulté
+            //Création de la Vue niveau avec la difficulté
             vueNiveau = new VueNiveau(difficulte);
 
             closeView((Vue)o);
             startGame();
         }
-
-
-
-
 
 
         // ---------------------------------- //
@@ -274,7 +290,7 @@ public class Controleur implements Observer {
                 }
 
                 // Update visuel de la position
-                updatePos(joueurActif % aventuriers.size());
+              //  updatePos(joueurActif % aventuriers.size());
                 closeView((Vue) o);
                 nbActions++;
             } else {
@@ -306,7 +322,6 @@ public class Controleur implements Observer {
         // ---------------------------------- //
         // --------  GESTION DU TOUR -------- //
         // ---------------------------------- //
-
         if(jeuLance) {
             // Si le nombre d'actions possibles de l'aventurier est égal au nombre d'actions effectuées pendant ce tour (nbActions) on passe le tour
             if ((aventuriers.get(joueurActif % aventuriers.size()).getNombreAction() == nbActions)) {
@@ -334,8 +349,11 @@ public class Controleur implements Observer {
         vueAventuriers.get(vueActive%aventuriers.size()).getBtnTerminerTour().setEnabled(b);
     }
 
-    public void updatePos(int joueur){
-        vueAventuriers.get(joueur).setPosition(aventuriers.get(joueur).getPosition().toString());
+    public void updatePos(int[] coordonnesJoueur, PION pion) {
+        ArrayList<PION>pions;
+        pions = vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].getPions();
+        pions.add(pion);
+        vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].update(ETAT_TUILE.SECHE, pions);
     }
 
     public Grille getGrille(){

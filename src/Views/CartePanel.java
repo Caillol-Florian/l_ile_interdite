@@ -18,6 +18,10 @@ public class CartePanel extends JPanel {
         }
     }
 
+    public CartePanel(){
+
+    }
+
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(resize(imageCarte, 60, 84), 0, 0, null);
@@ -30,5 +34,14 @@ public class CartePanel extends JPanel {
         g2d.drawImage(tmp, 0, 0, null);
         g2d.dispose();
         return dimg;
+    }
+
+    public void setCarte(String path){
+        try {
+            this.imageCarte = ImageIO.read(new File(path));
+            imageCarte.getGraphics().drawImage(imageCarte, 0, 0, null);
+        } catch (IOException e) {
+            System.out.println("Impossible de récupérer l'image.");
+        }
     }
 }

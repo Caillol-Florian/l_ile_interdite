@@ -307,7 +307,7 @@ public class VueInscription extends Vue {
                 if (getPseudos().get(0).contentEquals("")){
                     afficherInformation("Veuillez écrire vos pseudos pour commencer la partie");
                 } else {
-                    notifyObservers(Messages.SUIVANT);
+                    notifyObservers(Messages.VALIDERINSCRIPTION);
                 }
                 clearChanged();
             }

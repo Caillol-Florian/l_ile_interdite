@@ -11,6 +11,5 @@ public enum Messages {
     RETOUR,
     VALIDERASSECHEMENT,
     AUTRE,
-    SUIVANT,
     FINTOUR;
 }

@@ -13,11 +13,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class TuilePanel extends JPanel {
+
     private BufferedImage imageTuile;
     private NOM_TUILE nomTuile;
     private ArrayList<BufferedImage>imagesPions = new ArrayList<>();
+    private ArrayList<PION> pions;
 
     public TuilePanel(NOM_TUILE nomTuile, ETAT_TUILE etatTuile, ArrayList<PION>pions) {
+        if(pions == null){
+            this.pions = new ArrayList<>();
+        } else {
+            this.pions = pions;
+        }
 
         this.nomTuile = nomTuile;
 
@@ -37,9 +44,16 @@ public class TuilePanel extends JPanel {
         }
     }
 
+    public TuilePanel(String path){
+        try {
+            this.imageTuile = ImageIO.read(new File(path));
+        } catch (IOException e) {
+            System.out.println("Impossible de récupérer l'image.");
+        }
+    }
+
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int index = 15;
         g.drawImage(resize(imageTuile, 150, 150), 0, 0, null);
         drawPions(this.imagesPions);
     }
@@ -89,5 +103,9 @@ public class TuilePanel extends JPanel {
                 index += pion.getWidth(null);
             }
         }
+    }
+
+    public ArrayList<PION> getPions(){
+            return pions;
     }
 }
