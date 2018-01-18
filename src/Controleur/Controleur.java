@@ -37,6 +37,7 @@ public class Controleur implements Observer {
     private ArrayList<CarteInondation>pileCartesInondations = new ArrayList<>();
     private ArrayList<CarteInondation>défausseCarteInondations = new ArrayList<>();
     private ArrayList<Tresor>tresorsRécupérés = new ArrayList<>();
+    private ArrayList<Aventurier>aventuriersADeplacer = new ArrayList<>();
 
     private Tresor calice;
     private Tresor pierre;
@@ -336,7 +337,7 @@ public class Controleur implements Observer {
                     vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].update(pionsTuile);
 
                     // =====================================
-                    // AJOUTER LE PION SUR L'ANCIENNE TUILE
+                    // AJOUTER LE PION SUR LA NOUVELLE TUILE
                     // Update visuelle
                     ArrayList<PION> newPions = vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions();
                     newPions.add(aventuriers.get(joueurActif % aventuriers.size()).getPion());
@@ -697,7 +698,7 @@ public class Controleur implements Observer {
             tourPassé = false; // Le tour n'est plus passé
             aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
             piloteSpecial = false; // Reset de l'action spéciale du pilote
-
+            aventuriersADeplacer.clear(); // Il n'y a plus d'aventurier à déplacer
             vuePlateau.highlightAventurier(getJActif(), (joueurActif - 1) % aventuriers.size());
 
     }
@@ -725,15 +726,50 @@ public class Controleur implements Observer {
                 } else {
                     // Actualisation modèle
                     getGrille().getTuile(tuileInondée.getNom()).setEtat(ETAT_TUILE.COULEE);
-                    // Actualisation visuelle
-                    vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].setEtatTuile(ETAT_TUILE.COULEE);
-                    vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].update(vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].getPions());
+
                     // Suppression de la carte
                     pileCartesInondations.remove(pileCartesInondations.get(0));
 
                     // Vérification qu'un joueur n'est pas déjà sur la tuile qui vient d'être coulée
-                    
+                    if (!vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].getPions().isEmpty()) {
+                        // Récupération des aventuriers présents sur la tuile
+                        for (Aventurier aventurier : aventuriers) {
+                            if (aventurier.getPosition().getNom() == tuileInondée.getNom()){
+                                aventuriersADeplacer.add(aventurier);
+                            }
+                        }
 
+                        int j;
+                        boolean tuileTrouvée;
+                        for (Aventurier aventurier : aventuriersADeplacer){
+                            j = 0;
+                            tuileTrouvée = false;
+                            while(j < aventurier.getTuilesAccesibles(getGrille()).size() && !tuileTrouvée){
+                                int[] nouvelleCoo = {aventurier.getTuilesAccesibles(getGrille()).get(j), aventurier.getTuilesAccesibles(getGrille()).get(j+1)};
+                                if(!getGrille().getTuiles()[nouvelleCoo[0]][nouvelleCoo[1]].estCoulee()){
+
+                                    aventurier.setPosition(getGrille().getTuiles()[nouvelleCoo[0]][nouvelleCoo[1]]);
+                                    tuileTrouvée = true;
+
+                                    // =====================================
+                                    // AJOUTER LE PION SUR LA NOUVELLE TUILE
+                                    // Update visuelle
+                                    System.out.println(vuePlateau.getTableauTuile());
+                                    ArrayList<PION> newPions = vuePlateau.getTableauTuile()[nouvelleCoo[0]][nouvelleCoo[1]].getPions();
+                                    newPions.add(aventurier.getPion());
+                                    vuePlateau.getTableauTuile()[nouvelleCoo[0]][nouvelleCoo[1]].update(newPions);
+                                }
+                                j+=2;
+                            }
+                            if (!tuileTrouvée){
+                                partiePerdue = true;
+                            }
+                        }
+                    }
+
+                    // Actualisation visuelle
+                    vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].setEtatTuile(ETAT_TUILE.COULEE);
+                    vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].update(vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].getPions());
                 }
 
             }else {

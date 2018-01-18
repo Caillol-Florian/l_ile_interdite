@@ -90,16 +90,20 @@ public class TuilePanel extends JPanel {
                 this.setImageTuile(ImageIO.read(fileTuileInondee));
             } else if (getEtatTuile() == ETAT_TUILE.COULEE){
                 this.setImageTuile(ImageIO.read(fileTuileOcean));
+                getPions().clear();
             }
 
             // Affichage des pions
                 // Actualisation des pions
                 this.getImagesPions().clear();
-                if(!pions.isEmpty()) {
+
+            if (getEtatTuile() != ETAT_TUILE.COULEE) {
+                if (!pions.isEmpty()) {
                     for (PION pion : pions) {
                         this.getImagesPions().add(ImageIO.read(new File(pion.getPath())));
                     }
                 }
+            }
 
             Image image = new BufferedImage(150, 150, BufferedImage.TYPE_INT_ARGB);
             paintComponent(image.getGraphics());
