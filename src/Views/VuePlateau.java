@@ -28,6 +28,8 @@ public class VuePlateau extends Vue {
     private final TuilePanel[][] tableauTuile;
     // Array contenant l'Array des cartes de chaque aventurier.
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
+    // Tableau path tresor
+    private String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"};
 
     // Niveau de difficulté
     private Integer niveau = 1;
@@ -75,10 +77,50 @@ public class VuePlateau extends Vue {
 
         GridBagConstraints cColonneAventurier = new GridBagConstraints();
         cColonneAventurier.gridy = 0;
+        cColonneAventurier.gridx = 0;
         cColonneAventurier.fill = GridBagConstraints.BOTH;
         cColonneAventurier.insets = new Insets(25,0,0,0);
 
+        JPanel panelTresor = new JPanel(new GridBagLayout());
+        panelAventuriers.add(panelTresor,cColonneAventurier);
+        GridBagConstraints cTresor = new GridBagConstraints();
+
+        cTresor.weightx = 4;
+        cTresor.weighty = 2;
+        cTresor.gridx = 0;
+        cTresor.gridy = 0;
+        cTresor.fill = GridBagConstraints.BOTH;
+        cTresor.anchor = GridBagConstraints.CENTER;
+
+        cTresor.gridwidth = 4;
+
+        panelTresor.setBorder(new MatteBorder(2,2,2,2, Color.BLACK));
+
+        JPanel textTresorPanel = new JPanel();
+        textTresorPanel.setBackground(Color.BLACK);
+        JLabel tresorLabel = new JLabel("Trésor(s) à récupérer");
+        tresorLabel.setForeground(Color.WHITE);
+        textTresorPanel.add(tresorLabel);
+        panelTresor.add(textTresorPanel, cTresor);
+
+        cTresor.gridy = 1;
+        cTresor.gridwidth = 1;
+
+        ArrayList<CartePanel>tresors = new ArrayList<>();
+        for (int i =0; i<4; i++){
+            CartePanel tresor = new CartePanel(tresorsPath[i],90,90);
+            tresor.setPreferredSize(new Dimension(90,90));
+            tresors.add(tresor);
+            panelTresor.add(tresor,cTresor);
+            cTresor.gridx++;
+        }
+
+
+
+        cColonneAventurier.gridy++;
+
         Dimension sizeCarte = new Dimension(60,  84);
+
         for(int i = 0; i < pseudosJoueurs.size(); i++){
             JPanel panelAventurier = new JPanel(new GridBagLayout());
             panelAventurier.setBorder(new MatteBorder(2,2,2,2, couleurs.get(i)));
@@ -204,7 +246,6 @@ public class VuePlateau extends Vue {
         // Grille
         this.tableauTuile = new TuilePanel[6][6];
         Dimension size = new Dimension(150,150);
-        String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"};
         int index = 0;
         int indexTresor = 0;
         for(int i = 0; i < 6; i++){
@@ -461,7 +502,6 @@ public class VuePlateau extends Vue {
     }
 
     public void setNiveau(Integer niveau) {
-        System.out.println("VueNiveau_nopic.setNiveau(" + niveau + ")");
         panelsGauches.get(this.niveau).setBackground(getBgColor(this.niveau - 1));
         this.niveau = niveau;
         panelsGauches.get(this.niveau).setBackground(this.niveau == 10 ? Color.RED : Color.YELLOW);
