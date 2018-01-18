@@ -13,6 +13,7 @@ public class Parameters {
     public static final Boolean LOGS = false ; // Afficher des traces par System.out.println()
     public static final Boolean ALEAS = true ; // Attribuer les aventuriers aléatoirement ou non, mélanger les défausses et les pioches
     public static final Boolean SIMPLIFIED = true ; // Processus simplifié (pas d'interruption pendant les tours)
+    public static final Boolean AFFICHERTRESOR = false; //Affiche les trésors aux coins du plateau
     
     // ====================================================================================
     // Paramètres IHM
