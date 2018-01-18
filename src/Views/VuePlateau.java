@@ -2,6 +2,8 @@ package Views;
 
 import Enums.*;
 import Modèles.Parameters;
+import org.w3c.dom.css.CSSPrimitiveValue;
+import org.w3c.dom.css.RGBColor;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static Modèles.Parameters.AFFICHERTRESOR;
 import static javax.swing.SwingConstants.CENTER;
 
 public class VuePlateau extends Vue {
@@ -24,6 +27,9 @@ public class VuePlateau extends Vue {
     private final JPanel mainPanel;
     // Array contenant chaque panel de chaque aventurier
     private final ArrayList<JPanel>arrayPanelsAventurier = new ArrayList<>();
+    private ArrayList<Color> couleurs;
+    private ArrayList<JPanel> panelsNom;
+    private Color grey = new Color(122,122,122);
     // Grille des tuiles
     private final TuilePanel[][] tableauTuile;
     // Array contenant l'Array des cartes de chaque aventurier.
@@ -49,6 +55,9 @@ public class VuePlateau extends Vue {
         window.setLocation(0, 0);
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        // =============
+        this.couleurs = couleurs;
 
         // =============================================================
         // Création du panel principal
@@ -121,7 +130,7 @@ public class VuePlateau extends Vue {
 
         for(int i = 0; i < pseudosJoueurs.size(); i++){
             JPanel panelAventurier = new JPanel(new GridBagLayout());
-            panelAventurier.setBorder(new MatteBorder(2,2,2,2, couleurs.get(i)));
+            panelAventurier.setBorder(new MatteBorder(2,2,2,2, grey));
 
             GridBagConstraints cAventurier = new GridBagConstraints();
             cAventurier.gridy = 0; cAventurier.gridx = 0;
@@ -141,11 +150,13 @@ public class VuePlateau extends Vue {
             panelAventurier.add(cartePersonnage, cAventurier);
 
             // Nom de l'aventurier
+            panelsNom = new ArrayList<>();
             cAventurier.gridy = 0;
             cAventurier.gridx = 1;
             cAventurier.gridheight = 1;
             JPanel panelNom = new JPanel();
-            panelNom.setBackground(couleurs.get(i));
+            panelNom.setBackground(grey);
+            panelsNom.add(panelNom);
             JLabel labelNomAventurier = new JLabel(pseudosJoueurs.get(i),SwingConstants.CENTER);
             labelNomAventurier.setForeground(Color.WHITE);
             panelNom.add(labelNomAventurier);
@@ -190,8 +201,9 @@ public class VuePlateau extends Vue {
         cBouton.gridx = 0;
         cBouton.gridy = 0;
         cBouton.anchor = GridBagConstraints.CENTER;
+        cBouton.insets = new Insets(10,0,10,0);
 
-        //cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
+        cColonneAventurier.insets = new Insets(50,0,0,0);
         panelAventuriers.add(panelBoutons, cColonneAventurier);
 
         Dimension iconSize = new Dimension(50,50);
@@ -316,12 +328,17 @@ public class VuePlateau extends Vue {
                     panelPlateau.add(new JLabel(),cGrille);
 
                 } else if((i == 0 || i == 5) && (j==0 || j == 5)){ // Trésors
-                    TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
-                    this.tableauTuile[i][j] = tresor;
-                    panelPlateau.add(tresor, cGrille);
-                    tresor.setPreferredSize(size);
-                    tresor.setOpaque(false);
-                    indexTresor++;
+                    if (AFFICHERTRESOR) {
+                        TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
+                        this.tableauTuile[i][j] = tresor;
+                        panelPlateau.add(tresor, cGrille);
+                        tresor.setPreferredSize(size);
+                        tresor.setOpaque(false);
+                        indexTresor++;
+                    } else {
+                        panelPlateau.add(new JLabel(), cGrille);
+                    }
+
                 }
                 else{ // Tuiles
                     TuilePanel tuile = new TuilePanel(nomsTuiles.get(index), ETAT_TUILE.SECHE, null);
@@ -510,6 +527,13 @@ public class VuePlateau extends Vue {
         btn.setToolTipText(texte);
         btn.setOpaque(false);
         return btn;
+    }
+
+    public void highlightAventurier(int joueurActif){
+        panelsNom.get(joueurActif-1).setBackground(grey);
+        panelsNom.get(joueurActif).setBackground(couleurs.get(joueurActif));
+        arrayPanelsAventurier.get(joueurActif-1).setBorder(new MatteBorder(2,2,2,2, grey));
+        arrayPanelsAventurier.get(joueurActif).setBorder(new MatteBorder(2,2,2,2, couleurs.get(joueurActif)));
     }
 
     public TuilePanel[][] getTableauTuile() {
