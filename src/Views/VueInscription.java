@@ -31,7 +31,7 @@ public class VueInscription extends Vue {
     private ArrayList<String> pseudos = new ArrayList<>();
     private ArrayList<JTextField> JTextFields = new ArrayList<>();
 
-    private boolean btnD1 = false;
+    private boolean btnD1 = true;
     private boolean btnD2 = false;
     private boolean btnD3 = false;
     private boolean btnD4 = false;
