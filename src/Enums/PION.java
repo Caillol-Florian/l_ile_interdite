@@ -9,7 +9,7 @@ public enum PION {
     VERT ("Explorateur", new Color(0, 195, 0), "images/pions/pionVert"),
     VIOLET ("Messager", new Color(204, 94, 255), "images/pions/pionViolet"),
     JAUNE("Navigateur", new Color(255, 255, 0), "images/pions/pionJaune"),
-    GRIS("Plongeur", new Color(220, 220, 220), "images/pions/pionGris");
+    NOIR("Plongeur", new Color(50, 50, 50), "images/pions/pionNoir");
 
     private final String name ;
     private final Color couleur;

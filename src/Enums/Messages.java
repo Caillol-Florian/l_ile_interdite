@@ -10,6 +10,7 @@ public enum Messages {
     VALIDERDEPLACEMENT,
     RETOUR,
     VALIDERASSECHEMENT,
+    DONCARTE,
     AUTRE,
     FINTOUR;
 }

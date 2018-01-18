@@ -59,6 +59,7 @@ public class Controleur implements Observer {
     private VueInscription vueInscription = new VueInscription();
     private VuePlateau vuePlateau;
     private VueDefausse vueDefausse = new VueDefausse();
+    private VueDonCarte vueDonCarte = new VueDonCarte();
 
     public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 
@@ -243,9 +244,11 @@ public class Controleur implements Observer {
 
             // Mise en évidence des tuiles pour assécher
         if (arg == Messages.ASSECHER) {
-            vuePlateau.highlightTuiles(true, aventuriers.get(getJActif()).getTuilesAssechables(grille));
-            deplacementActif = false;
-            assechementActif = true;
+            if(!assechementActif) {
+                vuePlateau.highlightTuiles(true, aventuriers.get(getJActif()).getTuilesAssechables(grille));
+                deplacementActif = false;
+                assechementActif = true;
+            }
         }
 
             // Mise en évidence des tuiles pour se déplacer
@@ -254,13 +257,15 @@ public class Controleur implements Observer {
             // On vérifie que le joueur actif est un pilote
                 // S'il est pilote, on affiche les tuiles disponibles en fonction de s'il a utilisé son déplacement spécial
             // SINON, on affiche les tuiles des autres aventuriers.
-            if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
-                vuePlateau.highlightTuiles(true, ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial));
-            } else {
-                vuePlateau.highlightTuiles(true, aventuriers.get(getJActif()).getTuilesAccesibles(grille));
+            if (!deplacementActif) {
+                if (aventuriers.get(joueurActif % aventuriers.size()) instanceof Pilote) {
+                    vuePlateau.highlightTuiles(true, ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial));
+                } else {
+                    vuePlateau.highlightTuiles(true, aventuriers.get(getJActif()).getTuilesAccesibles(grille));
+                }
+                assechementActif = false;
+                deplacementActif = true;
             }
-            assechementActif = false;
-            deplacementActif = true;
         }
 
         // ===============================================
@@ -377,8 +382,22 @@ public class Controleur implements Observer {
             }
 
         }
-        if (arg == Messages.AUTRE) {
-            Utils.afficherInformation("Cette fonctionnalité n'est pas encore disponible !");
+
+        // ==========================
+        // OUVERTURE VUE DON CARTE
+        if (arg == Messages.DONCARTE) {
+            for(int i = 0; i < aventuriers.get(getJActif()).getCartes().size(); i++){
+                vueDonCarte.getCartes().get(i).setCarte(aventuriers.get(getJActif()).getCartes().get(i).getPath());
+            }
+
+            int index = 0;
+            for(int j = 0; j < aventuriers.size(); j++){
+                if(aventuriers.get(j).getPosition() == aventuriers.get(getJActif()).getPosition() && aventuriers.get(j) != aventuriers.get(getJActif())) {
+                    vueDonCarte.getCartesA().get(index).setCarte("images/personnages/"+aventuriers.get(j).getNomRole().toString().toLowerCase()+".png");
+                    index++;
+                }
+            }
+            openView(vueDonCarte);
         }
 
         // Si on appuie sur le bouton Fin Tour pendant un tour, tourPassé = true (ce qui aura pour effet de passer le tour)
@@ -396,7 +415,7 @@ public class Controleur implements Observer {
         // assèchement bonus ou de passer le tour.
         if (nbActions == 2 & aAsseché){
             vuePlateau.getBtnBouger().setEnabled(false);
-            vuePlateau.getBtnAutre().setEnabled(false);
+            vuePlateau.getBtnDonCarte().setEnabled(false);
         }
 
         // ---------------------------------- //
@@ -522,6 +541,7 @@ public class Controleur implements Observer {
                     enableBoutons(false);
                     for(int j = 0; j < aventuriers.get(getJActif()).getCartes().size(); j++){
                         vueDefausse.getCartes().get(j).setCarte(aventuriers.get(getJActif()).getCartes().get(j).getPath());
+                        vueDefausse.setNomJoueur(aventuriers.get(getJActif()).getNomJoueur());
                         openView(vueDefausse);
                     }
                 }
@@ -536,7 +556,7 @@ public class Controleur implements Observer {
     public void enableBoutons(boolean enable){
         vuePlateau.getBtnAssecher().setEnabled(enable);
         vuePlateau.getBtnFinir().setEnabled(enable);
-        vuePlateau.getBtnAutre().setEnabled(enable);
+        vuePlateau.getBtnDonCarte().setEnabled(enable);
         vuePlateau.getBtnBouger().setEnabled(enable);
     }
 

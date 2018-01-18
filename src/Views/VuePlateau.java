@@ -41,7 +41,7 @@ public class VuePlateau extends Vue {
     private JButton btnBouger;
     private JButton btnAssecher;
     private JButton btnFinir;
-    private JButton btnAutre;
+    private JButton btnDon;
 
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles, int niveauDifficulte) {
 
@@ -207,8 +207,17 @@ public class VuePlateau extends Vue {
         });
         panelBoutons.add(btnAssecher);
 
-        btnAutre  = new JButton("Autre action");
-        panelBoutons.add(btnAutre);
+        btnDon  = new JButton("Donner une carte");
+
+        panelBoutons.add(btnDon);
+        btnDon.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.DONCARTE);
+                clearChanged();
+            }
+        });
 
         btnFinir = new JButton("Finir Tour");
         btnFinir.addActionListener(new ActionListener() {
@@ -219,6 +228,7 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
+
         panelBoutons.add(btnFinir);
 
 
@@ -489,8 +499,8 @@ public class VuePlateau extends Vue {
         return btnAssecher;
     }
 
-    public JButton getBtnAutre() {
-        return btnAutre;
+    public JButton getBtnDonCarte() {
+        return btnDon;
     }
 
     public JButton getBtnFinir() {

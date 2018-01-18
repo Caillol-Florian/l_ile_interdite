@@ -13,9 +13,10 @@ public class VueDefausse extends Vue {
     private final JFrame window;
     private final JPanel mainPanel;
     private ArrayList<CartePanel> cartes;
+    private JLabel labelNomJoueur = new JLabel();
     public VueDefausse(){
         this.window = new JFrame();
-        window.setSize(720, 150);
+        window.setSize(720, 180);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(700, 500);
         //le titre = nom du joueur
@@ -30,10 +31,11 @@ public class VueDefausse extends Vue {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
+        mainPanel.add(labelNomJoueur,c);
         c.anchor = GridBagConstraints.FIRST_LINE_START;
-
-        mainPanel.add(new JLabel("Choisir une carte à défausser"));
         c.gridy= 1;
+        mainPanel.add(new JLabel("Choisir une carte à défausser"),c);
+        c.gridy= 2;
         cartes = new ArrayList<>();
         JPanel panelCarte = new JPanel(new GridBagLayout());
         GridBagConstraints cCarte = new GridBagConstraints();
@@ -78,9 +80,12 @@ public class VueDefausse extends Vue {
         window.setVisible(b);
     }
 
-
+    public void setNomJoueur(String nomJoueur){
+        this.labelNomJoueur.setText(nomJoueur);
+    }
     public static void main(String[] args) {
         VueDefausse vue = new VueDefausse();
+        vue.setVisible(true);
     }
 
     public ArrayList<CartePanel> getCartes() {
