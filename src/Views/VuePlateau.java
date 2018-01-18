@@ -24,6 +24,8 @@ mainPanel (c) > panelAventuriers (cColonneAventurier) > panelMusique (cMusique) 
 
 ** panelAventurier > cartePersonnage | panelNom | panelCarte
 
+nb : tous les layouts sont indiqués dans le code
+
 */
 
 public class VuePlateau extends Vue {
@@ -38,7 +40,7 @@ public class VuePlateau extends Vue {
     private final TuilePanel[][] tableauTuile; // Grille des tuiles
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>(); // Array contenant l'Array des cartes de chaque aventurier.
     private String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"}; // Tableau path tresor
-    private Integer niveau; // Niveau de difficulté
+    private Integer niveau = 1; // Niveau de difficulté
 
     // Parametre vueNiveau
     HashMap<Integer, JPanel> panelsGauches = new HashMap<>();
@@ -82,13 +84,39 @@ public class VuePlateau extends Vue {
 
         mainPanel.add(panelAventuriers, c);
 
-        //  PanelTrésor
-
+        //  PanelMusique
         GridBagConstraints cColonneAventurier = new GridBagConstraints();
         cColonneAventurier.gridy = 0;
         cColonneAventurier.gridx = 0;
         cColonneAventurier.fill = GridBagConstraints.BOTH;
-        cColonneAventurier.insets = new Insets(25,0,0,0);
+
+        JPanel panelMusique = new JPanel(new GridBagLayout());
+        panelAventuriers.add(panelMusique,cColonneAventurier);
+        GridBagConstraints cMusique = new GridBagConstraints();
+        cMusique.weightx = 6;
+        cMusique.weighty = 1;
+        cMusique.gridx = 0;
+        cMusique.gridy = 0;
+        cMusique.anchor = GridBagConstraints.PAGE_START;
+
+        JButton Lecture = btnIcone("playButton.png","Lecture");
+        JButton Pause = btnIcone("pause.png","Pause");
+
+        panelMusique.add(Lecture,cMusique);
+        cMusique.gridx++;
+        panelMusique.add(Pause,cMusique);
+        cMusique.gridx++;
+
+        for (int i =0; i<4; i++){
+            panelMusique.add(new JLabel(), cMusique);
+            cMusique.gridx++;
+        }
+
+        cColonneAventurier.gridy++;
+
+        //  PanelTrésor
+
+        cColonneAventurier.insets = new Insets(25,0,25,0);
 
         JPanel panelTresor = new JPanel(new GridBagLayout());
         panelAventuriers.add(panelTresor,cColonneAventurier);
@@ -183,6 +211,8 @@ public class VuePlateau extends Vue {
 
             cartesAventurier.add(cartes);
             panelAventurier.add(panelCarte, cAventurier);
+
+            cColonneAventurier.insets = new Insets(5,0,0,0);
             panelAventuriers.add(panelAventurier, cColonneAventurier);
             arrayPanelsAventurier.add(panelAventurier);
             cColonneAventurier.gridy++;
@@ -200,7 +230,7 @@ public class VuePlateau extends Vue {
         cBouton.anchor = GridBagConstraints.CENTER;
         cBouton.insets = new Insets(10,0,10,0);
 
-        cColonneAventurier.insets = new Insets(50,0,0,0);
+        cColonneAventurier.insets = new Insets(55,0,35,0);
         panelAventuriers.add(panelBoutons, cColonneAventurier);
 
         Dimension iconSize = new Dimension(50,50);
