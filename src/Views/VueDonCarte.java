@@ -158,10 +158,6 @@ public class VueDonCarte extends Vue {
         window.setVisible(b);
     }
 
-    public static void main(String[] args) {
-        VueDonCarte vue = new VueDonCarte(); vue.setVisible(true);
-    }
-
     public ArrayList<CartePanel> getCartes() {
         return cartes;
     }

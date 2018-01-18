@@ -69,6 +69,7 @@ public class Controleur implements Observer {
     private VueInscription vueInscription = new VueInscription();
     private VuePlateau vuePlateau;
     private VueDefausse vueDefausse;
+    private VueDefaussePlateau vueDefausseListe ;
     private VueDonCarte vueDonCarte;
 
     //==============================
@@ -94,9 +95,11 @@ public class Controleur implements Observer {
         // Initialisation des modèles
 
         vueDefausse = new VueDefausse();
+        vueDefausseListe = new VueDefaussePlateau();
         vueDonCarte = new VueDonCarte();
         vueDefausse.abonner(this);
         vueDonCarte.abonner(this);
+        vueDefausseListe.abonner(this);
 
         // Initialisation des trésors
         this.calice = new Tresor(TYPE_TRESOR.CALICE);
@@ -597,6 +600,33 @@ public class Controleur implements Observer {
             }
         }
 
+        if(arg == Messages.DEFAUSSEACTION){
+            // Remplacement du dos des cartes de la vue
+            for(int i = 0; i < vueDefausseListe.getCartesDefaussees().size(); i++){
+                vueDefausseListe.getCartesDefaussees().get(i).setCarte("images/cartes/Fond rouge.png");
+            }
+
+            for(int i = 0; i < défausseCarteAction.size(); i++){
+                vueDefausseListe.getCartesDefaussees().get(i).setCarte(défausseCarteAction.get(i).getPath());
+            }
+
+            openView(vueDefausseListe);
+
+        }
+
+        if(arg == Messages.DEFAUSSEINONDEE){
+            // Remplacement du dos des cartes de la vue
+            for(int i = 0; i < vueDefausseListe.getCartesDefaussees().size(); i++){
+                vueDefausseListe.getCartesDefaussees().get(i).setCarte("images/cartes/Fond bleu.png");
+            }
+
+            for(int i = 0; i < défausseCarteInondations.size(); i++){
+                vueDefausseListe.getCartesDefaussees().get(i).setCarte(défausseCarteInondations.get(i).getTuile().getNom().getPathInonde());
+            }
+
+            openView(vueDefausseListe);
+        }
+
         // ---------------------------------- //
         // --------  GESTION DU TOUR -------- //
         // ---------------------------------- //
@@ -749,7 +779,6 @@ public class Controleur implements Observer {
                                 aventuriersADeplacer.add(aventurier);
                             }
                         }
-
                         int j;
                         boolean tuileTrouvée;
                         for (Aventurier aventurier : aventuriersADeplacer){

@@ -50,6 +50,8 @@ public class VuePlateau extends Vue {
     Integer cellHeight = (Parameters.HAUTEUR_AUTRES_VUES - 25 - (Parameters.UNDECORATED ? 0 : Parameters.DECORATION_HEIGHT)) / 10;
 
     private JButton btnBouger, btnAssecher, btnRecuperer, btnDon, btnSpecial, btnFinir, btnQuitter;
+    private CartePanel inondationFace;
+    private CartePanel tresorFace;
 
 
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles, int niveauDifficulte) {
@@ -464,9 +466,38 @@ public class VuePlateau extends Vue {
         panelInfo.add(tresorDos, cInfo);
 
         cInfo.gridx = 1;
-        CartePanel tresorFace = new CartePanel("images/cartes/Calice.png",120, 150);
+        this.tresorFace = new CartePanel("images/cartes/Calice.png",120, 150);
+        tresorFace.setToolTipText("Voir défausse des cartes actions");
         tresorFace.setPreferredSize(sizePioche);
         panelInfo.add(tresorFace, cInfo);
+        tresorFace.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                setChanged();
+                notifyObservers(Messages.DEFAUSSEACTION);
+                clearChanged();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         // PanelNiveau
         JPanel niveau = new JPanel();
@@ -567,9 +598,38 @@ public class VuePlateau extends Vue {
         panelInfo.add(inondationDos, cInfo);
 
         cInfo.gridx = 1;
-        CartePanel inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png",120, 150);
+        this.inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png",120, 150);
+        inondationFace.setToolTipText("Voir défausse des cartes inondées");
         inondationFace.setPreferredSize(sizePioche);
         panelInfo.add(inondationFace, cInfo);
+        inondationFace.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                setChanged();
+                notifyObservers(Messages.DEFAUSSEINONDEE);
+                clearChanged();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         setNiveau(niveauDifficulte);
 
@@ -692,5 +752,13 @@ public class VuePlateau extends Vue {
 
     public JButton getBtnRecuperer() {
         return btnRecuperer;
+    }
+
+    public CartePanel getTresorFace() {
+        return tresorFace;
+    }
+
+    public CartePanel getInondationFace() {
+        return inondationFace;
     }
 }

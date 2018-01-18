@@ -62,5 +62,18 @@ public enum NOM_TUILE {
         return path + "_Inonde.png";
     }
 
+    public String getPathCarteInonde(){
+        String pathC = "";
+        for(int i = 14; i < path.toCharArray().length; i++){
+            if(i == 14){
+                pathC += getPath().toUpperCase().charAt(i);
+            } else {
+                pathC += getPath().charAt(i);
+            }
+        }
+
+        return "images/cartes/" + pathC;
+    }
+
     public Tresor getTresor(){return tresor;}
 }

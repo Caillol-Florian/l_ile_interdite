@@ -85,10 +85,7 @@ public class VueDefausse extends Vue {
     public void setNomJoueur(String nomJoueur){
         this.labelNomJoueur.setText(nomJoueur);
     }
-    public static void main(String[] args) {
-        VueDefausse vue = new VueDefausse();
-        vue.setVisible(true);
-    }
+
 
     public ArrayList<CartePanel> getCartes() {
         return cartes;

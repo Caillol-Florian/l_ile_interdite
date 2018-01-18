@@ -13,5 +13,7 @@ public enum Messages {
     QUITTERPARTIE,
     PAUSE,
     PLAY,
+    DEFAUSSEACTION,
+    DEFAUSSEINONDEE,
     FINTOUR;
 }
