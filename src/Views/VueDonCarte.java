@@ -129,7 +129,7 @@ public class VueDonCarte extends Vue {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setChanged();
-                notifyObservers(Messages.RETOUR);
+                notifyObservers(Messages.QUITTER);
                 clearChanged();
             }
         });

@@ -309,11 +309,11 @@ public class VuePlateau extends Vue {
         btnSpecial = btnIcone("star.png","Action spéciale");
         panelBoutons.add(btnSpecial,cBouton);
 
-        btnAssecher.addActionListener(new ActionListener() {
+        btnSpecial.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setChanged();
-                notifyObservers(Messages.RECUPTRESOR);
+                notifyObservers(Messages.ACTIONSPECIALE);
                 clearChanged();
             }
         });

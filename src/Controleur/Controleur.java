@@ -34,7 +34,7 @@ public class Controleur implements Observer {
     private ArrayList<CarteAction>défausseCarteAction = new ArrayList<>();
     private ArrayList<CarteInondation>pileCartesInondations = new ArrayList<>();
     private ArrayList<CarteInondation>défausseCarteInondations = new ArrayList<>();
-
+    private ArrayList<Tresor>tresorsRécupérés = new ArrayList<>();
     private ArrayList<NOM_AVENTURIER>roles = new ArrayList<>();
 
     // ==============================
@@ -106,13 +106,13 @@ public class Controleur implements Observer {
         // Initialisation de la pile de Carte Actions
         // Carte trésors (5 de chaque)
         for (int i=0; i<5; i++){
-            CarteTresor carteTresorCalice = new CarteTresor("images/cartes/Calice.png");
+            CarteTresor carteTresorCalice = new CarteTresor("images/cartes/Calice.png", calice);
             pileCartesAction.add(carteTresorCalice);
-            CarteTresor carteTresorCristal = new CarteTresor("images/cartes/Cristal.png");
+            CarteTresor carteTresorCristal = new CarteTresor("images/cartes/Cristal.png", cristal);
             pileCartesAction.add(carteTresorCristal);
-            CarteTresor carteTresorPierre = new CarteTresor("images/cartes/Pierre.png");
+            CarteTresor carteTresorPierre = new CarteTresor("images/cartes/Pierre.png", pierre);
             pileCartesAction.add(carteTresorPierre);
-            CarteTresor carteTresorZephyr = new CarteTresor("images/cartes/Zephyr.png");
+            CarteTresor carteTresorZephyr = new CarteTresor("images/cartes/Zephyr.png", zephyr);
             pileCartesAction.add(carteTresorZephyr);
         }
 
@@ -246,7 +246,6 @@ public class Controleur implements Observer {
         // ---------------------------------- //
         // ----------- AVENTURIER ----------- //
         // ---------------------------------- //
-
             // Mise en évidence des tuiles pour assécher
         if (arg == Messages.ASSECHER) {
             if(!assechementActif) {
@@ -273,8 +272,9 @@ public class Controleur implements Observer {
             }
         }
 
-        // ===============================================
-        // VALIDATION DEPLACEMENT / ASSECHEMENT
+        // ---------------------------------- //
+        // -- VALID DEPLACEMENT/ASSECHEMENT-- //
+        // ---------------------------------- //
         if(arg instanceof Message_Coche){
             // Récupération du nom de la tuile sélectionnée
             NOM_TUILE tuileSelectionnee = ((Message_Coche)arg).getNomTuile();
@@ -377,7 +377,6 @@ public class Controleur implements Observer {
                     // Désactivation du highlight
                     vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAssechables(grille));
 
-
                     getGrille().getTuiles()[coordSelectionnee[0]][coordSelectionnee[1]].setEtat(ETAT_TUILE.SECHE);
                     vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].setEtatTuile(ETAT_TUILE.SECHE);
                     vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions());
@@ -400,6 +399,14 @@ public class Controleur implements Observer {
         // ==========================
         // OUVERTURE VUE DON CARTE
         if (arg == Messages.DONCARTE) {
+            // Remise à 0 des cartes affichées dans la vue don carte.
+            for(int i = 0; i < vueDonCarte.getCartes().size(); i++){
+                vueDonCarte.getCartes().get(i).setCarte("images/cartes/Fond rouge.png");
+            }
+            for(int i = 0; i < vueDonCarte.getCartesA().size(); i++){
+                vueDonCarte.getCartesA().get(i).setCarte("images/cartes/Fond rouge.png");
+            }
+
             // On récupère les cartes que possède l'aventurier courant et on les affiche dans le vue vueDonCarte
             for(int i = 0; i < aventuriers.get(getJActif()).getCartes().size(); i++){
                 vueDonCarte.getCartes().get(i).setCarte(aventuriers.get(getJActif()).getCartes().get(i).getPath());
@@ -417,8 +424,9 @@ public class Controleur implements Observer {
             openView(vueDonCarte);
         }
 
-        // ==========================
-        // DON D'UNE CARTE
+        // ---------------------------------- //
+        // --------- DON D'UNE CARTE -------- //
+        // ---------------------------------- //
         if(arg instanceof int[]){
             // On récupère la sélection de l'aventurier
             int[] selection = (int[])arg; // selection[0] = carte que l'aventurier veut donner & selection[1] = aventurier choisi
@@ -427,13 +435,13 @@ public class Controleur implements Observer {
                     // On parcourt la liste des aventuriers pour trouver l'aventurier qui correspond à celui sélectionner grâce à son nom de role
                     int indexAventurierSelectionne = -1;
                     for(int i = 0; i < aventuriers.size(); i++) {
-                        System.out.println(aventuriers.get(i).getNomRole().toString());
-                        System.out.println(vueDonCarte.getCartesA().get(selection[1]).getNomAventurier());
                         if (Objects.equals(aventuriers.get(i).getNomRole().toString(), vueDonCarte.getCartesA().get(selection[1]).getNomAventurier())) {
                             indexAventurierSelectionne = i;
                         }
                     }
-                    System.out.println(indexAventurierSelectionne);
+
+                    System.out.println("Avant" + aventuriers.get(indexAventurierSelectionne).getCartes().size());
+
                     if(indexAventurierSelectionne != -1) {
                         // Update Modèle
                         aventuriers.get(indexAventurierSelectionne).getCartes().add(aventuriers.get(getJActif()).getCartes().get(selection[0]));
@@ -448,13 +456,26 @@ public class Controleur implements Observer {
                             vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(j).setCarte("images/cartes/Fond rouge.png");
                         }
                         // Et on remet les nouvelles cartes dans l'ordre...
-                        for (int k = 0; k < aventuriers.get(getJActif()).getCartes().size(); k++) {
-                            // Aventurier qui a donné
-                            vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
+                        for (int k = 0; k < vuePlateau.getCartesAventurier().size(); k++) {
+                            if(k < aventuriers.get(getJActif()).getCartes().size() || vuePlateau.getCartesAventurier().size() == aventuriers.get(getJActif()).getCartes().size()) {
+                                vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
+                            }
                         }
-                        for(int q = 0; q < aventuriers.get(indexAventurierSelectionne).getCartes().size(); q++){
+                        for(int q = 0; q < vuePlateau.getCartesAventurier().size(); q++){
                             // Aventurier qui reçoit
-                            vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(q).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(q).getPath());
+                            if(q < aventuriers.get(indexAventurierSelectionne).getCartes().size() || vuePlateau.getCartesAventurier().size() == aventuriers.get(getJActif()).getCartes().size()) {
+                                vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(q).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(q).getPath());
+                            }
+                        }
+
+                        // Si après avoir donné une carte l'aventurier sélectionné a trop de carte il doit en défausser une !
+                        System.out.println("Après" + aventuriers.get(indexAventurierSelectionne).getCartes().size());
+                        if (aventuriers.get(indexAventurierSelectionne).getCartes().size() > 5){
+                            for(int j = 0; j < vueDefausse.getCartes().size(); j++) { // On ouvre la vue défausse avec les cartes qu'il possède (6 premières).
+                                vueDefausse.getCartes().get(j).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(j).getPath());
+                                vueDefausse.setNomJoueur(aventuriers.get(indexAventurierSelectionne).getNomJoueur());
+                                openView(vueDefausse);
+                            }
                         }
 
                         nbActions++;
@@ -471,16 +492,95 @@ public class Controleur implements Observer {
             }
         }
 
+        // ---------------------------------- //
+        // ---------- RECUP TRESOR ---------- //
+        // ---------------------------------- //
+        if(arg == Messages.RECUPTRESOR){
+            Tresor tresorDeLaTuile = aventuriers.get(getJActif()).getPosition().getNom().getTresor();
+
+            // Vérification que la tuile possède un trésor
+            if(tresorDeLaTuile != null){
+                // Vérification que le trésor n'a pas déjà été récupéré.
+                if (tresorsRécupérés.contains(tresorDeLaTuile)) {
+                    // Vérification que le joueur possède assez de carte trésor pour récupérer le trésor.
+                    int nbCarteTresorCorrespondante = 0;
+                    ArrayList<Integer>cartesASupprimer = new ArrayList<>();
+
+                    for (int i = 0; i < aventuriers.get(getJActif()).getCartes().size(); i++) {
+                        if (aventuriers.get(getJActif()).getCartes().get(i) instanceof CarteTresor) {
+                            if (tresorDeLaTuile == ((CarteTresor) aventuriers.get(getJActif()).getCartes().get(i)).getTresor()) {
+                                nbCarteTresorCorrespondante++;
+                                cartesASupprimer.add(i);
+                            }
+                        }
+                    }
+
+                    if (nbCarteTresorCorrespondante >= 4) {
+                        tresorsRécupérés.add(tresorDeLaTuile);
+
+                        for(int i = 0; i < 4; i++){
+                            aventuriers.get(getJActif()).getCartes().remove(cartesASupprimer.get(i));
+                        }
+
+                        // Remise à 0 graphique de la liste des cartes de l'aventurier
+                        for (int j = 0; j < 5; j++) {
+                            // Aventurier qui a donné
+                            vuePlateau.getCartesAventurier().get(getJActif()).get(j).setCarte("images/cartes/Fond rouge.png");
+                        }
+                        // Et on remet les nouvelles cartes dans l'ordre...
+                        for (int k = 0; k < aventuriers.get(getJActif()).getCartes().size(); k++) {
+                            // Aventurier qui a donné
+                            vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
+                        }
+
+                    } else {
+                        Utils.afficherInformation("Vous n'avez pas assez de carte trésor " + tresorDeLaTuile.getTypeTresor().toString() + " !");
+                    }
+                } else {
+                    Utils.afficherInformation("Ce trésor à déja été récupéré !");
+                }
+            } else {
+                Utils.afficherInformation("Cette tuile ne possède pas de trésor !");
+            }
+        }
+
+        // ---------------------------------- //
+        // -----------  DEFAUSSE  ----------- //
+        // ---------------------------------- //
+        if(arg instanceof Integer){
+            int carteChoisie = (Integer)arg;
+
+            // On ajoute la carte chosie à la pile défausse
+            défausseCarteAction.add(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(carteChoisie));
+
+            // Et on la supprimme de la liste des carte de l'aventurier
+            aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().remove(carteChoisie);
+
+            // On actualise la liste des carte dans la vue
+            for(int i = 0; i <  vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).size() ; i++){
+                vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).get(i).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(i).getPath());
+            }
+
+            // On vérifie une seconde fois si l'aventurier n'a plus que 5 cartes (cas où il a 5 cartes et en pioche 2 en plus).
+            if(aventuriers.get((joueurActif-1)%aventuriers.size()).getCartes().size() < 6) { // S'il a 5 ou moins
+                closeView(vueDefausse); // On ferme la vue permettant de défausser une carte
+                enableBoutons(true); // On ractive les boutons
+            } else { // Sinon il doit encore défausser, on actualise la vue défausse avec les 6 cartes qu'il lui reste.
+                for(int j = 0; j < vueDefausse.getCartes().size(); j++){
+                    vueDefausse.getCartes().get(j).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(j).getPath());
+                    vueDefausse.setNomJoueur(aventuriers.get(((joueurActif-1)%aventuriers.size())).getNomJoueur());
+                }
+            }
+        }
+
+        // ---------------------------------- //
+        // --------  GESTION DU TOUR -------- //
+        // ---------------------------------- //
+
         // Si on appuie sur le bouton Fin Tour pendant un tour, tourPassé = true (ce qui aura pour effet de passer le tour)
         if (arg == Messages.FINTOUR) {
             tourPassé = true;
         }
-
-        // Quand on clique sur un bouton Retour, on ferme la présente vue.
-        if (arg == Messages.RETOUR) {
-            closeView((Vue) o);
-        }
-
         // On gère l'assèchement bonus de l'Ingénieur
         // Si l'ingénieur a effectué 2 actions et qu'il a déjà asséché une fois, il n'a plus le choix que de profiter de son
         // assèchement bonus ou de passer le tour.
@@ -489,9 +589,8 @@ public class Controleur implements Observer {
             vuePlateau.getBtnDonCarte().setEnabled(false);
         }
 
-        // ---------------------------------- //
-        // --------  GESTION DU TOUR -------- //
-        // ---------------------------------- //
+        // =================
+        // TOUR SUIVANT
         if(jeuLance) {
             // Si le nombre d'actions possibles de l'aventurier est égal au nombre d'actions effectuées pendant ce tour (nbActions) on passe le tour
             if ((aventuriers.get(getJActif()).getNombreAction() == nbActions)) {
@@ -530,34 +629,6 @@ public class Controleur implements Observer {
             }
         }
 
-        // ---------------------------------- //
-        // -----------  DEFAUSSE  ----------- //
-        // ---------------------------------- //
-        if(arg instanceof Integer){
-            int carteChoisie = (Integer)arg;
-
-            // On ajoute la carte chosie à la pile défausse
-            défausseCarteAction.add(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(carteChoisie));
-
-            // Et on la supprimme de la liste des carte de l'aventurier
-            aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().remove(carteChoisie);
-
-            // On actualise la liste des carte dans la vue
-            for(int i = 0; i <  vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).size() ; i++){
-                vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).get(i).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(i).getPath());
-            }
-
-            // On vérifie une seconde fois si l'aventurier n'a plus que 5 cartes (cas où il a 5 cartes et en pioche 2 en plus).
-            if(aventuriers.get((joueurActif-1)%aventuriers.size()).getCartes().size() < 6) { // S'il a 5 ou moins
-                closeView(vueDefausse); // On ferme la vue permettant de défausser une carte
-                enableBoutons(true); // On ractive les boutons
-            } else { // Sinon il doit encore défausser, on actualise la vue défausse avec les 6 cartes qu'il lui reste.
-                for(int j = 0; j < vueDefausse.getCartes().size(); j++){
-                    vueDefausse.getCartes().get(j).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(j).getPath());
-                    vueDefausse.setNomJoueur(aventuriers.get(((joueurActif-1)%aventuriers.size())).getNomJoueur());
-                }
-            }
-        }
     }
 
 
@@ -611,7 +682,7 @@ public class Controleur implements Observer {
             Collections.shuffle(pileCartesAction);
         }
 
-        CarteAction carteActionTirée = null;
+        CarteAction carteActionTirée;
         for(int i = 0; i < 2; i++){
             carteActionTirée = pileCartesAction.get(0);
             // S'il s'agit d'une carte montée des eaux.
@@ -633,8 +704,7 @@ public class Controleur implements Observer {
         }
 
         // Si malgré l'ajout de la carte il a moins de 6 cartes
-        if(aventuriers.get(getJActif()).getCartes().size() < 6) {
-        } else { // SINON il doit défausser !
+        if (aventuriers.get(getJActif()).getCartes().size() >= 6) { // SINON il doit défausser !
             enableBoutons(false); // On désactive les boutons (il n'a plus le choix que de défausser)
             for(int j = 0; j < vueDefausse.getCartes().size(); j++){ // On ouvre la vue défausse avec les cartes qu'il possède (6 premières).
                 vueDefausse.getCartes().get(j).setCarte(aventuriers.get(getJActif()).getCartes().get(j).getPath());

@@ -4,7 +4,13 @@ import Modèles.Tresor;
 
 public class CarteTresor extends CarteStockable {
 
-    public CarteTresor(String nom){
+    Tresor tresor;
+    public CarteTresor(String nom, Tresor tresor){
         super(nom);
+        this.tresor = tresor;
+    }
+
+    public Tresor getTresor() {
+        return tresor;
     }
 }
