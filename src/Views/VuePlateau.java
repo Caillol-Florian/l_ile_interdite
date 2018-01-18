@@ -38,10 +38,8 @@ public class VuePlateau extends Vue {
     Integer cellWidth = 50;
     Integer cellHeight = (Parameters.HAUTEUR_AUTRES_VUES - 25 - (Parameters.UNDECORATED ? 0 : Parameters.DECORATION_HEIGHT)) / 10;
 
-    private JButton btnBouger;
-    private JButton btnAssecher;
-    private JButton btnFinir;
-    private JButton btnDon;
+    private JButton btnBouger, btnAssecher, btnRecuperer, btnDon, btnSpecial, btnFinir;
+
 
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles, int niveauDifficulte) {
 
@@ -182,10 +180,26 @@ public class VuePlateau extends Vue {
             cColonneAventurier.gridy++;
         }
 
-        JPanel panelBoutons = new JPanel(new GridLayout(2,2));
-        cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
+
+        //construction panelBouton
+        ImagePanel panelBoutons = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
+        panelBoutons.setLayout(new GridBagLayout());
+        GridBagConstraints cBouton = new GridBagConstraints();
+        cBouton.weightx = 3;
+        cBouton.weighty = 2;
+        cBouton.gridx = 0;
+        cBouton.gridy = 0;
+        cBouton.anchor = GridBagConstraints.CENTER;
+
+        //cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
         panelAventuriers.add(panelBoutons, cColonneAventurier);
-        btnBouger = new JButton("Se déplacer");
+
+        Dimension iconSize = new Dimension(50,50);
+
+
+        btnBouger = btnIcone("move.png","Se déplacer");
+        panelBoutons.add(btnBouger,cBouton);
+
         btnBouger.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -194,9 +208,12 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
-        panelBoutons.add(btnBouger);
 
-        btnAssecher = new JButton("Assécher");
+        cBouton.gridx++;
+
+        btnAssecher = btnIcone("drought.png","Assécher");
+        panelBoutons.add(btnAssecher,cBouton);
+
         btnAssecher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -205,11 +222,26 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
-        panelBoutons.add(btnAssecher);
 
-        btnDon  = new JButton("Donner une carte");
+        cBouton.gridx++;
 
-        panelBoutons.add(btnDon);
+        btnRecuperer = btnIcone("chest.png","Récupérer trésor");
+        panelBoutons.add(btnRecuperer,cBouton);
+
+        btnAssecher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.RECUPTRESOR);
+                clearChanged();
+            }
+        });
+
+        cBouton.gridx++;
+
+        btnDon  = btnIcone("give-card.png","Donner une carte");
+        panelBoutons.add(btnDon, cBouton);
+
         btnDon.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -219,7 +251,25 @@ public class VuePlateau extends Vue {
             }
         });
 
-        btnFinir = new JButton("Finir Tour");
+        cBouton.gridx++;
+
+        btnSpecial = btnIcone("star.png","Action spéciale");
+        panelBoutons.add(btnSpecial,cBouton);
+
+        btnAssecher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.RECUPTRESOR);
+                clearChanged();
+            }
+        });
+
+        cBouton.gridx++;
+
+        btnFinir = btnIcone("next.png","Finir Tour");
+        panelBoutons.add(btnFinir, cBouton);
+
         btnFinir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -229,7 +279,7 @@ public class VuePlateau extends Vue {
             }
         });
 
-        panelBoutons.add(btnFinir);
+
 
 
         // =============================================================
@@ -450,6 +500,16 @@ public class VuePlateau extends Vue {
 
         // ===
         window.setVisible(true);
+    }
+
+    public JButton btnIcone(String path, String texte){
+        String imgUrl="images/icones/"+path;
+        ImageIcon icone = new ImageIcon(imgUrl);
+        JButton btn = new JButton(icone);
+        btn.setPreferredSize(new Dimension(60,60));
+        btn.setToolTipText(texte);
+        btn.setOpaque(false);
+        return btn;
     }
 
     public TuilePanel[][] getTableauTuile() {

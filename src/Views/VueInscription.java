@@ -335,33 +335,6 @@ public class VueInscription extends Vue {
         });
     }
 
-
-
-    private class PanelAvecImage extends JPanel {
-
-        private Image image;
-        private final Integer width;
-        private final Integer height;
-
-        public PanelAvecImage(Integer width, Integer height, String imageFile) {
-            this.width = width;
-            this.height = height;
-            try {
-                this.image = ImageIO.read(new File(imageFile));
-            } catch (IOException ex) {
-                System.err.println("Erreur de lecture background");
-            }
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, this.width, this.height, null, this);
-            }
-        }
-    }
-
     public void updateJTextField(){
 
         for (int i=0; i<4; i++){
