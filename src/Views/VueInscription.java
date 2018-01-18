@@ -48,7 +48,7 @@ public class VueInscription extends Vue {
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new ImagePanel(1024,720, "images/backgrounds/bg_inscriptionN.jpg") ;
+        mainPanel = new ImagePanel(1024,720, "src/images/backgrounds/bg_inscriptionN.jpg") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
@@ -85,7 +85,7 @@ public class VueInscription extends Vue {
         gc.anchor = GridBagConstraints.CENTER;
 
 
-        String imgUrl="images/icones/iconSettings.png";
+        String imgUrl="src/images/icones/iconSettings.png";
         ImageIcon icone0 = new ImageIcon(imgUrl);
 
         JLabel titreLabel = new JLabel(icone0);
@@ -118,7 +118,7 @@ public class VueInscription extends Vue {
         gc.insets = new Insets(0,0,0,0);
 
         //URL de l'image
-        String imgUrl1="images/icones/icon2PN.png";
+        String imgUrl1="src/images/icones/icon2PN.png";
         ImageIcon icone1 = new ImageIcon(imgUrl1);
         //création des boutons - ajout icones
         JButton jButton2 = new JButton(icone1);
@@ -137,7 +137,7 @@ public class VueInscription extends Vue {
         gc.gridx = 2;
         gc.gridy = 3;
 
-        String imgUrl2="images/icones/icon3PN.png";
+        String imgUrl2="src/images/icones/icon3PN.png";
         ImageIcon icone2 = new ImageIcon(imgUrl2);
         JButton jButton3 = new JButton(icone2);
         jButton3.setPreferredSize(new Dimension(200,60));
@@ -155,7 +155,7 @@ public class VueInscription extends Vue {
         gc.gridx = 3;
         gc.gridy = 3;
 
-        String imgUrl3="images/icones/icon4PN.png";
+        String imgUrl3="src/images/icones/icon4PN.png";
         ImageIcon icone3 = new ImageIcon(imgUrl3);
         JButton jButton4 = new JButton(icone3);
         jButton4.setPreferredSize(new Dimension(200,60));

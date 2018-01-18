@@ -39,7 +39,6 @@ public class VuePlateau extends Vue {
 
     private final TuilePanel[][] tableauTuile; // Grille des tuiles
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>(); // Array contenant l'Array des cartes de chaque aventurier.
-    private String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"}; // Tableau path tresor
     private Integer niveau = 1; // Niveau de difficulté
 
     private ArrayList<CartePanel>tresors;
@@ -66,12 +65,12 @@ public class VuePlateau extends Vue {
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //  MainPanel
-        mainPanel = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
+        mainPanel = new ImagePanel(1920,1080,"src/images/backgrounds/bg_plateau.png");
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
         // Panel Aventuriers
-        ImagePanel panelAventuriers =new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
+        ImagePanel panelAventuriers =new ImagePanel(1920,1080,"src/images/backgrounds/bg_plateau.png");
         panelAventuriers.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -180,7 +179,7 @@ public class VuePlateau extends Vue {
 
         tresors = new ArrayList<>();
         for (int i =0; i<4; i++){
-            CartePanel tresor = new CartePanel("images/tresors/blank.png",90,90);
+            CartePanel tresor = new CartePanel("src/images/tresors/blank.png",90,90);
             tresor.setPreferredSize(new Dimension(90,90));
             getTresors().add(tresor);
             panelTresor.add(tresor,cTresor);
@@ -209,7 +208,7 @@ public class VuePlateau extends Vue {
             cAventurier.gridheight = 2;
             cAventurier.fill = GridBagConstraints.BOTH;
 
-            CartePanel cartePersonnage = new CartePanel("images/personnages/"+nomRoles.get(i).toLowerCase()+".png",90,120);
+            CartePanel cartePersonnage = new CartePanel("src/images/personnages/"+nomRoles.get(i).toLowerCase()+".png",90,120);
             cartePersonnage.setPreferredSize(new Dimension(90,120));
             panelAventurier.add(cartePersonnage, cAventurier);
 
@@ -236,7 +235,7 @@ public class VuePlateau extends Vue {
 
             ArrayList<CartePanel>cartes = new ArrayList<>();
             for(int j = 0; j < 5; j++){
-                CartePanel carte = new CartePanel("images/cartes/Fond rouge.png",60,84);
+                CartePanel carte = new CartePanel("src/images/cartes/Fond rouge.png",60,84);
                 carte.setPreferredSize(sizeCarte);
                 panelCarte.add(carte, cCarte);
                 cCarte.gridx++;
@@ -377,7 +376,7 @@ public class VuePlateau extends Vue {
 
         // Panel Grille
 
-        JPanel panelPlateau = new ImagePanel(1920,1920,"images/backgrounds/bg_plateau.png");
+        JPanel panelPlateau = new ImagePanel(1920,1920,"src/images/backgrounds/bg_plateau.png");
         panelPlateau.setLayout(new GridBagLayout());
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
@@ -448,7 +447,7 @@ public class VuePlateau extends Vue {
         c.fill = GridBagConstraints.BOTH;
 
 
-        JPanel panelInfo = new ImagePanel(1920,1920,"images/backgrounds/bg_plateau.png");
+        JPanel panelInfo = new ImagePanel(1920,1920,"src/images/backgrounds/bg_plateau.png");
         panelInfo.setLayout(new GridBagLayout());
         mainPanel.add(panelInfo,c);
 
@@ -461,12 +460,12 @@ public class VuePlateau extends Vue {
         Dimension sizePioche = new Dimension(120,150);
         cInfo.gridx = 0;
         cInfo.gridy = 0;
-        CartePanel tresorDos = new CartePanel("images/cartes/Fond rouge.png", 120, 150);
+        CartePanel tresorDos = new CartePanel("src/images/cartes/Fond rouge.png", 120, 150);
         tresorDos.setPreferredSize(sizePioche);
         panelInfo.add(tresorDos, cInfo);
 
         cInfo.gridx = 1;
-        this.tresorFace = new CartePanel("images/cartes/Calice.png",120, 150);
+        this.tresorFace = new CartePanel("src/images/cartes/Calice.png",120, 150);
         tresorFace.setToolTipText("Voir défausse des cartes actions");
         tresorFace.setPreferredSize(sizePioche);
         panelInfo.add(tresorFace, cInfo);
@@ -593,12 +592,12 @@ public class VuePlateau extends Vue {
         cInfo.gridy = 2;
 
 
-        CartePanel inondationDos = new CartePanel("images/cartes/Fond bleu.png",120, 150);
+        CartePanel inondationDos = new CartePanel("src/images/cartes/Fond bleu.png",120, 150);
         inondationDos.setPreferredSize(sizePioche);
         panelInfo.add(inondationDos, cInfo);
 
         cInfo.gridx = 1;
-        this.inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png",120, 150);
+        this.inondationFace = new CartePanel("src/images/cartes/LeValDuCrecupuscule.png",120, 150);
         inondationFace.setToolTipText("Voir défausse des cartes inondées");
         inondationFace.setPreferredSize(sizePioche);
         panelInfo.add(inondationFace, cInfo);
@@ -637,7 +636,7 @@ public class VuePlateau extends Vue {
     }
 
     public JButton btnIcone(String path, String texte){
-        String imgUrl="images/icones/"+path;
+        String imgUrl="src/images/icones/"+path;
         ImageIcon icone = new ImageIcon(imgUrl);
         JButton btn = new JButton(icone);
         btn.setPreferredSize(new Dimension(60,60));

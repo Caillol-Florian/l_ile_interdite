@@ -118,19 +118,19 @@ public class Controleur implements Observer {
         // Initialisation de la pile de Carte Actions
         // Carte trésors (5 de chaque)
         for (int i=0; i<5; i++){
-            CarteTresor carteTresorCalice = new CarteTresor("images/cartes/Calice.png", calice);
+            CarteTresor carteTresorCalice = new CarteTresor("src/images/cartes/Calice.png", calice);
             pileCartesAction.add(carteTresorCalice);
-            CarteTresor carteTresorCristal = new CarteTresor("images/cartes/Cristal.png", cristal);
+            CarteTresor carteTresorCristal = new CarteTresor("src/images/cartes/Cristal.png", cristal);
             pileCartesAction.add(carteTresorCristal);
-            CarteTresor carteTresorPierre = new CarteTresor("images/cartes/Pierre.png", pierre);
+            CarteTresor carteTresorPierre = new CarteTresor("src/images/cartes/Pierre.png", pierre);
             pileCartesAction.add(carteTresorPierre);
-            CarteTresor carteTresorZephyr = new CarteTresor("images/cartes/Zephyr.png", zephyr);
+            CarteTresor carteTresorZephyr = new CarteTresor("src/images/cartes/Zephyr.png", zephyr);
             pileCartesAction.add(carteTresorZephyr);
         }
 
         // Cartes hélicoptère et montée des eaux (3 de chaque)
         for (int i=0; i<3; i++){
-            CarteHelicoptere carteHelicoptere = new CarteHelicoptere("images/cartes/Helicoptere.png");
+            CarteHelicoptere carteHelicoptere = new CarteHelicoptere("src/images/cartes/Helicoptere.png");
             pileCartesAction.add(carteHelicoptere);
             CarteMonteeEaux carteMonteeEaux = new CarteMonteeEaux();
             pileCartesAction.add(carteMonteeEaux);
@@ -138,7 +138,7 @@ public class Controleur implements Observer {
 
         // Cartes sac de sable (2)
         for (int i=0; i<2; i++){
-            CarteSacDeSable carteSacDeSable = new CarteSacDeSable("images/cartes/SacsDeSable.png");
+            CarteSacDeSable carteSacDeSable = new CarteSacDeSable("src/images/cartes/SacsDeSable.png");
             pileCartesAction.add(carteSacDeSable);
         }
 
@@ -435,10 +435,10 @@ public class Controleur implements Observer {
         if (arg == Messages.DONCARTE) {
             // Remise à 0 des cartes affichées dans la vue don carte.
             for(int i = 0; i < vueDonCarte.getCartes().size(); i++){
-                vueDonCarte.getCartes().get(i).setCarte("images/cartes/Fond rouge.png");
+                vueDonCarte.getCartes().get(i).setCarte("src/images/cartes/Fond rouge.png");
             }
             for(int i = 0; i < vueDonCarte.getCartesA().size(); i++){
-                vueDonCarte.getCartesA().get(i).setCarte("images/cartes/Fond rouge.png");
+                vueDonCarte.getCartesA().get(i).setCarte("src/images/cartes/Fond rouge.png");
             }
 
             // On récupère les cartes que possède l'aventurier courant et on les affiche dans le vue vueDonCarte
@@ -450,7 +450,7 @@ public class Controleur implements Observer {
             int index = 0;
             for(int j = 0; j < aventuriers.size(); j++){
                 if(aventuriers.get(j).getPosition() == aventuriers.get(getJActif()).getPosition() && aventuriers.get(j) != aventuriers.get(getJActif())) {
-                    vueDonCarte.getCartesA().get(index).setCarte("images/personnages/"+aventuriers.get(j).getNomRole().toString().toLowerCase()+".png");
+                    vueDonCarte.getCartesA().get(index).setCarte("src/images/personnages/"+aventuriers.get(j).getNomRole().toString().toLowerCase()+".png");
                     index++;
                 }
             }
@@ -483,9 +483,9 @@ public class Controleur implements Observer {
                         // Remise à 0 graphique de la liste des cartes des aventuriers
                         for (int j = 0; j < 5; j++) {
                             // Aventurier qui a donné
-                            vuePlateau.getCartesAventurier().get(getJActif()).get(j).setCarte("images/cartes/Fond rouge.png");
+                            vuePlateau.getCartesAventurier().get(getJActif()).get(j).setCarte("src/images/cartes/Fond rouge.png");
                             // Aventurier qui reçoit
-                            vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(j).setCarte("images/cartes/Fond rouge.png");
+                            vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(j).setCarte("src/images/cartes/Fond rouge.png");
                         }
                         // Et on remet les nouvelles cartes dans l'ordre...
                         for (int k = 0; k < vuePlateau.getCartesAventurier().size(); k++) {
@@ -564,7 +564,7 @@ public class Controleur implements Observer {
                         // Remise à 0 graphique de la liste des cartes de l'aventurier
                         for (int j = 0; j < 5; j++) {
                             // Aventurier qui a donné
-                            vuePlateau.getCartesAventurier().get(getJActif()).get(j).setCarte("images/cartes/Fond rouge.png");
+                            vuePlateau.getCartesAventurier().get(getJActif()).get(j).setCarte("src/images/cartes/Fond rouge.png");
                         }
                         // Et on remet les nouvelles cartes dans l'ordre...
                         for (int k = 0; k < aventuriers.get(getJActif()).getCartes().size(); k++) {
@@ -603,7 +603,7 @@ public class Controleur implements Observer {
         if(arg == Messages.DEFAUSSEACTION){
             // Remplacement du dos des cartes de la vue
             for(int i = 0; i < vueDefausseListe.getCartesDefaussees().size(); i++){
-                vueDefausseListe.getCartesDefaussees().get(i).setCarte("images/cartes/Fond rouge.png");
+                vueDefausseListe.getCartesDefaussees().get(i).setCarte("src/images/cartes/Fond rouge.png");
             }
 
             for(int i = 0; i < défausseCarteAction.size(); i++){
@@ -617,7 +617,7 @@ public class Controleur implements Observer {
         if(arg == Messages.DEFAUSSEINONDEE){
             // Remplacement du dos des cartes de la vue
             for(int i = 0; i < vueDefausseListe.getCartesDefaussees().size(); i++){
-                vueDefausseListe.getCartesDefaussees().get(i).setCarte("images/cartes/Fond bleu.png");
+                vueDefausseListe.getCartesDefaussees().get(i).setCarte("src/images/cartes/Fond bleu.png");
             }
 
             for(int i = 0; i < défausseCarteInondations.size(); i++){

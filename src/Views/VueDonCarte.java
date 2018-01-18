@@ -34,7 +34,7 @@ public class VueDonCarte extends Vue {
         window.setUndecorated(Parameters.UNDECORATED);
 
 
-        mainPanel = new ImagePanel(520, 370, "images/backgrounds/bg_inscriptionN.jpg");
+        mainPanel = new ImagePanel(520, 370, "src/images/backgrounds/bg_inscriptionN.jpg");
         mainPanel.setLayout(new GridBagLayout());
         this.window.add(mainPanel);
         GridBagConstraints c = new GridBagConstraints();
@@ -53,7 +53,7 @@ public class VueDonCarte extends Vue {
         cCarte.insets = new Insets(3,3,3,3);
         Dimension sizeCarte = new Dimension(90,  120);
         for(int i = 0; i < 5; i++){
-            CartePanel carte = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
+            CartePanel carte = new CartePanel("src/images/cartes/Fond rouge.png", 90, 120);
             carte.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {}
@@ -92,7 +92,7 @@ public class VueDonCarte extends Vue {
         cCarte.gridy = 1;
         cCarte.insets = new Insets(3,3,3,3);
         for(int i = 0; i < 4; i++){
-            CartePanel carte = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
+            CartePanel carte = new CartePanel("src/images/cartes/Fond rouge.png", 90, 120);
             carte.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {}

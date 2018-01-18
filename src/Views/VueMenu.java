@@ -27,7 +27,7 @@ public class VueMenu extends Vue {
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new ImagePanel(1024,720, "images/backgrounds/bg_menu.png") ;
+        mainPanel = new ImagePanel(1024,720, "src/images/backgrounds/bg_menu.png") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 

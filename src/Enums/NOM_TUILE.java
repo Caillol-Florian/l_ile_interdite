@@ -13,30 +13,30 @@ import Modèles.Tresor;
  */
 public enum NOM_TUILE {
     EAU("Eau", null, null),
-    LE_PONT_DES_ABIMES ("Le Pont des Abimes", "images/tuiles/LePontDesAbimes", null),
-    LA_PORTE_DE_BRONZE ("La Porte de Bronze", "images/tuiles/LaPorteDeBronze", null),
-    LA_CAVERNE_DES_OMBRES ("La Caverne des Ombres", "images/tuiles/LaCarverneDesOmbres", new Tresor(TYPE_TRESOR.CRISTAL)),
-    LA_PORTE_DE_FER("La Porte de Fer", "images/tuiles/LaPorteDeFer", null),
-    LA_PORTE_D_OR("La Porte d'Or", "images/tuiles/LaPortedOr", null),
-    LES_FALAISES_DE_L_OUBLI("Les Falaises de l'Oubli", "images/tuiles/LesFalaisesDeLOubli", null),
-    LE_PALAIS_DE_CORAIL("Le Palais de Corail", "images/tuiles/LePalaisDeCorail", new Tresor(TYPE_TRESOR.CALICE)),
-    LA_PORTE_D_ARGENT("La Porte d'Argent", "images/tuiles/LaPortedArgent", null),
-    LES_DUNES_DE_L_ILLUSION("Les Dunes de l'Illusion", "images/tuiles/LesDunesDeLIllusion", null),
-    HELIPORT("Heliport", "images/tuiles/Heliport", null),
-    LA_PORTE_DE_CUIVRE("La Porte de Cuivre", "images/tuiles/LaPorteDeCuivre", null),
-    LE_JARDIN_DES_HURLEMENTS("Le Jardin des Hurlements", "images/tuiles/LeJardinDesHurlements", new Tresor(TYPE_TRESOR.ZEPHYR)),
-    LA_FORET_POURPRE("La Forêt Pourpre", "images/tuiles/LaForetPourpre", null),
-    LE_LAGON_PERDU("Le Lagon Perdu", "images/tuiles/LeLagonPerdu", null),
-    LE_MARAIS_BRUMEUX("Le Marais Brumeux", "images/tuiles/LeMaraisBrumeux", null),
-    OBSERVATOIRE("Observatoire", "images/tuiles/Observatoire", null),
-    LE_ROCHER_FANTOME("Le Rocher Fantôme", "images/tuiles/LeRocherFantome", null),
-    LA_CAVERNE_DU_BRASIER("La Caverne du Brasier", "images/tuiles/LaCarverneDuBrasier", new Tresor(TYPE_TRESOR.CRISTAL)),
-    LE_TEMPLE_DU_SOLEIL("Le Temple du Soleil", "images/tuiles/LeTempleDuSoleil", new Tresor(TYPE_TRESOR.PIERRE)),
-    LE_TEMPLE_DE_LA_LUNE("Le Temple de La Lune", "images/tuiles/LeTempleDeLaLune", new Tresor(TYPE_TRESOR.PIERRE)),
-    LE_PALAIS_DES_MAREES("Le Palais des Marees", "images/tuiles/LePalaisDesMarees", new Tresor(TYPE_TRESOR.CALICE)),
-    LE_VAL_DU_CREPUSCULE("Le Val du Crepuscule", "images/tuiles/LeValDuCrepuscule", null),
-    LA_TOUR_DU_GUET("La Tour du Guet", "images/tuiles/LaTourDuGuet", null),
-    LE_JARDIN_DES_MURMURES("Le Jardin des Murmures", "images/tuiles/LeJardinDesMurmures", new Tresor(TYPE_TRESOR.ZEPHYR));
+    LE_PONT_DES_ABIMES ("Le Pont des Abimes", "src/images/tuiles/LePontDesAbimes", null),
+    LA_PORTE_DE_BRONZE ("La Porte de Bronze", "src/images/tuiles/LaPorteDeBronze", null),
+    LA_CAVERNE_DES_OMBRES ("La Caverne des Ombres", "src/images/tuiles/LaCarverneDesOmbres", new Tresor(TYPE_TRESOR.CRISTAL)),
+    LA_PORTE_DE_FER("La Porte de Fer", "src/images/tuiles/LaPorteDeFer", null),
+    LA_PORTE_D_OR("La Porte d'Or", "src/images/tuiles/LaPortedOr", null),
+    LES_FALAISES_DE_L_OUBLI("Les Falaises de l'Oubli", "src/images/tuiles/LesFalaisesDeLOubli", null),
+    LE_PALAIS_DE_CORAIL("Le Palais de Corail", "src/images/tuiles/LePalaisDeCorail", new Tresor(TYPE_TRESOR.CALICE)),
+    LA_PORTE_D_ARGENT("La Porte d'Argent", "src/images/tuiles/LaPortedArgent", null),
+    LES_DUNES_DE_L_ILLUSION("Les Dunes de l'Illusion", "src/images/tuiles/LesDunesDeLIllusion", null),
+    HELIPORT("Heliport", "src/images/tuiles/Heliport", null),
+    LA_PORTE_DE_CUIVRE("La Porte de Cuivre", "src/images/tuiles/LaPorteDeCuivre", null),
+    LE_JARDIN_DES_HURLEMENTS("Le Jardin des Hurlements", "src/images/tuiles/LeJardinDesHurlements", new Tresor(TYPE_TRESOR.ZEPHYR)),
+    LA_FORET_POURPRE("La Forêt Pourpre", "src/images/tuiles/LaForetPourpre", null),
+    LE_LAGON_PERDU("Le Lagon Perdu", "src/images/tuiles/LeLagonPerdu", null),
+    LE_MARAIS_BRUMEUX("Le Marais Brumeux", "src/images/tuiles/LeMaraisBrumeux", null),
+    OBSERVATOIRE("Observatoire", "src/images/tuiles/Observatoire", null),
+    LE_ROCHER_FANTOME("Le Rocher Fantôme", "src/images/tuiles/LeRocherFantome", null),
+    LA_CAVERNE_DU_BRASIER("La Caverne du Brasier", "src/images/tuiles/LaCarverneDuBrasier", new Tresor(TYPE_TRESOR.CRISTAL)),
+    LE_TEMPLE_DU_SOLEIL("Le Temple du Soleil", "src/images/tuiles/LeTempleDuSoleil", new Tresor(TYPE_TRESOR.PIERRE)),
+    LE_TEMPLE_DE_LA_LUNE("Le Temple de La Lune", "src/images/tuiles/LeTempleDeLaLune", new Tresor(TYPE_TRESOR.PIERRE)),
+    LE_PALAIS_DES_MAREES("Le Palais des Marees", "src/images/tuiles/LePalaisDesMarees", new Tresor(TYPE_TRESOR.CALICE)),
+    LE_VAL_DU_CREPUSCULE("Le Val du Crepuscule", "src/images/tuiles/LeValDuCrepuscule", null),
+    LA_TOUR_DU_GUET("La Tour du Guet", "src/images/tuiles/LaTourDuGuet", null),
+    LE_JARDIN_DES_MURMURES("Le Jardin des Murmures", "src/images/tuiles/LeJardinDesMurmures", new Tresor(TYPE_TRESOR.ZEPHYR));
 
 
     private final String name ;
@@ -72,7 +72,7 @@ public enum NOM_TUILE {
             }
         }
 
-        return "images/cartes/" + pathC;
+        return "src/images/cartes/" + pathC;
     }
 
     public Tresor getTresor(){return tresor;}

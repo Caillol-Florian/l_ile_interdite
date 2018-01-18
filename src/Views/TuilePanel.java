@@ -22,8 +22,8 @@ public class TuilePanel extends JPanel {
     BufferedImage highlight;
 
     // Stockage des fichiers pour éviter d'en recréer à chaque update
-    private File fileHighlightImage = new File("images/tuiles/highlight.png");
-    private File fileTuileOcean = new File("images/tuiles/Ocean.png");
+    private File fileHighlightImage = new File("src/images/tuiles/highlight.png");
+    private File fileTuileOcean = new File("src/images/tuiles/Ocean.png");
     private File fileTuileSeche;
     private File fileTuileInondee;
 

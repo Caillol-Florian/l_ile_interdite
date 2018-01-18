@@ -31,7 +31,7 @@ public class VueDefaussePlateau extends Vue {
         window.setUndecorated(Parameters.UNDECORATED);
 
 
-        mainPanel = new ImagePanel(1080, 1080, "images/backgrounds/bg_inscriptionN.jpg");
+        mainPanel = new ImagePanel(1080, 1080, "src/images/backgrounds/bg_inscriptionN.jpg");
         mainPanel.setLayout(new GridBagLayout());
         this.window.add(mainPanel);
         GridBagConstraints c = new GridBagConstraints();
@@ -60,7 +60,7 @@ public class VueDefaussePlateau extends Vue {
 
         for(int i = 0; i < 4; i++){
             for (int j = 0; j<6; j++){
-                CartePanel carte = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
+                CartePanel carte = new CartePanel("src/images/cartes/Fond rouge.png", 90, 120);
                 carte.setPreferredSize(sizeCarte);
                 panelCarte.add(carte, cCarte);
                 cCarte.gridx++;

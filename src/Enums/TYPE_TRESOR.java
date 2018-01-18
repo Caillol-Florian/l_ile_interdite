@@ -1,10 +1,10 @@
 package Enums;
 
 public enum TYPE_TRESOR {
-    PIERRE("Pierre", "images/tresors/pierre.png"),
-    CALICE("Calice", "images/tresors/calice.png"),
-    ZEPHYR("Zephyr", "images/tresors/zephyr.png"),
-    CRISTAL("Cristal", "images/tresors/cristal.png");
+    PIERRE("Pierre", "src/images/tresors/pierre.png"),
+    CALICE("Calice", "src/images/tresors/calice.png"),
+    ZEPHYR("Zephyr", "src/images/tresors/zephyr.png"),
+    CRISTAL("Cristal", "src/images/tresors/cristal.png");
 
     String nom;
     String path;
