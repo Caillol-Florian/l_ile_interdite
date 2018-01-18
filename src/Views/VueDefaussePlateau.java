@@ -1,9 +1,12 @@
 package Views;
 
 
+import Enums.Messages;
 import Modèles.Parameters;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -75,6 +78,14 @@ public class VueDefaussePlateau extends Vue {
         c.gridy= 3;
         c.insets = new Insets(15,0,0,0);
         JButton btnQuitter = new JButton("Quitter");
+        btnQuitter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.QUITTER);
+                clearChanged();
+            }
+        });
         btnQuitter.setPreferredSize(new Dimension(200,40));
         mainPanel.add(btnQuitter,c);
 

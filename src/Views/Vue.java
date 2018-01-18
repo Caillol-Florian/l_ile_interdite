@@ -29,4 +29,8 @@ public abstract class Vue extends Observable {
     public void setAvailableTuile(ArrayList<String> arTuile){}
     public NOM_TUILE getTuileSelectionnee(){return null;}
 
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+    }
 }

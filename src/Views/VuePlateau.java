@@ -349,7 +349,7 @@ public class VuePlateau extends Vue {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setChanged();
-                notifyObservers(Messages.RETOUR);
+                notifyObservers(Messages.QUITTERPARTIE);
                 clearChanged();
             }
         });
@@ -372,11 +372,6 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
-
-
-
-
-
 
         // Panel Grille
 
@@ -689,5 +684,13 @@ public class VuePlateau extends Vue {
 
     public ArrayList<CartePanel> getTresors() {
         return tresors;
+    }
+
+    public JButton getBtnSpecial() {
+        return btnSpecial;
+    }
+
+    public JButton getBtnRecuperer() {
+        return btnRecuperer;
     }
 }

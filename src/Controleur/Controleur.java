@@ -31,7 +31,7 @@ public class Controleur implements Observer {
     // Modèle
     private ArrayList<NOM_AVENTURIER>roles = new ArrayList<>();
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
-    private Grille grille = new Grille();
+    private Grille grille;
     private ArrayList<CarteAction>pileCartesAction = new ArrayList<>();
     private ArrayList<CarteAction>défausseCarteAction = new ArrayList<>();
     private ArrayList<CarteInondation>pileCartesInondations = new ArrayList<>();
@@ -92,6 +92,7 @@ public class Controleur implements Observer {
     public void startGame(){
         // ================================
         // Initialisation des modèles
+
         vueDefausse = new VueDefausse();
         vueDonCarte = new VueDonCarte();
         vueDefausse.abonner(this);
@@ -172,9 +173,9 @@ public class Controleur implements Observer {
         // Tirage des 6 premières tuiles inondées
         tirageInondation(6);
 
-        // Highlight du premier jouer
-        // Il n'y a pas d'ancien joueur mais on met ancienJoueur = 3 (celui avant 0 est 3).
-        vuePlateau.highlightAventurier(0, 3);
+        // Highlight du premier joueur
+        // Il n'y a pas d'ancien joueur mais on met le second car il y a au minimum deux joueurs
+        vuePlateau.highlightAventurier(0, 1);
     }
 
     @Override
@@ -187,6 +188,9 @@ public class Controleur implements Observer {
         if (arg == Messages.INSCRPTION){
             closeView((Vue)o);
             openView(vueInscription);
+            openView(vueInscription);
+            openView(vueInscription);
+
         }
 
         // Ajout Vue règles
@@ -197,6 +201,7 @@ public class Controleur implements Observer {
 
         if (arg == Messages.RETOUR){
             closeView(((Vue)o));
+            openView(vueMenu);
             openView(vueMenu);
         }
 
@@ -209,6 +214,7 @@ public class Controleur implements Observer {
             nbJoueurs = ((VueInscription)o).getNombreJoueurs();
             difficulte = ((VueInscription)o).getNiveauDifficulte();
             pseudos = ((VueInscription)o).getPseudos();
+            this.grille = new Grille();
 
             // On créer les aventuriers en leur attribbuant aléatoirement un role
             for (NOM_AVENTURIER role : NOM_AVENTURIER.values()){
@@ -675,6 +681,12 @@ public class Controleur implements Observer {
         if (arg == Messages.PAUSE) {
             musique.stop();
         }
+
+        if(arg == Messages.QUITTERPARTIE){
+            closeView((Vue)o);
+            openView(vueMenu);
+            resetPartie();
+        }
     }
 
 
@@ -700,7 +712,6 @@ public class Controleur implements Observer {
             piloteSpecial = false; // Reset de l'action spéciale du pilote
             aventuriersADeplacer.clear(); // Il n'y a plus d'aventurier à déplacer
             vuePlateau.highlightAventurier(getJActif(), (joueurActif - 1) % aventuriers.size());
-
     }
 
     public void tirageInondation(int nbCarteAPiocher){
@@ -754,7 +765,6 @@ public class Controleur implements Observer {
                                     // =====================================
                                     // AJOUTER LE PION SUR LA NOUVELLE TUILE
                                     // Update visuelle
-                                    System.out.println(vuePlateau.getTableauTuile());
                                     ArrayList<PION> newPions = vuePlateau.getTableauTuile()[nouvelleCoo[0]][nouvelleCoo[1]].getPions();
                                     newPions.add(aventurier.getPion());
                                     vuePlateau.getTableauTuile()[nouvelleCoo[0]][nouvelleCoo[1]].update(newPions);
@@ -891,11 +901,44 @@ public class Controleur implements Observer {
         return joueurActif % aventuriers.size();
     }
 
+    public void resetPartie(){
+        // ==============================
+        // Modèle
+        roles.clear();
+        aventuriers.clear();
+        pileCartesAction.clear();
+        défausseCarteAction.clear();
+        pileCartesInondations.clear();
+        défausseCarteInondations.clear();
+        tresorsRécupérés.clear();
+        aventuriersADeplacer.clear();
+
+        // ==============================
+        // Paramètres
+        nbJoueurs = 0;
+        difficulte = 0;
+        pseudos.clear();
+
+        jeuLance = false;
+        nbActions = 0;
+        tourPassé = false;
+        joueurActif = 0;
+        aAsseché = false; //afin de traiter l'assechement supplementaire de l'ingenieur
+        piloteSpecial = false; // Déplacement spécial du pilote
+        deplacementActif = false;
+        assechementActif = false;
+        defausseEnCours = false;
+        joueurADefausser = 0;
+        partiePerdue = false;
+    }
+
     public void enableBoutons(boolean enable){
         vuePlateau.getBtnAssecher().setEnabled(enable);
         vuePlateau.getBtnFinir().setEnabled(enable);
         vuePlateau.getBtnDonCarte().setEnabled(enable);
         vuePlateau.getBtnBouger().setEnabled(enable);
+        vuePlateau.getBtnRecuperer().setEnabled(enable);
+        vuePlateau.getBtnSpecial().setEnabled(enable);
     }
 
     public void updatePos(int[] coordonnesJoueur, PION pion) {
