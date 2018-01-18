@@ -74,8 +74,6 @@ public class VueDefausse extends Vue {
         }
         mainPanel.add(panelCarte, c);
         panelCarte.setOpaque(false);
-
-
     }
 
     @Override

@@ -29,6 +29,7 @@ public class Controleur implements Observer {
 
     // ==============================
     // Modèle
+    private ArrayList<NOM_AVENTURIER>roles = new ArrayList<>();
     private ArrayList<Aventurier>aventuriers = new ArrayList<>();
     private Grille grille = new Grille();
     private ArrayList<CarteAction>pileCartesAction = new ArrayList<>();
@@ -36,7 +37,11 @@ public class Controleur implements Observer {
     private ArrayList<CarteInondation>pileCartesInondations = new ArrayList<>();
     private ArrayList<CarteInondation>défausseCarteInondations = new ArrayList<>();
     private ArrayList<Tresor>tresorsRécupérés = new ArrayList<>();
-    private ArrayList<NOM_AVENTURIER>roles = new ArrayList<>();
+
+    private Tresor calice;
+    private Tresor pierre;
+    private Tresor cristal;
+    private Tresor zephyr;
 
     // ==============================
     // Paramètres
@@ -55,16 +60,15 @@ public class Controleur implements Observer {
     boolean assechementActif = false;
     boolean defausseEnCours = false;
     private int joueurADefausser = 0;
-
-    private boolean partieGagnee = false;
+    boolean partiePerdue = false;
 
     // =============================
     // Vues
     private VueMenu vueMenu = new VueMenu();
     private VueInscription vueInscription = new VueInscription();
     private VuePlateau vuePlateau;
-    private VueDefausse vueDefausse = new VueDefausse();
-    private VueDonCarte vueDonCarte = new VueDonCarte();
+    private VueDefausse vueDefausse;
+    private VueDonCarte vueDonCarte;
 
     //==============================
     // Sons
@@ -74,12 +78,10 @@ public class Controleur implements Observer {
     Clip alarm = null;
 
     public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-
         //Ajout observer aux différentes vues
         vueMenu.abonner(this);
         vueInscription.abonner(this);
-        vueDefausse.abonner(this);
-        vueDonCarte.abonner(this);
+
         //Lancement du jeu
         openView(vueMenu);
 
@@ -89,12 +91,16 @@ public class Controleur implements Observer {
     public void startGame(){
         // ================================
         // Initialisation des modèles
+        vueDefausse = new VueDefausse();
+        vueDonCarte = new VueDonCarte();
+        vueDefausse.abonner(this);
+        vueDonCarte.abonner(this);
 
         // Initialisation des trésors
-        Tresor calice = new Tresor(TYPE_TRESOR.CALICE);
-        Tresor cristal = new Tresor(TYPE_TRESOR.CRISTAL);
-        Tresor pierre = new Tresor(TYPE_TRESOR.PIERRE);
-        Tresor zephyr = new Tresor(TYPE_TRESOR.ZEPHYR);
+        this.calice = new Tresor(TYPE_TRESOR.CALICE);
+        this.cristal = new Tresor(TYPE_TRESOR.CRISTAL);
+        this.pierre = new Tresor(TYPE_TRESOR.PIERRE);
+        this.zephyr = new Tresor(TYPE_TRESOR.ZEPHYR);
 
         // Initialisation de la pile de Carte Inondations
         for (NOM_TUILE nom_tuile : NOM_TUILE.values()){
@@ -249,7 +255,7 @@ public class Controleur implements Observer {
         // ---------------------------------- //
             // Mise en évidence des tuiles pour assécher
         if (arg == Messages.ASSECHER) {
-            if(!assechementActif) {
+            if(!assechementActif) { // Si l'assèchement n'est pas déjà actif, pas besoin d'highlight
                 vuePlateau.highlightTuiles(true, aventuriers.get(getJActif()).getTuilesAssechables(grille));
                 deplacementActif = false;
                 assechementActif = true;
@@ -262,7 +268,7 @@ public class Controleur implements Observer {
             // On vérifie que le joueur actif est un pilote
                 // S'il est pilote, on affiche les tuiles disponibles en fonction de s'il a utilisé son déplacement spécial
             // SINON, on affiche les tuiles des autres aventuriers.
-            if (!deplacementActif) {
+            if (!deplacementActif) { // Si le déplacement n'est pas déjà actif, pas besoin d'highlight
                 if (aventuriers.get(joueurActif % aventuriers.size()) instanceof Pilote) {
                     vuePlateau.highlightTuiles(true, ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial));
                 } else {
@@ -536,10 +542,11 @@ public class Controleur implements Observer {
                         }
                     }
 
-                    System.out.println(nbCarteTresorCorrespondante);
                     if (nbCarteTresorCorrespondante >= 4) {
+                        // Ajout du trésor à la liste des trésors récupérés
                         tresorsRécupérés.add(tresorDeLaTuile);
 
+                        // Suppression des cartes trésors de l'aventurier dans le modèle
                         for(int i = 0; i < 4; i++){
                             aventuriers.get(getJActif()).getCartes().remove(cartesASupprimer.get(i));
                         }
@@ -555,6 +562,7 @@ public class Controleur implements Observer {
                             vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
                         }
 
+                        // Affichage dans la vue du trésor gagné
                         vuePlateau.getTresors().get(tresorsRécupérés.size()-1).setCarte(tresorDeLaTuile.getTypeTresor().getPath());
 
                     } else {
@@ -618,18 +626,40 @@ public class Controleur implements Observer {
                 if (!defausseEnCours) {
                     prochainTour();
                 }
+
+                //=================================
+                // TEST CONDITION PARTIE PERDUE
+                // Une partie est perdue :
+                // 1.Si les 2 tuiles « Temple », « Caverne », « Palais » ou « Jardin » (sur lesquelles sont placés les symboles des trésors) sombrent avant que vous n’ayez pris leurs trésors respectifs
+                // 2.Si « l’héliport » sombre
+                // 3.Si un joueur est sur une tuile Île qui sombre et qu’il n’y a pas de tuile adjacente où nager
+                // 4.Si le Marqueur de niveau atteint la tête de mort (niveau d’eau à 10).
+                // Ici on peut vérifier à la fin d'un tour (après avoir pioché des cartes inondations) les conditions 1, 2 et 3
+                if ((getGrille().getTuile(NOM_TUILE.LE_PALAIS_DE_CORAIL).estCoulee() && (getGrille().getTuile(NOM_TUILE.LE_PALAIS_DES_MAREES).estCoulee()) && !tresorsRécupérés.contains(calice)) ||
+                        (getGrille().getTuile(NOM_TUILE.LA_CAVERNE_DES_OMBRES).estCoulee() && (getGrille().getTuile(NOM_TUILE.LA_CAVERNE_DU_BRASIER).estCoulee()) && !tresorsRécupérés.contains(cristal)) ||
+                        (getGrille().getTuile(NOM_TUILE.LE_JARDIN_DES_HURLEMENTS).estCoulee() && (getGrille().getTuile(NOM_TUILE.LE_JARDIN_DES_MURMURES).estCoulee()) && !tresorsRécupérés.contains(zephyr)) ||
+                        (getGrille().getTuile(NOM_TUILE.LE_TEMPLE_DE_LA_LUNE).estCoulee() && (getGrille().getTuile(NOM_TUILE.LE_TEMPLE_DU_SOLEIL).estCoulee()) && !tresorsRécupérés.contains(pierre)) ||
+                        (getGrille().getTuile(NOM_TUILE.HELIPORT).estCoulee()) ||
+                        difficulte == 10){
+                    partiePerdue = true;
+                }
             }
         }
 
+        if(partiePerdue){
+            Utils.afficherInformation("Partie perdue !");
+            enableBoutons(false);
+        }
 
         // ---------------------------------- //
         // --------  GESTION DU SON --------- //
         // ---------------------------------- //
 
         if (arg == Messages.PLAY){
-
             if (!musiqueCharger){
                 musique = chargerSon(musique,"percussions.wav");
+                FloatControl f = (FloatControl) musique.getControl(FloatControl.Type.MASTER_GAIN);
+                f.setValue(-20f);
                 musique.start();
                 musique.loop((int)musique.getMicrosecondLength());
                 musiqueCharger = true;
@@ -673,22 +703,16 @@ public class Controleur implements Observer {
     }
 
     public void tirageInondation(int nbCarteAPiocher){
-
-        if(pileCartesInondations.isEmpty()) {
-            pileCartesInondations.addAll(défausseCarteInondations);
-            défausseCarteInondations.clear();
-            Collections.shuffle(pileCartesInondations);
-        }
-
         Tuile tuileInondée;
         int[] coordonneeTuile = new int[2];
         // Pioche du nombre de carte à piocher (6 pour le début de la partie, niveau de l'eau à chaque fin de tour)
         for(int i = 0; i < nbCarteAPiocher; i++){
+            if(!pileCartesInondations.isEmpty()) {
                 // Récupération de la tuile correspondante et ses coordonnées
-                tuileInondée = pileCartesInondations.get(0).getTuile(); // Cette ligne peut faire planter mais cela n'arrivera jamais, en effet, si toutes les cartes sont coulées la pile sera toujours vide ! (Mais le jeu sera finie avant !)
+                tuileInondée = pileCartesInondations.get(0).getTuile();
                 coordonneeTuile[0] = getGrille().getCordonneesTuiles(tuileInondée)[0];
                 coordonneeTuile[1] = getGrille().getCordonneesTuiles(tuileInondée)[1];
-                // Si la tuile est sèche on l'inonde, sinon on la coule et on la carte inondation du jeu.
+                // Si la tuile est sèche on l'inonde, sinon on la coule et on retire la carte inondation du jeu.
                 if (getGrille().getTuile(tuileInondée.getNom()).getEtat() == ETAT_TUILE.SECHE) {
                     // Actualisation modèle
                     getGrille().getTuile(tuileInondée.getNom()).setEtat(ETAT_TUILE.INONDEE);
@@ -699,11 +723,24 @@ public class Controleur implements Observer {
                     défausseCarteInondations.add(pileCartesInondations.get(0));
                     pileCartesInondations.remove(pileCartesInondations.get(0));
                 } else {
+                    // Actualisation modèle
                     getGrille().getTuile(tuileInondée.getNom()).setEtat(ETAT_TUILE.COULEE);
+                    // Actualisation visuelle
                     vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].setEtatTuile(ETAT_TUILE.COULEE);
                     vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].update(vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].getPions());
+                    // Suppression de la carte
                     pileCartesInondations.remove(pileCartesInondations.get(0));
+
+                    // Vérification qu'un joueur n'est pas déjà sur la tuile qui vient d'être coulée
+                    
+
                 }
+
+            }else {
+                pileCartesInondations.addAll(défausseCarteInondations);
+                défausseCarteInondations.clear();
+                Collections.shuffle(pileCartesInondations);
+            }
         }
     }
 
@@ -727,6 +764,7 @@ public class Controleur implements Observer {
                 pileCartesAction.remove(carteActionTirée); // On supprimme la carte montée des eaux de la pile des cartes actions
                 défausseCarteAction.add(carteActionTirée); // On l'ajoute à la défausse
                 vuePlateau.setNiveau(difficulte); // Et on actualise le niveau de l'eau sur la vue.
+                jouerSonMonteeDesEaux();
             } else {
                 aventuriers.get(getJActif()).addCarte((CarteStockable) carteActionTirée); // On ajoute la carte à la liste des cartes que le joueur possède
                 pileCartesAction.remove(carteActionTirée); // Et on la retire de la pile
@@ -759,14 +797,13 @@ public class Controleur implements Observer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //Get a sound clip resource.
 
         try {
             clip = AudioSystem.getClip();
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
-        //Open audio clip and load samples from the audio input stream.
+
         try {
             clip.open(audioIn);
         } catch (LineUnavailableException e) {
@@ -781,7 +818,9 @@ public class Controleur implements Observer {
     public void jouerSonMonteeDesEaux(){
 
         if (!alarmCharger){
-            alarm = chargerSon(alarm, "alarm.wav");
+            alarm = chargerSon(alarm, "wave.wav");
+            FloatControl f = (FloatControl) alarm.getControl(FloatControl.Type.MASTER_GAIN);
+            f.setValue(-40f);
             alarm.start();
         } else {
             alarm.start();
