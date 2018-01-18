@@ -48,7 +48,7 @@ public class VueInscription extends Vue {
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new ImagePanel(1024,720, "images/backgrounds/bg_inscription.png") ;
+        mainPanel = new ImagePanel(1024,720, "images/backgrounds/bg_inscriptionN.jpg") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
