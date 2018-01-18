@@ -10,5 +10,7 @@ public enum Messages {
     DONCARTE,
     RECUPTRESOR,
     ACTIONSPECIALE,
+    PAUSE,
+    PLAY,
     FINTOUR;
 }

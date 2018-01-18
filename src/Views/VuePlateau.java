@@ -111,7 +111,26 @@ public class VuePlateau extends Vue {
         panelMusique.add(textMusiquePanel, cMusique);
 
         JButton Lecture = btnIcone("playButton.png","Lecture");
+
+        Lecture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.PLAY);
+                clearChanged();
+            }
+        });
+
         JButton Pause = btnIcone("pause.png","Pause");
+
+        Pause.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.PAUSE);
+                clearChanged();
+            }
+        });
 
         cMusique.gridy = 1;
         cMusique.gridwidth = 1;

@@ -6,6 +6,7 @@
 package Controleur;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -65,6 +66,13 @@ public class Controleur implements Observer {
     private VueDefausse vueDefausse = new VueDefausse();
     private VueDonCarte vueDonCarte = new VueDonCarte();
 
+    //==============================
+    // Sons
+    boolean musiqueCharger = false;
+    boolean alarmCharger = false;
+    Clip musique = null;
+    Clip alarm = null;
+
     public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 
         //Ajout observer aux différentes vues
@@ -75,17 +83,6 @@ public class Controleur implements Observer {
         //Lancement du jeu
         openView(vueMenu);
 
-        // =========================
-        // Musique
-
-        //pour l'exécuter au moment ou la fenêtre s'ouvre
-        //AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/src/Controleur/1055.wav"));
-        //Get a sound clip resource.
-        //Clip clip = AudioSystem.getClip();
-        //Open audio clip and load samples from the audio input stream.
-        //clip.open(audioIn);
-        //clip.start();
-        //clip.loop((int)clip.getMicrosecondLength());
     }
 
 
@@ -623,6 +620,30 @@ public class Controleur implements Observer {
                 }
             }
         }
+
+
+        // ---------------------------------- //
+        // --------  GESTION DU SON --------- //
+        // ---------------------------------- //
+
+        if (arg == Messages.PLAY){
+
+            if (!musiqueCharger){
+                musique = chargerSon(musique,"percussions.wav");
+                musique.start();
+                musique.loop((int)musique.getMicrosecondLength());
+                musiqueCharger = true;
+            } else {
+                if (!musique.isRunning()){
+                    musique.start();
+                    musique.loop((int) musique.getMicrosecondLength());
+                }
+            }
+        }
+
+        if (arg == Messages.PAUSE) {
+            musique.stop();
+        }
     }
 
 
@@ -725,6 +746,45 @@ public class Controleur implements Observer {
                 defausseEnCours = true;
                 joueurADefausser = getJActif();
             }
+        }
+
+    }
+
+    public Clip chargerSon(Clip clip,String path){
+        AudioInputStream audioIn = null;
+        try {
+            audioIn = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/src/sons/"+path));
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Get a sound clip resource.
+
+        try {
+            clip = AudioSystem.getClip();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        //Open audio clip and load samples from the audio input stream.
+        try {
+            clip.open(audioIn);
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return clip;
+    }
+
+    public void jouerSonMonteeDesEaux(){
+
+        if (!alarmCharger){
+            alarm = chargerSon(alarm, "alarm.wav");
+            alarm.start();
+        } else {
+            alarm.start();
         }
 
     }
