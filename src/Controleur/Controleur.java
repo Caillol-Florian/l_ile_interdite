@@ -286,11 +286,21 @@ public class Controleur implements Observer {
                 // Vérification que la tuile sélectionnée soit correcte
                 boolean deplacementPossible = false;
                 int i = 0;
-                while(i < ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).size())-1 && deplacementPossible == false){
-                    if((aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i+1) == coordSelectionnee[1]){
-                        deplacementPossible = true;
+                // Pour le pilote
+                if (aventuriers.get(joueurActif % aventuriers.size()) instanceof Pilote) {
+                    while(i < ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial).size()-1 && deplacementPossible == false) {
+                        if (((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial).get(i) == coordSelectionnee[0] && ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial).get(i + 1) == coordSelectionnee[1]) {
+                            deplacementPossible = true;
+                        }
+                        i += 2;
                     }
-                    i+=2;
+                } else { // Pour les autres aventuriers.
+                    while(i < ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).size())-1 && deplacementPossible == false) {
+                        if ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i + 1) == coordSelectionnee[1]) {
+                            deplacementPossible = true;
+                        }
+                        i += 2;
+                    }
                 }
 
                 if(deplacementPossible) {
@@ -329,7 +339,7 @@ public class Controleur implements Observer {
                         int j = 0;
                         boolean dedans = false;
                         while (j < ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).size()) - 1 && dedans == false) {
-                            if ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i + 1) == coordSelectionnee[1]) {
+                            if ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(j) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(j + 1) == coordSelectionnee[1]) {
                                 dedans = true;
                             }
                             j += 2;
@@ -381,7 +391,6 @@ public class Controleur implements Observer {
                     }
                 }
             }
-
         }
 
         // ==========================
@@ -443,7 +452,10 @@ public class Controleur implements Observer {
                             // Aventurier qui reçoit
                             vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(q).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(q).getPath());
                         }
+
                         nbActions++;
+                        closeView((Vue)o);
+
                     } else {
                         Utils.afficherInformation("Vous devez sélectionner une carte et un aventurier !");
                     }
