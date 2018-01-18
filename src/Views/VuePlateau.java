@@ -404,24 +404,10 @@ public class VuePlateau extends Vue {
         for(int i = 0; i < 6; i++){
             for (int j = 0; j < 6; j++){
                 // Tuiles vide
-                if(((i == 0 || i == 5) && (j == 1 || j == 4)) || ((i == 1 || i == 4) && (j==0 || j == 5))) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
+                if(((i == 0 || i == 5) && (j == 1 || j == 4 || j==0 || j == 5)) || ((i == 1 || i == 4) && (j==0 || j == 5))) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
                     this.tableauTuile[i][j] = null;
-                    panelPlateau.add(new JLabel(),cGrille);
-
-                } else if((i == 0 || i == 5) && (j==0 || j == 5)){ // Si on décide d'afficher les trésors
-                    if (AFFICHERTRESOR) {
-                        TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
-                        this.tableauTuile[i][j] = tresor;
-                        panelPlateau.add(tresor, cGrille);
-                        tresor.setPreferredSize(size);
-                        tresor.setOpaque(false);
-                        indexTresor++;
-                    } else {
-                        panelPlateau.add(new JLabel(), cGrille);
-                    }
-
-                }
-                else{ // Tuiles
+                    panelPlateau.add(new JLabel(), cGrille);
+                } else{ // Tuiles
                     TuilePanel tuile = new TuilePanel(nomsTuiles.get(index), ETAT_TUILE.SECHE, null);
                     tuile.addMouseListener(new MouseListener() {
                         @Override

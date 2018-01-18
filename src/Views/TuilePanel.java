@@ -21,8 +21,15 @@ public class TuilePanel extends JPanel {
     private ArrayList<PION> pions;
     BufferedImage highlight;
 
+    // Stockage des fichiers pour éviter d'en recréer à chaque update
+    private File fileHighlightImage = new File("images/tuiles/highlight.png");
+    private File fileTuileOcean = new File("images/tuiles/Ocean.png");
+    private File fileTuileSeche;
+    private File fileTuileInondee;
+
 
     public TuilePanel(NOM_TUILE nomTuile, ETAT_TUILE etatTuile, ArrayList<PION>pions) {
+
         if(pions == null){
             this.setPions(new ArrayList<>());
         } else {
@@ -32,31 +39,27 @@ public class TuilePanel extends JPanel {
         setEtatTuile(etatTuile);
         setNomTuile(nomTuile);
 
+        this.fileTuileSeche = new File(getNomTuile().getPath());
+        this.fileTuileInondee = new File(getNomTuile().getPathInonde());
+
         try {
             // Récupération de l'image highlight
-            this.highlight = ImageIO.read(new File("images/tuiles/highlight.png"));
+            this.highlight = ImageIO.read(fileHighlightImage);
 
             // Récupération de l'image de la tuile en fonction de son état.
             if (getEtatTuile() == ETAT_TUILE.SECHE){
-                this.setImageTuile(ImageIO.read(new File(nomTuile.getPath())));
+                this.setImageTuile(ImageIO.read(fileTuileSeche));
             } else if (getEtatTuile() == ETAT_TUILE.INONDEE) {
-                this.setImageTuile(ImageIO.read(new File(nomTuile.getPathInonde())));
+                this.setImageTuile(ImageIO.read(fileTuileInondee));
             } else if (getEtatTuile() == ETAT_TUILE.COULEE){
-                this.setImageTuile(ImageIO.read(new File("images/tuiles/Ocean.png")));
+                this.setImageTuile(ImageIO.read(fileTuileOcean));
             }
+
             if (pions != null) {
                 for (PION pion : pions) {
                     this.getImagesPions().add(ImageIO.read(new File(pion.getPath())));
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Impossible de récupérer l'image.");
-        }
-    }
-
-    public TuilePanel(String path){
-        try {
-            this.setImageTuile(ImageIO.read(new File(path)));
         } catch (IOException e) {
             System.out.println("Impossible de récupérer l'image.");
         }
@@ -82,11 +85,11 @@ public class TuilePanel extends JPanel {
             // Actualisation de l'état de la tuile
             // On récupère l'image de la tuile correspondant à son état
             if (getEtatTuile() == ETAT_TUILE.SECHE){
-                this.setImageTuile(ImageIO.read(new File(getNomTuile().getPath())));
+                this.setImageTuile(ImageIO.read(fileTuileSeche));
             } else if (getEtatTuile() == ETAT_TUILE.INONDEE) {
-                this.setImageTuile(ImageIO.read(new File(getNomTuile().getPathInonde())));
+                this.setImageTuile(ImageIO.read(fileTuileInondee));
             } else if (getEtatTuile() == ETAT_TUILE.COULEE){
-                this.setImageTuile(ImageIO.read(new File("images/tuiles/Ocean.png")));
+                this.setImageTuile(ImageIO.read(fileTuileOcean));
             }
 
             // Affichage des pions
