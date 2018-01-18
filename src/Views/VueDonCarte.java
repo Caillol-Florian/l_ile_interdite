@@ -79,6 +79,7 @@ public class VueDonCarte extends Vue {
             getCartes().add(carte);
         }
         mainPanel.add(panelCarte, c);
+        panelCarte.setOpaque(false);
 
         c.gridy= 2;
         c.anchor = GridBagConstraints.CENTER;
@@ -118,6 +119,7 @@ public class VueDonCarte extends Vue {
         }
 
         mainPanel.add(panelCarteA, c);
+        panelCarteA.setOpaque(false);
 
         c.gridx= 0;
         c.gridy = 5;
@@ -148,6 +150,7 @@ public class VueDonCarte extends Vue {
         mainPanel.add(btnValider,c);
         btnQuitter.setPreferredSize(d);
         btnValider.setPreferredSize(d);
+
     }
 
     @Override

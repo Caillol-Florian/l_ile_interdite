@@ -73,6 +73,8 @@ public class VueDefausse extends Vue {
             getCartes().add(carte);
         }
         mainPanel.add(panelCarte, c);
+        panelCarte.setOpaque(false);
+
 
     }
 
