@@ -52,6 +52,8 @@ public class Controleur implements Observer {
     boolean piloteSpecial = false; // Déplacement spécial du pilote
     boolean deplacementActif = false;
     boolean assechementActif = false;
+    boolean defausseEnCours = false;
+    private int joueurADefausser = 0;
 
     // =============================
     // Vues
@@ -167,6 +169,12 @@ public class Controleur implements Observer {
         // Highlight du premier jouer
         // Il n'y a pas d'ancien joueur mais on met ancienJoueur = 3 (celui avant 0 est 3).
         vuePlateau.highlightAventurier(0, 3);
+
+        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
+        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
+        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
+        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
+
     }
 
     @Override
@@ -440,8 +448,6 @@ public class Controleur implements Observer {
                         }
                     }
 
-                    System.out.println("Avant" + aventuriers.get(indexAventurierSelectionne).getCartes().size());
-
                     if(indexAventurierSelectionne != -1) {
                         // Update Modèle
                         aventuriers.get(indexAventurierSelectionne).getCartes().add(aventuriers.get(getJActif()).getCartes().get(selection[0]));
@@ -457,24 +463,29 @@ public class Controleur implements Observer {
                         }
                         // Et on remet les nouvelles cartes dans l'ordre...
                         for (int k = 0; k < vuePlateau.getCartesAventurier().size(); k++) {
-                            if(k < aventuriers.get(getJActif()).getCartes().size() || vuePlateau.getCartesAventurier().size() == aventuriers.get(getJActif()).getCartes().size()) {
+                            if(k < aventuriers.get(getJActif()).getCartes().size()) {
                                 vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
                             }
                         }
+
                         for(int q = 0; q < vuePlateau.getCartesAventurier().size(); q++){
                             // Aventurier qui reçoit
-                            if(q < aventuriers.get(indexAventurierSelectionne).getCartes().size() || vuePlateau.getCartesAventurier().size() == aventuriers.get(getJActif()).getCartes().size()) {
+                            if(q < aventuriers.get(indexAventurierSelectionne).getCartes().size()){
                                 vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(q).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(q).getPath());
+                            }
+                            // Affichage de la dernière carte si l'aventurier a 5 cartes ou plus... (je suis pas arrivé à le glisser dans le if du dessus)
+                            if(aventuriers.get(indexAventurierSelectionne).getCartes().size() >= 5) {
+                                vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(4).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(4).getPath());
                             }
                         }
 
                         // Si après avoir donné une carte l'aventurier sélectionné a trop de carte il doit en défausser une !
-                        System.out.println("Après" + aventuriers.get(indexAventurierSelectionne).getCartes().size());
                         if (aventuriers.get(indexAventurierSelectionne).getCartes().size() > 5){
                             for(int j = 0; j < vueDefausse.getCartes().size(); j++) { // On ouvre la vue défausse avec les cartes qu'il possède (6 premières).
                                 vueDefausse.getCartes().get(j).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(j).getPath());
                                 vueDefausse.setNomJoueur(aventuriers.get(indexAventurierSelectionne).getNomJoueur());
                                 openView(vueDefausse);
+                                joueurADefausser = indexAventurierSelectionne;
                             }
                         }
 
@@ -501,20 +512,21 @@ public class Controleur implements Observer {
             // Vérification que la tuile possède un trésor
             if(tresorDeLaTuile != null){
                 // Vérification que le trésor n'a pas déjà été récupéré.
-                if (tresorsRécupérés.contains(tresorDeLaTuile)) {
+                if (!tresorsRécupérés.contains(tresorDeLaTuile)) {
                     // Vérification que le joueur possède assez de carte trésor pour récupérer le trésor.
                     int nbCarteTresorCorrespondante = 0;
                     ArrayList<Integer>cartesASupprimer = new ArrayList<>();
 
                     for (int i = 0; i < aventuriers.get(getJActif()).getCartes().size(); i++) {
                         if (aventuriers.get(getJActif()).getCartes().get(i) instanceof CarteTresor) {
-                            if (tresorDeLaTuile == ((CarteTresor) aventuriers.get(getJActif()).getCartes().get(i)).getTresor()) {
+                            if (tresorDeLaTuile.getTypeTresor() == ((CarteTresor) aventuriers.get(getJActif()).getCartes().get(i)).getTresor().getTypeTresor()) {
                                 nbCarteTresorCorrespondante++;
                                 cartesASupprimer.add(i);
                             }
                         }
                     }
 
+                    System.out.println(nbCarteTresorCorrespondante);
                     if (nbCarteTresorCorrespondante >= 4) {
                         tresorsRécupérés.add(tresorDeLaTuile);
 
@@ -533,6 +545,8 @@ public class Controleur implements Observer {
                             vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
                         }
 
+                        System.out.println("Trésor récupéré !");
+
                     } else {
                         Utils.afficherInformation("Vous n'avez pas assez de carte trésor " + tresorDeLaTuile.getTypeTresor().toString() + " !");
                     }
@@ -550,26 +564,11 @@ public class Controleur implements Observer {
         if(arg instanceof Integer){
             int carteChoisie = (Integer)arg;
 
-            // On ajoute la carte chosie à la pile défausse
-            défausseCarteAction.add(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(carteChoisie));
+            defausser(carteChoisie, joueurADefausser);
 
-            // Et on la supprimme de la liste des carte de l'aventurier
-            aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().remove(carteChoisie);
-
-            // On actualise la liste des carte dans la vue
-            for(int i = 0; i <  vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).size() ; i++){
-                vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).get(i).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(i).getPath());
-            }
-
-            // On vérifie une seconde fois si l'aventurier n'a plus que 5 cartes (cas où il a 5 cartes et en pioche 2 en plus).
-            if(aventuriers.get((joueurActif-1)%aventuriers.size()).getCartes().size() < 6) { // S'il a 5 ou moins
-                closeView(vueDefausse); // On ferme la vue permettant de défausser une carte
-                enableBoutons(true); // On ractive les boutons
-            } else { // Sinon il doit encore défausser, on actualise la vue défausse avec les 6 cartes qu'il lui reste.
-                for(int j = 0; j < vueDefausse.getCartes().size(); j++){
-                    vueDefausse.getCartes().get(j).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(j).getPath());
-                    vueDefausse.setNomJoueur(aventuriers.get(((joueurActif-1)%aventuriers.size())).getNomJoueur());
-                }
+            if(defausseEnCours){
+                prochainTour();
+                defausseEnCours = false;
             }
         }
 
@@ -599,17 +598,6 @@ public class Controleur implements Observer {
 
             // tourPassé est true si on a atteint le nombre maximum d'actions possibles ou qu'on a appuyé sur le bouton Fin Tour
             if (tourPassé) {
-                // Désactivation du highlight si le joueur a cliqué sur le bouton déplacer / assécher mais n'a pas validé l'assèchement
-                if(aventuriers.get(getJActif()) instanceof Pilote){
-                    vuePlateau.highlightTuiles(false, ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial));
-                } else {
-                    vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAccesibles(grille));
-                    vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAssechables(grille));
-                }
-
-                tourPassé = false; // Le tour n'est plus passé
-                enableBoutons(true); // Réactivation des boutons (cas de l'ingénieur)
-
                 // =================================
                 // Tirage des cartes
                 // Cartes inondations
@@ -617,26 +605,38 @@ public class Controleur implements Observer {
                 // Cartes actions
                 tirageCarteActions();
 
-                // =================================
-                // Remise à 0 des paramètres du tour
-                joueurActif++; // On passe au prochain joueur
-                nbActions = 0; // On remet le nombre d'actions effectuées à 0
-                tourPassé = false; // Le tour n'est plus passé
-                aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
-                piloteSpecial = false; // Reset de l'action spéciale du pilote
-
-                vuePlateau.highlightAventurier(getJActif(), (joueurActif-1)%aventuriers.size());
+                if (!defausseEnCours) {
+                    prochainTour();
+                }
             }
         }
 
     }
 
 
-    public void updatePos(int[] coordonnesJoueur, PION pion) {
-        ArrayList<PION>pions;
-        pions = vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].getPions();
-        pions.add(pion);
-        vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].update(pions);
+    public void prochainTour(){
+        // Désactivation du highlight si le joueur a cliqué sur le bouton déplacer / assécher mais n'a pas validé
+        if(aventuriers.get(getJActif()) instanceof Pilote){
+            vuePlateau.highlightTuiles(false, ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial));
+        } else {
+            vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAccesibles(grille));
+            vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAssechables(grille));
+        }
+
+        tourPassé = false; // Le tour n'est plus passé
+        enableBoutons(true); // Réactivation des boutons (cas de l'ingénieur)
+
+
+        // =================================
+        // Remise à 0 des paramètres du tour
+            joueurActif++; // On passe au prochain joueur
+            nbActions = 0; // On remet le nombre d'actions effectuées à 0
+            tourPassé = false; // Le tour n'est plus passé
+            aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
+            piloteSpecial = false; // Reset de l'action spéciale du pilote
+
+            vuePlateau.highlightAventurier(getJActif(), (joueurActif - 1) % aventuriers.size());
+
     }
 
     public void tirageInondation(int nbCarteAPiocher){
@@ -710,13 +710,36 @@ public class Controleur implements Observer {
                 vueDefausse.getCartes().get(j).setCarte(aventuriers.get(getJActif()).getCartes().get(j).getPath());
                 vueDefausse.setNomJoueur(aventuriers.get(getJActif()).getNomJoueur());
                 openView(vueDefausse);
+                defausseEnCours = true;
+                joueurADefausser = getJActif();
             }
         }
 
-        System.out.println(pileCartesAction.size());
     }
 
+    public void defausser(int carteChoisie, int joueurADefausser){
+        // On ajoute la carte chosie à la pile défausse
+        défausseCarteAction.add(aventuriers.get(joueurADefausser).getCartes().get(carteChoisie));
 
+        // Et on la supprimme de la liste des carte de l'aventurier
+        aventuriers.get(joueurADefausser).getCartes().remove(carteChoisie);
+
+        // On actualise la liste des carte dans la vue
+        for(int i = 0; i <  vuePlateau.getCartesAventurier().get(joueurADefausser).size() ; i++){
+            vuePlateau.getCartesAventurier().get(joueurADefausser).get(i).setCarte(aventuriers.get(joueurADefausser).getCartes().get(i).getPath());
+        }
+
+        // On vérifie une seconde fois si l'aventurier n'a plus que 5 cartes (cas où il a 5 cartes et en pioche 2 en plus).
+        if(aventuriers.get(joueurADefausser).getCartes().size() < 6) { // S'il a 5 ou moins
+            closeView(vueDefausse); // On ferme la vue permettant de défausser une carte
+            enableBoutons(true); // On ractive les boutons
+        } else { // Sinon il doit encore défausser, on actualise la vue défausse avec les 6 cartes qu'il lui reste.
+            for(int j = 0; j < vueDefausse.getCartes().size(); j++){
+                vueDefausse.getCartes().get(j).setCarte(aventuriers.get(joueurADefausser).getCartes().get(j).getPath());
+                vueDefausse.setNomJoueur(aventuriers.get(joueurADefausser).getNomJoueur());
+            }
+        }
+    }
     public int getJActif(){
         return joueurActif % aventuriers.size();
     }
@@ -726,6 +749,13 @@ public class Controleur implements Observer {
         vuePlateau.getBtnFinir().setEnabled(enable);
         vuePlateau.getBtnDonCarte().setEnabled(enable);
         vuePlateau.getBtnBouger().setEnabled(enable);
+    }
+
+    public void updatePos(int[] coordonnesJoueur, PION pion) {
+        ArrayList<PION>pions;
+        pions = vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].getPions();
+        pions.add(pion);
+        vuePlateau.getTableauTuile()[coordonnesJoueur[0]][coordonnesJoueur[1]].update(pions);
     }
 
     public Grille getGrille(){
