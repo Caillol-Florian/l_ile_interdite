@@ -20,8 +20,8 @@ public class VueInscription extends Vue {
     private JFrame window = new JFrame("Inscription");
     private ImagePanel mainPanel;
     private Font regular = new Font("Gill Sans",0,22);
-    private Font bold = new Font("Gill Sans", 1, 50);
-    private Font jouer = new Font("Gill Sans", 1,22);
+    private Font bold = new Font("Gill Sans", 1, 25);
+    private Font jouer = new Font("Gill Sans", 1,20);
     private Font btn = new Font("Gill Sans", 0,17);
     private Font btnBold = new Font("Gill Sans", 1,17);
     private boolean btn2P = false;
@@ -90,7 +90,7 @@ public class VueInscription extends Vue {
 
         JLabel titreLabel = new JLabel(icone0);
         titreLabel.setText("   Paramètres de la partie");
-        titreLabel.setForeground(Color.WHITE);
+        titreLabel.setForeground(Color.BLACK);
         titreLabel.setFont(bold);
         mainPanel.add(titreLabel,gc);
 
@@ -101,10 +101,10 @@ public class VueInscription extends Vue {
         gc.gridwidth = 4;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.LAST_LINE_START;
-        gc.insets = new Insets(0,55,0,0);
+        gc.insets = new Insets(0,25,0,0);
 
         JLabel titre = new JLabel("Veuillez séléctionner le nombre de joueur");
-        titre.setForeground(Color.WHITE);
+        titre.setForeground(Color.BLACK);
         titre.setFont(regular);
         mainPanel.add(titre,gc);
 
@@ -178,10 +178,10 @@ public class VueInscription extends Vue {
         gc.gridwidth = 4;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.LAST_LINE_START;
-        gc.insets = new Insets(0,55,0,0);
+        gc.insets = new Insets(0,25,0,0);
 
-        JLabel pseudoLabel = new JLabel("Veuillez entrer vos pseudos (obligatoire)");
-        pseudoLabel.setForeground(Color.WHITE);
+        JLabel pseudoLabel = new JLabel("Veuillez entrer vos pseudos");
+        pseudoLabel.setForeground(Color.BLACK);
         pseudoLabel.setFont(regular);
         mainPanel.add(pseudoLabel,gc);
 
@@ -209,10 +209,10 @@ public class VueInscription extends Vue {
         gc.gridwidth = 4;
         gc.gridheight = 1;
         gc.anchor = GridBagConstraints.LAST_LINE_START;
-        gc.insets = new Insets(0,55,0,0);
+        gc.insets = new Insets(0,25,0,0);
 
         JLabel difficulteChoix = new JLabel("Veuillez séléctionner le niveau de difficulté");
-        difficulteChoix.setForeground(Color.WHITE);
+        difficulteChoix.setForeground(Color.BLACK);
         difficulteChoix.setFont(regular);
         mainPanel.add(difficulteChoix,gc);
 
