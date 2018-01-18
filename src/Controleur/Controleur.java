@@ -41,6 +41,7 @@ public class Controleur implements Observer {
     // Paramètres
     private int nbJoueurs;
     private int difficulte;
+    private int[] nbCarteAPiocher = {2,2,3,3,3,4,4,5,5,0};
     private ArrayList<String> pseudos;
 
     private boolean jeuLance = false;
@@ -53,23 +54,19 @@ public class Controleur implements Observer {
     boolean assechementActif = false;
 
     // =============================
-    // ArrayList des vuesAventuriers
-    private ArrayList<VueAventurier> vueAventuriers = new ArrayList<>();
-
-
-    // =============================
     // Vues
     private VueMenu vueMenu = new VueMenu();
     private VueInscription vueInscription = new VueInscription();
     private VueNiveau vueNiveau;
     private VuePlateau vuePlateau;
+    private VueDefausse vueDefausse = new VueDefausse();
 
     public Controleur() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 
         //Ajout observer aux différentes vues
         vueMenu.abonner(this);
         vueInscription.abonner(this);
-
+        vueDefausse.abonner(this);
         //Lancement du jeu
         openView(vueMenu);
 
@@ -274,6 +271,7 @@ public class Controleur implements Observer {
         if(arg instanceof Message_Coche){
             // Récupération du nom de la tuile sélectionnée
             NOM_TUILE tuileSelectionnee = ((Message_Coche)arg).getNomTuile();
+            // Coordonnée sélectionnee
             int[] coordSelectionnee = new int[2];
             coordSelectionnee[0] = getGrille().getCordonneesTuiles(getGrille().getTuile(tuileSelectionnee))[0];
             coordSelectionnee[1] = getGrille().getCordonneesTuiles(getGrille().getTuile(tuileSelectionnee))[1];
@@ -281,81 +279,103 @@ public class Controleur implements Observer {
             // ==========================================
             // DEPLACEMENT
             if (deplacementActif){
-                // Désactivation du highlight
-                if(aventuriers.get(joueurActif%aventuriers.size()) instanceof Pilote){
-                    vuePlateau.highlightTuiles(false, ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial));
-                } else {
-                    vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAccesibles(grille));
-                }
-
-
                 // ============================
-                // UPDATE MODELE / VUE
-
-                // ===================================
-                // RETIRER LE PION DE L'ANCIENNE TUILE
-                // Ancienne coordonnées
-                int[] coordAncienne = new int[2];
-                coordAncienne[0] = getGrille().getCordonneesTuiles(aventuriers.get(getJActif()).getPosition())[0];
-                coordAncienne[1] = getGrille().getCordonneesTuiles(aventuriers.get(getJActif()).getPosition())[1];
-                // Update visuelle
-                ArrayList<PION> pionsTuile = vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].getPions();
-                pionsTuile.remove(aventuriers.get(joueurActif%aventuriers.size()).getPion());
-                vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].update(pionsTuile);
-
-                // =====================================
-                // AJOUTER LE PION SUR L'ANCIENNE TUILE
-                // Coordonnées sélectionnées
-                // Update visuelle
-                ArrayList<PION> newPions = vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions();
-                newPions.add(aventuriers.get(joueurActif%aventuriers.size()).getPion());
-                vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(newPions);
-
-
-                // ====================================
-                // Vérification si le pilote a utilisé son déplacement spécial :
-                // Si la tuile sélectionnée n'est pas une tuile adjacente au pilote alors il a utilisé son pouvoir
-                if (aventuriers.get(getJActif()) instanceof Pilote){
-                    int i = 0;
-                    boolean dedans = false;
-                    while(i < ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).size())-1 && dedans == false){
-                        if((aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i+1) == coordSelectionnee[1]){
-                            dedans = true;
-                        }
-                        i+=2;
+                // Vérification que la tuile sélectionnée soit correcte
+                boolean deplacementPossible = false;
+                int i = 0;
+                while(i < ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).size())-1 && deplacementPossible == false){
+                    if((aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i+1) == coordSelectionnee[1]){
+                        deplacementPossible = true;
                     }
-                    if(!dedans){
-                        piloteSpecial = true;
-                    }
+                    i+=2;
                 }
 
-                // ====================================
-                // ACTUALISATION POSITION MODELE
-                aventuriers.get(getJActif()).setPosition(getGrille().getTuile(tuileSelectionnee));
-                deplacementActif = false;
-                nbActions++;
+                if(deplacementPossible) {
+                    // Désactivation du highlight
+                    if (aventuriers.get(joueurActif % aventuriers.size()) instanceof Pilote) {
+                        vuePlateau.highlightTuiles(false, ((Pilote) aventuriers.get(getJActif())).getTuilesAccesibles(grille, piloteSpecial));
+                    } else {
+                        vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAccesibles(grille));
+                    }
+
+                    // ==========================================
+                    // UPDATE MODELE / VUE :
+                    // ===================================
+                    // RETIRER LE PION DE L'ANCIENNE TUILE
+                    // Ancienne coordonnées
+                    int[] coordAncienne = new int[2];
+                    coordAncienne[0] = getGrille().getCordonneesTuiles(aventuriers.get(getJActif()).getPosition())[0];
+                    coordAncienne[1] = getGrille().getCordonneesTuiles(aventuriers.get(getJActif()).getPosition())[1];
+                    // Update visuelle
+                    ArrayList<PION> pionsTuile = vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].getPions();
+                    pionsTuile.remove(aventuriers.get(joueurActif % aventuriers.size()).getPion());
+                    vuePlateau.getTableauTuile()[coordAncienne[0]][coordAncienne[1]].update(pionsTuile);
+
+                    // =====================================
+                    // AJOUTER LE PION SUR L'ANCIENNE TUILE
+                    // Update visuelle
+                    ArrayList<PION> newPions = vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions();
+                    newPions.add(aventuriers.get(joueurActif % aventuriers.size()).getPion());
+                    vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(newPions);
+
+
+                    // ====================================
+                    // Vérification si le pilote a utilisé son déplacement spécial :
+                    // Si la tuile sélectionnée n'est pas une tuile adjacente au pilote alors il a utilisé son pouvoir
+                    if (aventuriers.get(getJActif()) instanceof Pilote) {
+                        int j = 0;
+                        boolean dedans = false;
+                        while (j < ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).size()) - 1 && dedans == false) {
+                            if ((aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAccesibles(grille).get(i + 1) == coordSelectionnee[1]) {
+                                dedans = true;
+                            }
+                            j += 2;
+                        }
+                        if (!dedans) {
+                            piloteSpecial = true;
+                        }
+                    }
+
+                    // ====================================
+                    // ACTUALISATION POSITION MODELE
+                    aventuriers.get(getJActif()).setPosition(getGrille().getTuile(tuileSelectionnee));
+                    deplacementActif = false;
+                    nbActions++;
+                }
+
 
                 // ==========================================
                 // ASSECHEMENT
-            } else if (assechementActif){
-                // Désactivation du highlight
-                vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAssechables(grille));
+            } else if (assechementActif) {
+                boolean assechementPossible = false;
+                int i = 0;
+                while (i < ((aventuriers.get(getJActif())).getTuilesAssechables(grille).size()) - 1 && assechementPossible == false) {
+                    if ((aventuriers.get(getJActif())).getTuilesAssechables(grille).get(i) == coordSelectionnee[0] && (aventuriers.get(getJActif())).getTuilesAssechables(grille).get(i + 1) == coordSelectionnee[1]) {
+                        assechementPossible = true;
+                    }
+                    i += 2;
+                }
+
+                if (assechementPossible) {
+                    // Désactivation du highlight
+                    vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAssechables(grille));
 
 
-                getGrille().getTuiles()[coordSelectionnee[0]][coordSelectionnee[1]].setEtat(ETAT_TUILE.SECHE);
-                vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].setEtatTuile(ETAT_TUILE.SECHE);
-                vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions());
-                assechementActif = false;
+                    getGrille().getTuiles()[coordSelectionnee[0]][coordSelectionnee[1]].setEtat(ETAT_TUILE.SECHE);
+                    vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].setEtatTuile(ETAT_TUILE.SECHE);
+                    vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].update(vuePlateau.getTableauTuile()[coordSelectionnee[0]][coordSelectionnee[1]].getPions());
+                    assechementActif = false;
 
-                // Assèchement bonus de l'ingénieur
-                // Si l'aventurier qui assèche est un ingénieur et qu'il n'a pas déjà asseché
-                if (aventuriers.get(getJActif()).getNomRole() == NOM_AVENTURIER.INGENIEUR && !aAsseché) {
-                    aAsseché = true; // On change la valeur aAsseché en true
-                } else if (aAsseché) { // S'il a déjà asseché
-                    nbActions++; // On augmente le nombre d'action effectué
-                    aAsseché = false; // On remet la valeur aAsseché en false
-                } else {
-                    nbActions++; // Sinon s'il s'agit pas d'un ingénieur on augmente le nombre d'action
+                    // Assèchement bonus de l'ingénieur
+                    // Si l'aventurier qui assèche est un ingénieur et qu'il n'a pas déjà asseché
+                    if (aventuriers.get(getJActif()).getNomRole() == NOM_AVENTURIER.INGENIEUR && !aAsseché) {
+                        aAsseché = true; // On change la valeur aAsseché en true
+                    } else if (aAsseché) { // S'il a déjà asseché
+                        nbActions++; // On augmente le nombre d'action effectué
+                        aAsseché = false; // On remet la valeur aAsseché en false
+                    } else {
+                        nbActions++; // Sinon s'il s'agit pas d'un ingénieur on augmente le nombre d'action
+                    }
                 }
             }
 
@@ -401,21 +421,42 @@ public class Controleur implements Observer {
                     vuePlateau.highlightTuiles(false, aventuriers.get(getJActif()).getTuilesAssechables(grille));
                 }
 
-                // ==========================
+                tourPassé = false; // Le tour n'est plus passé
+                enableBoutons(true); // Réactivation des boutons (cas de l'ingénieur)
+
+                // =================================
                 // Tirage des cartes
                 // Cartes inondations
-                tirageInondation(difficulte);
+                tirageInondation(nbCarteAPiocher[difficulte]);
                 // Cartes actions
                 tirageCarteActions();
 
+                // =================================
+                // Remise à 0 des paramètres du tour
                 joueurActif++; // On passe au prochain joueur
                 nbActions = 0; // On remet le nombre d'actions effectuées à 0
                 tourPassé = false; // Le tour n'est plus passé
                 aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
                 piloteSpecial = false; // Reset de l'action spéciale du pilote
 
-                enableBoutons(); // Réactivation des boutons (cas de l'ingénieur)
             }
+        }
+
+        // ---------------------------------- //
+        // -----------  DEFAUSSE  ----------- //
+        // ---------------------------------- //
+        if(arg instanceof Integer){
+            int carteChoisie = (Integer)arg;
+            // On ajoute la carte chosie à la pile défausse
+            défausseCarteAction.add(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(carteChoisie));
+            // Et on la supprimme de la liste des carte de l'aventurier
+            aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().remove(carteChoisie);
+            // On actualise la liste des carte dans la vue
+            for(int i = 0; i < aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().size(); i++){
+                vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).get(i).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(i).getPath());
+            }
+            // On ferme la vue permettant de défausser une carte
+            closeView(vueDefausse);
         }
     }
 
@@ -477,6 +518,13 @@ public class Controleur implements Observer {
                     vuePlateau.getCartesAventurier().get(getJActif()).get(aventuriers.get(getJActif()).getCartes().size() - 1).setCarte(carteActionTirée.getPath());
                     défausseCarteAction.add(carteActionTirée);
                     pileCartesAction.remove(carteActionTirée);
+                } else {
+                    aventuriers.get(getJActif()).addCarte((CarteStockable) carteActionTirée);
+                    enableBoutons(false);
+                    for(int j = 0; j < aventuriers.get(getJActif()).getCartes().size(); j++){
+                        vueDefausse.getCartes().get(j).setCarte(aventuriers.get(getJActif()).getCartes().get(j).getPath());
+                        openView(vueDefausse);
+                    }
                 }
             }
         }
@@ -485,11 +533,12 @@ public class Controleur implements Observer {
     public int getJActif(){
         return joueurActif % aventuriers.size();
     }
-    public void enableBoutons(){
-        vuePlateau.getBtnAssecher().setEnabled(true);
-        vuePlateau.getBtnFinir().setEnabled(true);
-        vuePlateau.getBtnAutre().setEnabled(true);
-        vuePlateau.getBtnBouger().setEnabled(true);
+
+    public void enableBoutons(boolean enable){
+        vuePlateau.getBtnAssecher().setEnabled(enable);
+        vuePlateau.getBtnFinir().setEnabled(enable);
+        vuePlateau.getBtnAutre().setEnabled(enable);
+        vuePlateau.getBtnBouger().setEnabled(enable);
     }
 
     public Grille getGrille(){

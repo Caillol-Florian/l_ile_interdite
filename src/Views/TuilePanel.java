@@ -86,7 +86,6 @@ public class TuilePanel extends JPanel {
             } else if (getEtatTuile() == ETAT_TUILE.INONDEE) {
                 this.setImageTuile(ImageIO.read(new File(getNomTuile().getPathInonde())));
             } else if (getEtatTuile() == ETAT_TUILE.COULEE){
-                System.out.println("oua");
                 this.setImageTuile(ImageIO.read(new File("images/tuiles/Ocean.png")));
             }
 
