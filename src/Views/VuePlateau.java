@@ -45,20 +45,20 @@ public class VuePlateau extends Vue {
 
         window = new JFrame();
         window.setTitle("Ile Interdite");
-        window.setSize(1920, 1000);
+        window.setSize(1920, 1080);
         window.setLocation(0, 0);
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // =============================================================
         // Création du panel principal
-        mainPanel = new PanelAvecImage(1920,1000,"images/backgrounds/bg_plateau.png");
+        mainPanel = new PanelAvecImage(1920,1080,"images/backgrounds/bg_plateau.png");
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
         // =============================================================
         // Panel Aventuriers
-        PanelAvecImage panelAventuriers =new PanelAvecImage(1920,1000,"images/backgrounds/bg_plateau.png");
+        PanelAvecImage panelAventuriers =new PanelAvecImage(1920,1080,"images/backgrounds/bg_plateau.png");
         panelAventuriers.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -276,15 +276,15 @@ public class VuePlateau extends Vue {
         cInfo.anchor = GridBagConstraints.CENTER;
 
         //Construction pioche/défausse carte trésor
-        Dimension sizePioche = new Dimension(90,120);
+        Dimension sizePioche = new Dimension(120,150);
         cInfo.gridx = 0;
         cInfo.gridy = 0;
-        CartePanel tresorDos = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
+        CartePanel tresorDos = new CartePanel("images/cartes/Fond rouge.png", 120, 150);
         tresorDos.setPreferredSize(sizePioche);
         panelInfo.add(tresorDos, cInfo);
 
         cInfo.gridx = 1;
-        CartePanel tresorFace = new CartePanel("images/cartes/Calice.png",90,120);
+        CartePanel tresorFace = new CartePanel("images/cartes/Calice.png",120, 150);
         tresorFace.setPreferredSize(sizePioche);
         panelInfo.add(tresorFace, cInfo);
 
@@ -386,12 +386,12 @@ public class VuePlateau extends Vue {
         cInfo.gridy = 2;
 
 
-        CartePanel inondationDos = new CartePanel("images/cartes/Fond bleu.png",90,120);
+        CartePanel inondationDos = new CartePanel("images/cartes/Fond bleu.png",120, 150);
         inondationDos.setPreferredSize(sizePioche);
         panelInfo.add(inondationDos, cInfo);
 
         cInfo.gridx = 1;
-        CartePanel inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png",90,120);
+        CartePanel inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png",120, 150);
         inondationFace.setPreferredSize(sizePioche);
         panelInfo.add(inondationFace, cInfo);
 
