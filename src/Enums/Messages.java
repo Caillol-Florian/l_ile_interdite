@@ -12,5 +12,7 @@ public enum Messages {
     VALIDERASSECHEMENT,
     DONCARTE,
     AUTRE,
+    RECUPTRESOR,
+    ACTIONSPECIALE,
     FINTOUR;
 }

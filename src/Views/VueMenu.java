@@ -13,7 +13,7 @@ import java.io.IOException;
 public class VueMenu extends Vue {
 
     private JFrame window = new JFrame("Menu Principal");
-    private PanelAvecImage mainPanel;
+    private ImagePanel mainPanel;
     private Font regular = new Font("Gill Sans",0,16);
     private Font bold = new Font("Gill Sans", 0, 30);
 
@@ -27,7 +27,7 @@ public class VueMenu extends Vue {
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new PanelAvecImage(1024,720, "images/backgrounds/bg_menu.png") ;
+        mainPanel = new ImagePanel(1024,720, "images/backgrounds/bg_menu.png") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
@@ -128,31 +128,6 @@ public class VueMenu extends Vue {
                 clearChanged();
             }
         });
-    }
-
-    private class PanelAvecImage extends JPanel {
-
-        private Image image ;
-        private final Integer width ;
-        private final Integer height ;
-
-        public PanelAvecImage(Integer width, Integer height, String imageFile) {
-            this.width = width ;
-            this.height = height ;
-            try {
-                this.image = ImageIO.read(new File(imageFile));
-            } catch (IOException ex) {
-                System.err.println("Erreur de lecture background");
-            }
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, this.width, this.height, null, this);
-            }
-        }
     }
 
     @Override

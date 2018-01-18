@@ -18,7 +18,7 @@ public class VueInscription extends Vue {
 
 
     private JFrame window = new JFrame("Inscription");
-    private PanelAvecImage mainPanel;
+    private ImagePanel mainPanel;
     private Font regular = new Font("Gill Sans",0,22);
     private Font bold = new Font("Gill Sans", 1, 50);
     private Font jouer = new Font("Gill Sans", 1,22);
@@ -48,7 +48,7 @@ public class VueInscription extends Vue {
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainPanel = new PanelAvecImage(1024,720, "images/backgrounds/bg_inscription.png") ;
+        mainPanel = new ImagePanel(1024,720, "images/backgrounds/bg_inscription.png") ;
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
@@ -333,33 +333,6 @@ public class VueInscription extends Vue {
                 }
             }
         });
-    }
-
-
-
-    private class PanelAvecImage extends JPanel {
-
-        private Image image;
-        private final Integer width;
-        private final Integer height;
-
-        public PanelAvecImage(Integer width, Integer height, String imageFile) {
-            this.width = width;
-            this.height = height;
-            try {
-                this.image = ImageIO.read(new File(imageFile));
-            } catch (IOException ex) {
-                System.err.println("Erreur de lecture background");
-            }
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, this.width, this.height, null, this);
-            }
-        }
     }
 
     public void updateJTextField(){

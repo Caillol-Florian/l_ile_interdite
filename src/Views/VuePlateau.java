@@ -38,10 +38,8 @@ public class VuePlateau extends Vue {
     Integer cellWidth = 50;
     Integer cellHeight = (Parameters.HAUTEUR_AUTRES_VUES - 25 - (Parameters.UNDECORATED ? 0 : Parameters.DECORATION_HEIGHT)) / 10;
 
-    private JButton btnBouger;
-    private JButton btnAssecher;
-    private JButton btnFinir;
-    private JButton btnDon;
+    private JButton btnBouger, btnAssecher, btnRecuperer, btnDon, btnSpecial, btnFinir;
+
 
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles, int niveauDifficulte) {
 
@@ -54,13 +52,13 @@ public class VuePlateau extends Vue {
 
         // =============================================================
         // Création du panel principal
-        mainPanel = new PanelAvecImage(1920,1080,"images/backgrounds/bg_plateau.png");
+        mainPanel = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
         // =============================================================
         // Panel Aventuriers
-        PanelAvecImage panelAventuriers =new PanelAvecImage(1920,1080,"images/backgrounds/bg_plateau.png");
+        ImagePanel panelAventuriers =new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         panelAventuriers.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -182,10 +180,26 @@ public class VuePlateau extends Vue {
             cColonneAventurier.gridy++;
         }
 
-        JPanel panelBoutons = new JPanel(new GridLayout(2,2));
-        cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
+
+        //construction panelBouton
+        ImagePanel panelBoutons = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
+        panelBoutons.setLayout(new GridBagLayout());
+        GridBagConstraints cBouton = new GridBagConstraints();
+        cBouton.weightx = 3;
+        cBouton.weighty = 2;
+        cBouton.gridx = 0;
+        cBouton.gridy = 0;
+        cBouton.anchor = GridBagConstraints.CENTER;
+
+        //cColonneAventurier.anchor = GridBagConstraints.PAGE_END;
         panelAventuriers.add(panelBoutons, cColonneAventurier);
-        btnBouger = new JButton("Se déplacer");
+
+        Dimension iconSize = new Dimension(50,50);
+
+
+        btnBouger = btnIcone("move.png","Se déplacer");
+        panelBoutons.add(btnBouger,cBouton);
+
         btnBouger.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -194,9 +208,12 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
-        panelBoutons.add(btnBouger);
 
-        btnAssecher = new JButton("Assécher");
+        cBouton.gridx++;
+
+        btnAssecher = btnIcone("drought.png","Assécher");
+        panelBoutons.add(btnAssecher,cBouton);
+
         btnAssecher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -205,11 +222,26 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
-        panelBoutons.add(btnAssecher);
 
-        btnDon  = new JButton("Donner une carte");
+        cBouton.gridx++;
 
-        panelBoutons.add(btnDon);
+        btnRecuperer = btnIcone("chest.png","Récupérer trésor");
+        panelBoutons.add(btnRecuperer,cBouton);
+
+        btnAssecher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.RECUPTRESOR);
+                clearChanged();
+            }
+        });
+
+        cBouton.gridx++;
+
+        btnDon  = btnIcone("give-card.png","Donner une carte");
+        panelBoutons.add(btnDon, cBouton);
+
         btnDon.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -219,7 +251,25 @@ public class VuePlateau extends Vue {
             }
         });
 
-        btnFinir = new JButton("Finir Tour");
+        cBouton.gridx++;
+
+        btnSpecial = btnIcone("star.png","Action spéciale");
+        panelBoutons.add(btnSpecial,cBouton);
+
+        btnAssecher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.RECUPTRESOR);
+                clearChanged();
+            }
+        });
+
+        cBouton.gridx++;
+
+        btnFinir = btnIcone("next.png","Finir Tour");
+        panelBoutons.add(btnFinir, cBouton);
+
         btnFinir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -229,12 +279,12 @@ public class VuePlateau extends Vue {
             }
         });
 
-        panelBoutons.add(btnFinir);
+
 
 
         // =============================================================
         // Panel Grille
-        JPanel panelPlateau = new PanelAvecImage(1920,1920,"images/backgrounds/bg_plateau.png");
+        JPanel panelPlateau = new ImagePanel(1920,1920,"images/backgrounds/bg_plateau.png");
         panelPlateau.setLayout(new GridBagLayout());
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
@@ -317,7 +367,7 @@ public class VuePlateau extends Vue {
         c.fill = GridBagConstraints.BOTH;
 
 
-        JPanel panelInfo = new PanelAvecImage(1920,1920,"images/backgrounds/bg_plateau.png");
+        JPanel panelInfo = new ImagePanel(1920,1920,"images/backgrounds/bg_plateau.png");
         panelInfo.setLayout(new GridBagLayout());
         mainPanel.add(panelInfo,c);
 
@@ -452,30 +502,14 @@ public class VuePlateau extends Vue {
         window.setVisible(true);
     }
 
-
-    private class PanelAvecImage extends JPanel {
-
-        private Image image;
-        private final Integer width ;
-        private final Integer height ;
-
-        public PanelAvecImage(Integer width, Integer height, String imageFile) {
-            this.width = width ;
-            this.height = height ;
-            try {
-                this.image = ImageIO.read(new File(imageFile));
-            } catch (IOException ex) {
-                System.err.println("Erreur de lecture background");
-            }
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, this.width, this.height, null, this);
-            }
-        }
+    public JButton btnIcone(String path, String texte){
+        String imgUrl="images/icones/"+path;
+        ImageIcon icone = new ImageIcon(imgUrl);
+        JButton btn = new JButton(icone);
+        btn.setPreferredSize(new Dimension(60,60));
+        btn.setToolTipText(texte);
+        btn.setOpaque(false);
+        return btn;
     }
 
     public TuilePanel[][] getTableauTuile() {
