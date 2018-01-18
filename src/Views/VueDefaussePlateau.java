@@ -9,72 +9,77 @@ import java.awt.event.MouseListener;
 
 import java.util.ArrayList;
 
-public class VueDefausse extends Vue {
+public class VueDefaussePlateau extends Vue {
     private final JFrame window;
     private final JPanel mainPanel;
     private ArrayList<CartePanel> cartes;
     private JLabel labelNomJoueur = new JLabel();
+    private Font titreFont = new Font("Gill Sans", 1,22);
 
-    public VueDefausse(){
+    public VueDefaussePlateau(){
         this.window = new JFrame();
-        window.setSize(720, 180);
+        window.setSize(1080, 720);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
         //le titre = nom du joueur
-        window.setTitle("Défausser une carte !");
+        window.setTitle("Défausse plateau");
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setUndecorated(Parameters.UNDECORATED);
 
 
-        mainPanel = new ImagePanel(720, 180, "images/backgrounds/bg_inscriptionN.jpg");
+        mainPanel = new ImagePanel(1080, 1080, "images/backgrounds/bg_inscriptionN.jpg");
         mainPanel.setLayout(new GridBagLayout());
         this.window.add(mainPanel);
         GridBagConstraints c = new GridBagConstraints();
+
         c.gridx = 0;
         c.gridy = 0;
         mainPanel.add(labelNomJoueur,c);
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
+
+        c.insets = new Insets(0,0,20,0);
+        c.anchor = GridBagConstraints.CENTER;
         c.gridy= 1;
-        mainPanel.add(new JLabel("Choisir une carte à défausser"),c);
+
+        JLabel titre = new JLabel("Cartes défaussées");
+        titre.setFont(titreFont);
+        mainPanel.add(titre,c);
+
         c.gridy= 2;
         cartes = new ArrayList<>();
+
         JPanel panelCarte = new JPanel(new GridBagLayout());
         GridBagConstraints cCarte = new GridBagConstraints();
-        //cCarte.gridy = 0;
         cCarte.gridx = 0;
         cCarte.gridy = 1;
-        cCarte.insets = new Insets(3,3,3,3);
+        cCarte.insets = new Insets(10,10,10,10);
         Dimension sizeCarte = new Dimension(90,  120);
-        for(int i = 0; i < 6; i++){
-            CartePanel carte = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
-            carte.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {}
 
-                @Override
-                public void mousePressed(MouseEvent e) {}
+        for(int i = 0; i < 4; i++){
+            for (int j = 0; j<6; j++){
+                CartePanel carte = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
+                carte.setPreferredSize(sizeCarte);
+                panelCarte.add(carte, cCarte);
+                cCarte.gridx++;
+                getCartesDefaussees().add(carte);
 
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    setChanged();
-                    notifyObservers(getCartes().indexOf(carte));
-                    clearChanged();
-                }
-                @Override
-                public void mouseEntered(MouseEvent e) {}
-
-                @Override
-                public void mouseExited(MouseEvent e) {}
-            });
-
-            carte.setPreferredSize(sizeCarte);
-            panelCarte.add(carte, cCarte);
-            cCarte.gridx++;
-            getCartes().add(carte);
+            }
+            cCarte.gridx = 0;
+            cCarte.gridy++;
         }
+
+        c.insets = new Insets(0,0,0,0);
         mainPanel.add(panelCarte, c);
         panelCarte.setOpaque(false);
+
+        c.gridy= 3;
+        c.insets = new Insets(15,0,0,0);
+        JButton btnQuitter = new JButton("Quitter");
+        btnQuitter.setPreferredSize(new Dimension(200,40));
+        mainPanel.add(btnQuitter,c);
+
+
+
     }
 
     @Override
@@ -82,17 +87,12 @@ public class VueDefausse extends Vue {
         window.setVisible(b);
     }
 
-    public void setNomJoueur(String nomJoueur){
-        this.labelNomJoueur.setText(nomJoueur);
-    }
     public static void main(String[] args) {
-        VueDefausse vue = new VueDefausse();
+        VueDefaussePlateau vue = new VueDefaussePlateau();
         vue.setVisible(true);
     }
 
-    public ArrayList<CartePanel> getCartes() {
+    public ArrayList<CartePanel> getCartesDefaussees() {
         return cartes;
     }
 }
-
-

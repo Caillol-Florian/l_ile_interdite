@@ -49,7 +49,7 @@ public class VuePlateau extends Vue {
     Integer cellWidth = 50;
     Integer cellHeight = (Parameters.HAUTEUR_AUTRES_VUES - 25 - (Parameters.UNDECORATED ? 0 : Parameters.DECORATION_HEIGHT)) / 10;
 
-    private JButton btnBouger, btnAssecher, btnRecuperer, btnDon, btnSpecial, btnFinir;
+    private JButton btnBouger, btnAssecher, btnRecuperer, btnDon, btnSpecial, btnFinir, btnQuitter;
 
 
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles, int niveauDifficulte) {
@@ -253,7 +253,8 @@ public class VuePlateau extends Vue {
 
 
         //  PanelBouton
-        ImagePanel panelBoutons = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
+        JPanel panelBoutons = new JPanel();
+        panelBoutons.setOpaque(false);
         panelBoutons.setLayout(new GridBagLayout());
         GridBagConstraints cBouton = new GridBagConstraints();
         cBouton.weightx = 3;
@@ -338,8 +339,29 @@ public class VuePlateau extends Vue {
         });
 
         cBouton.gridx++;
+        cBouton.gridheight =2;
+        cBouton.insets = new Insets(0,20,0,0);
 
-        btnFinir = btnIcone("next.png","Finir Tour");
+        btnQuitter = btnIcone("next.png","Quitter la partie");
+        panelBoutons.add(btnQuitter,cBouton);
+
+        btnQuitter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setChanged();
+                notifyObservers(Messages.RETOUR);
+                clearChanged();
+            }
+        });
+
+        cBouton.gridx = 0;
+        cBouton.gridy++;
+        cBouton.gridwidth = 5;
+        cBouton.gridheight =1;
+        cBouton.fill = GridBagConstraints.BOTH;
+        cBouton.insets = new Insets(0,0,0,0);
+
+        btnFinir = btnIcone("exchange.png","Finir Tour");
         panelBoutons.add(btnFinir, cBouton);
 
         btnFinir.addActionListener(new ActionListener() {
@@ -350,6 +372,10 @@ public class VuePlateau extends Vue {
                 clearChanged();
             }
         });
+
+
+
+
 
 
         // Panel Grille
