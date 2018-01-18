@@ -1,6 +1,7 @@
 package Views;
 
 import Enums.*;
+import Modèles.Parameters;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static javax.swing.SwingConstants.CENTER;
 
@@ -27,6 +29,13 @@ public class VuePlateau extends Vue {
     // Array contenant l'Array des cartes de chaque aventurier.
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
 
+    // Niveau de difficulté
+    private Integer niveau = 1; //penser à la pesner en para
+    // Parametre vueNiveau
+    HashMap<Integer, JPanel> panelsGauches = new HashMap<>();
+    Integer cellWidth = 50;
+    Integer cellHeight = (Parameters.HAUTEUR_AUTRES_VUES - 25 - (Parameters.UNDECORATED ? 0 : Parameters.DECORATION_HEIGHT)) / 10;
+
     private JButton btnBouger;
     private JButton btnAssecher;
     private JButton btnFinir;
@@ -36,24 +45,31 @@ public class VuePlateau extends Vue {
 
         window = new JFrame();
         window.setTitle("Ile Interdite");
-        window.setSize(1450, 1000);
+        window.setSize(1920, 1000);
         window.setLocation(0, 0);
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // =============================================================
         // Création du panel principal
-        mainPanel = new PanelAvecImage(1500,1500,"images/backgrounds/bg_plateau.png");
+        mainPanel = new PanelAvecImage(1920,1000,"images/backgrounds/bg_plateau.png");
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
         // =============================================================
         // Panel Aventuriers
-        PanelAvecImage panelAventuriers =new PanelAvecImage(1500,1500,"images/backgrounds/bg_plateau.png");
+        PanelAvecImage panelAventuriers =new PanelAvecImage(1920,1000,"images/backgrounds/bg_plateau.png");
         panelAventuriers.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
+
+        c.anchor = GridBagConstraints.PAGE_START;
         c.fill = GridBagConstraints.BOTH;
+
+        c.weightx = 3;
+        c.weighty = 1;
+
+        c.gridx = 0;
+        c.gridy = 0;
 
         mainPanel.add(panelAventuriers, c);
 
@@ -108,7 +124,6 @@ public class VuePlateau extends Vue {
             ArrayList<CartePanel>cartes = new ArrayList<>();
             for(int j = 0; j < 5; j++){
                 CartePanel carte = new CartePanel("images/cartes/Fond rouge.png");
-
                 carte.setPreferredSize(sizeCarte);
                 panelCarte.add(carte, cCarte);
                 cCarte.gridx++;
@@ -167,20 +182,24 @@ public class VuePlateau extends Vue {
 
         // =============================================================
         // Panel Grille
-        JPanel panelPlateau = new PanelAvecImage(1500,1500,"images/backgrounds/bg_plateau.png");
+        JPanel panelPlateau = new PanelAvecImage(1920,1920,"images/backgrounds/bg_plateau.png");
         panelPlateau.setLayout(new GridBagLayout());
         c.fill = GridBagConstraints.BOTH;
-        c.anchor = GridBagConstraints.LINE_END;
-        c.gridy = 0;
+        c.anchor = GridBagConstraints.CENTER;
         c.gridx = 1;
-        c.weightx = 6;
-        mainPanel.add(panelPlateau, c);
-        c.fill = GridBagConstraints.NONE;
-        // Contrainte pour le panel grille
-        c.weightx = 1;
-        c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(5,5,5,5);
+
+        mainPanel.add(panelPlateau, c);
+
+        // Contrainte pour le panel grille
+
+        GridBagConstraints cGrille = new GridBagConstraints();
+
+        cGrille.fill = GridBagConstraints.BOTH;
+        cGrille.weightx = 1;
+        cGrille.gridx = 0;
+        cGrille.gridy = 0;
+        cGrille.insets = new Insets(5,5,5,5);
         // ===========================================
         // Grille
         this.tableauTuile = new TuilePanel[6][6];
@@ -193,12 +212,12 @@ public class VuePlateau extends Vue {
                 // Tuiles vide
                 if(((i == 0 || i == 5) && (j == 1 || j == 4)) || ((i == 1 || i == 4) && (j==0 || j == 5))) { // Si les coordonnées i,j correspondent, il s'agit d'une tuile eau
                     this.tableauTuile[i][j] = null;
-                    panelPlateau.add(new JLabel(),c);
+                    panelPlateau.add(new JLabel(),cGrille);
 
                 } else if((i == 0 || i == 5) && (j==0 || j == 5)){ // Trésors
                     TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
                     this.tableauTuile[i][j] = tresor;
-                    panelPlateau.add(tresor, c);
+                    panelPlateau.add(tresor, cGrille);
                     tresor.setPreferredSize(size);
                     tresor.setOpaque(false);
                     indexTresor++;
@@ -227,17 +246,163 @@ public class VuePlateau extends Vue {
                         public void mouseExited(MouseEvent e) {}
                     });
 
-                    panelPlateau.add(tuile, c);
+                    panelPlateau.add(tuile, cGrille);
                     this.tableauTuile[i][j] = tuile;
                     index++;
                     tuile.setOpaque(false);
                     tuile.setPreferredSize(size);
                 }
-                c.gridx++;
+                cGrille.gridx++;
             }
-            c.gridx = 0;
-            c.gridy++;
+            cGrille.gridx = 0;
+            cGrille.gridy++;
         }
+
+        //Consction panel info (pioche et niveau)
+
+        c.gridx = 2;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.PAGE_END;
+        c.fill = GridBagConstraints.BOTH;
+
+
+        JPanel panelInfo = new PanelAvecImage(1920,1920,"images/backgrounds/bg_plateau.png");
+        panelInfo.setLayout(new GridBagLayout());
+        mainPanel.add(panelInfo,c);
+
+        GridBagConstraints cInfo = new GridBagConstraints();
+        cInfo.weightx = 2;
+        cInfo.weighty = 3;
+        cInfo.anchor = GridBagConstraints.CENTER;
+
+        //Construction pioche/défausse carte trésor
+        cInfo.gridx = 0;
+        cInfo.gridy = 0;
+        CartePanel tresorDos = new CartePanel("images/cartes/Fond rouge.png");
+        tresorDos.setPreferredSize(sizeCarte);
+        panelInfo.add(tresorDos, cInfo);
+
+        cInfo.gridx = 1;
+        CartePanel tresorFace = new CartePanel("images/cartes/Calice.png");
+        tresorFace.setPreferredSize(sizeCarte);
+        panelInfo.add(tresorFace, cInfo);
+
+        //Construction niveau
+        JPanel niveau = new JPanel();
+        niveau.setLayout(new BorderLayout());
+        niveau.setBackground(Color.WHITE);
+        niveau.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
+
+        JLabel labelTitre = new JLabel("Niveau", JLabel.CENTER);
+        niveau.add(labelTitre, BorderLayout.NORTH);
+        // labelTitre.setFont(labelTitre.getFont().deriveFont(Font.BOLD));
+        labelTitre.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 14));
+
+        JPanel panelNiveaux = new JPanel(new GridBagLayout());
+        panelNiveaux.setOpaque(false);
+        niveau.add(panelNiveaux, BorderLayout.CENTER);
+
+        GridBagConstraints cNiveau = new GridBagConstraints();
+        cNiveau.weightx = 2;
+        cNiveau.weighty = 10;
+        cNiveau.insets = new Insets(0, 0, 0, 0);
+        cNiveau.fill = GridBagConstraints.VERTICAL;
+
+        // Insertion de la cellule gauche de niveauInitial 10
+        for (int i = 0; i < 10; i++) {
+            cNiveau.gridx = 0;
+            cNiveau.gridy = i;
+            JPanel panelGauche = new JPanel();
+            panelGauche.setLayout(new BoxLayout(panelGauche, BoxLayout.Y_AXIS));
+            panelGauche.setBackground(getBgColor(10 - i));
+            panelGauche.setPreferredSize(new Dimension(cellWidth, cellHeight));
+            if (i < 9) {
+                panelGauche.setBorder(new MatteBorder(0, 0, 1, 0, Color.WHITE));
+            } else {
+                panelGauche.setBorder(new MatteBorder(1, 0, 0, 0, Color.WHITE));
+            }
+
+            panelNiveaux.add(panelGauche, cNiveau);
+
+            JLabel labelGauche = new JLabel("", JLabel.LEFT);
+            labelGauche.setPreferredSize(new Dimension(cellWidth, cellHeight));
+            labelGauche.setForeground(i == 0 ? new Color(223, 168, 169) : Color.BLACK);
+            labelGauche.setFont(new Font(labelGauche.getFont().getFamily(), labelGauche.getFont().getStyle(), 8));
+            labelGauche.setText(getLibelle(10 - i));
+            panelGauche.add(labelGauche);
+            panelsGauches.put((10 - i), panelGauche);
+        }
+
+        // Insertion de la cellule droite de niveauInitial 10
+        for (int iPanel = 0; iPanel < 4; iPanel++) {
+            cNiveau.gridx = 1;
+            cNiveau.gridy = (iPanel == 0 ? 0 : (iPanel == 1 ? 3 : (iPanel == 2 ? 5 : 8)));
+            cNiveau.gridheight = (iPanel == 0 || iPanel == 2 ? 3 : 2);
+            JPanel panelDroit = new JPanel();
+            panelDroit.setPreferredSize(new Dimension(cellWidth, cellHeight));
+            panelDroit.setLayout(new GridBagLayout());
+            panelNiveaux.add(panelDroit, cNiveau);
+
+            JLabel labelDroit;
+            switch (iPanel) {
+                case 0:
+                    panelDroit.setBackground(getBgColor(10));
+                    labelDroit = new JLabel("5", JLabel.CENTER);
+                    break;
+                case 1:
+                    panelDroit.setBackground(getBgColor(7));
+                    labelDroit = new JLabel("4", JLabel.CENTER);
+                    break;
+                case 2:
+                    panelDroit.setBackground(getBgColor(5));
+                    labelDroit = new JLabel("3", JLabel.CENTER);
+                    break;
+                default:
+                    panelDroit.setBackground(getBgColor(1));
+                    labelDroit = new JLabel("2", JLabel.CENTER);
+                    break;
+            }
+            labelDroit.setPreferredSize(new Dimension(cellWidth, cellHeight));
+            labelDroit.setForeground(Color.WHITE);
+            labelDroit.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 40));
+            GridBagConstraints gbc = new GridBagConstraints();
+            panelDroit.add(labelDroit, gbc);
+        }
+
+        panelsGauches.get(getNiveau()).setBackground(Color.YELLOW);
+
+        //Ajout vueNiveau
+
+        cInfo.gridx = 0;
+        cInfo.gridy = 1;
+        cInfo.gridwidth = 2;
+
+        panelInfo.add(niveau,cInfo);
+
+        //Construction pioche/défausse carte inondation
+
+        cInfo.gridwidth = 1;
+        cInfo.gridx = 0;
+        cInfo.gridy = 2;
+
+
+        CartePanel inondationDos = new CartePanel("images/cartes/Fond bleu.png");
+        inondationDos.setPreferredSize(sizeCarte);
+        panelInfo.add(inondationDos, cInfo);
+
+        cInfo.gridx = 1;
+        CartePanel inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png");
+        inondationFace.setPreferredSize(sizeCarte);
+        panelInfo.add(inondationFace, cInfo);
+
+
+
+
+
+
+
+
+
         // ===
         window.setVisible(true);
     }
@@ -299,6 +464,58 @@ public class VuePlateau extends Vue {
 
     public JButton getBtnBouger() {
         return btnBouger;
+    }
+
+    public void setNiveau(Integer niveau) {
+        System.out.println("VueNiveau_nopic.setNiveau(" + niveau + ")");
+        panelsGauches.get(this.niveau).setBackground(getBgColor(this.niveau - 1));
+        this.niveau = niveau;
+        panelsGauches.get(this.niveau).setBackground(this.niveau == 10 ? Color.RED : Color.YELLOW);
+        this.mainPanel.repaint();
+    }
+
+    public Integer getNiveau() {
+        return this.niveau;
+    }
+
+    public Integer getColoredNiveau() {
+        for (Integer coloredNiveau : panelsGauches.keySet()) {
+            if (panelsGauches.get(coloredNiveau).getBackground() == Color.YELLOW) {
+                return coloredNiveau;
+            }
+        }
+        return -1;
+    }
+
+    private Color getBgColor(Integer niveau) {
+        if (niveau <= 2)
+            return new Color(169, 215, 226);
+
+        if (niveau <= 5)
+            return new Color(129, 194, 212);
+
+
+        if (niveau <= 7)
+            return new Color(67, 119, 204);
+
+        return new Color(42, 76, 127);
+    }
+
+    private String getLibelle(int i) {
+        switch (i) {
+            case 1:
+                return " novice";
+            case 2:
+                return " normal";
+            case 3:
+                return " élite";
+            case 4:
+                return " légendaire";
+            case 10:
+                return " mortel";
+            default:
+                return "";
+        }
     }
 
     @Override

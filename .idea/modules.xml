@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/src/l_ile_interdite.iml" filepath="$PROJECT_DIR$/src/l_ile_interdite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/l_ile_interdite.iml" filepath="$PROJECT_DIR$/l_ile_interdite.iml" />
     </modules>
   </component>
 </project>
