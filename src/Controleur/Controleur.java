@@ -146,7 +146,7 @@ public class Controleur implements Observer {
             roles.add(aventurier.getNomRole().toString());
         }
 
-        this.vuePlateau = new VuePlateau(pseudos, couleurs, roles, getGrille().getNomTuiles());
+        this.vuePlateau = new VuePlateau(pseudos, couleurs, roles, getGrille().getNomTuiles(), difficulte);
         vuePlateau.abonner(this); // Abonnement
 
         // Placement des pions
@@ -510,6 +510,7 @@ public class Controleur implements Observer {
                 défausseCarteInondations.clear();
                 Collections.shuffle(pileCartesInondations);
                 pileCartesAction.remove(carteActionTirée);
+                vuePlateau.setNiveau(difficulte);
             } else {
                 if(aventuriers.get(getJActif()).getCartes().size() != 5) {
                     aventuriers.get(getJActif()).addCarte((CarteStockable) carteActionTirée);

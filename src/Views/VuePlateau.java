@@ -30,7 +30,7 @@ public class VuePlateau extends Vue {
     private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
 
     // Niveau de difficulté
-    private Integer niveau = 1; //penser à la pesner en para
+    private Integer niveau = 1;
     // Parametre vueNiveau
     HashMap<Integer, JPanel> panelsGauches = new HashMap<>();
     Integer cellWidth = 50;
@@ -41,7 +41,7 @@ public class VuePlateau extends Vue {
     private JButton btnFinir;
     private JButton btnAutre;
 
-    public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles) {
+    public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles, int niveauDifficulte) {
 
         window = new JFrame();
         window.setTitle("Ile Interdite");
@@ -296,7 +296,6 @@ public class VuePlateau extends Vue {
 
         JLabel labelTitre = new JLabel("Niveau", JLabel.CENTER);
         niveau.add(labelTitre, BorderLayout.NORTH);
-        // labelTitre.setFont(labelTitre.getFont().deriveFont(Font.BOLD));
         labelTitre.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 14));
 
         JPanel panelNiveaux = new JPanel(new GridBagLayout());
@@ -396,13 +395,7 @@ public class VuePlateau extends Vue {
         inondationFace.setPreferredSize(sizePioche);
         panelInfo.add(inondationFace, cInfo);
 
-
-
-
-
-
-
-
+        setNiveau(niveauDifficulte);
 
         // ===
         window.setVisible(true);
