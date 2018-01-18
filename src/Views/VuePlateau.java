@@ -96,7 +96,7 @@ public class VuePlateau extends Vue {
             cAventurier.gridheight = 2;
             cAventurier.fill = GridBagConstraints.BOTH;
 
-            CartePanel cartePersonnage = new CartePanel("images/personnages/"+nomRoles.get(i).toLowerCase()+".png");
+            CartePanel cartePersonnage = new CartePanel("images/personnages/"+nomRoles.get(i).toLowerCase()+".png",90,120);
             cartePersonnage.setPreferredSize(new Dimension(90,120));
             panelAventurier.add(cartePersonnage, cAventurier);
 
@@ -123,7 +123,7 @@ public class VuePlateau extends Vue {
 
             ArrayList<CartePanel>cartes = new ArrayList<>();
             for(int j = 0; j < 5; j++){
-                CartePanel carte = new CartePanel("images/cartes/Fond rouge.png");
+                CartePanel carte = new CartePanel("images/cartes/Fond rouge.png",60,84);
                 carte.setPreferredSize(sizeCarte);
                 panelCarte.add(carte, cCarte);
                 cCarte.gridx++;
@@ -276,15 +276,16 @@ public class VuePlateau extends Vue {
         cInfo.anchor = GridBagConstraints.CENTER;
 
         //Construction pioche/défausse carte trésor
+        Dimension sizePioche = new Dimension(90,120);
         cInfo.gridx = 0;
         cInfo.gridy = 0;
-        CartePanel tresorDos = new CartePanel("images/cartes/Fond rouge.png");
-        tresorDos.setPreferredSize(sizeCarte);
+        CartePanel tresorDos = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
+        tresorDos.setPreferredSize(sizePioche);
         panelInfo.add(tresorDos, cInfo);
 
         cInfo.gridx = 1;
-        CartePanel tresorFace = new CartePanel("images/cartes/Calice.png");
-        tresorFace.setPreferredSize(sizeCarte);
+        CartePanel tresorFace = new CartePanel("images/cartes/Calice.png",90,120);
+        tresorFace.setPreferredSize(sizePioche);
         panelInfo.add(tresorFace, cInfo);
 
         //Construction niveau
@@ -386,13 +387,13 @@ public class VuePlateau extends Vue {
         cInfo.gridy = 2;
 
 
-        CartePanel inondationDos = new CartePanel("images/cartes/Fond bleu.png");
-        inondationDos.setPreferredSize(sizeCarte);
+        CartePanel inondationDos = new CartePanel("images/cartes/Fond bleu.png",90,120);
+        inondationDos.setPreferredSize(sizePioche);
         panelInfo.add(inondationDos, cInfo);
 
         cInfo.gridx = 1;
-        CartePanel inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png");
-        inondationFace.setPreferredSize(sizeCarte);
+        CartePanel inondationFace = new CartePanel("images/cartes/LeValDuCrecupuscule.png",90,120);
+        inondationFace.setPreferredSize(sizePioche);
         panelInfo.add(inondationFace, cInfo);
 
 

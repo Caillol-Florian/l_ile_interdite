@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class CartePanel extends JPanel {
     private BufferedImage imageCarte;
+    private int W;
+    private int H;
 
     public CartePanel(String path){
         try {
@@ -19,6 +21,8 @@ public class CartePanel extends JPanel {
     }
 
     public CartePanel(String path, int W, int H){
+        setH(H);
+        setW(W);
         try {
             this.imageCarte = ImageIO.read(new File(path));
         } catch (IOException e) {
@@ -26,13 +30,10 @@ public class CartePanel extends JPanel {
         }
     }
 
-    public CartePanel(){
-
-    }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(resize(imageCarte, 90, 120), 0, 0, null);
+        g.drawImage(resize(imageCarte, getW(), getH()), 0, 0, null);
     }
 
 
@@ -52,5 +53,21 @@ public class CartePanel extends JPanel {
         } catch (IOException e) {
             System.out.println("Impossible de récupérer l'image.");
         }
+    }
+
+    public int getW() {
+        return W;
+    }
+
+    public void setW(int w) {
+        W = w;
+    }
+
+    public int getH() {
+        return H;
+    }
+
+    public void setH(int h) {
+        H = h;
     }
 }
