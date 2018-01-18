@@ -2,43 +2,44 @@ package Views;
 
 import Enums.*;
 import Modèles.Parameters;
-import org.w3c.dom.css.CSSPrimitiveValue;
-import org.w3c.dom.css.RGBColor;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.HashMap;
 
 import static Modèles.Parameters.AFFICHERTRESOR;
-import static javax.swing.SwingConstants.CENTER;
+
+/* Récap des imbrications des gridBagLayout, pour éviter les maux de têtes ;)
+
+mainPanel (c) > panelAventuriers (cColonneAventurier) > panelMusique (cMusique) | panelTresor (cTresor) | panelAventurier (cAventurier) ** | panelBouton (cBouton)
+              > panelGrille
+              > panelInfo
+
+** panelAventurier > cartePersonnage | panelNom | panelCarte
+
+*/
 
 public class VuePlateau extends Vue {
     private final JFrame window;
     private final JPanel mainPanel;
-    // Array contenant chaque panel de chaque aventurier
-    private final ArrayList<JPanel>arrayPanelsAventurier = new ArrayList<>();
+
+    private final ArrayList<JPanel>arrayPanelsAventurier = new ArrayList<>(); //Array contenant chaque panel de chaque aventurier
     private ArrayList<Color> couleurs;
     private ArrayList<JPanel> panelsNom = new ArrayList<>();
     private Color grey = new Color(122,122,122);
-    // Grille des tuiles
-    private final TuilePanel[][] tableauTuile;
-    // Array contenant l'Array des cartes de chaque aventurier.
-    private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>();
-    // Tableau path tresor
-    private String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"};
 
-    // Niveau de difficulté
-    private Integer niveau = 1;
+    private final TuilePanel[][] tableauTuile; // Grille des tuiles
+    private final ArrayList<ArrayList<CartePanel>>cartesAventurier = new ArrayList<>(); // Array contenant l'Array des cartes de chaque aventurier.
+    private String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"}; // Tableau path tresor
+    private Integer niveau; // Niveau de difficulté
+
     // Parametre vueNiveau
     HashMap<Integer, JPanel> panelsGauches = new HashMap<>();
     Integer cellWidth = 50;
@@ -49,6 +50,8 @@ public class VuePlateau extends Vue {
 
     public VuePlateau(ArrayList<String> pseudosJoueurs, ArrayList<Color> couleurs, ArrayList<String>nomRoles, ArrayList<NOM_TUILE> nomsTuiles, int niveauDifficulte) {
 
+        this.couleurs = couleurs;
+
         window = new JFrame();
         window.setTitle("Ile Interdite");
         window.setSize(1920, 1080);
@@ -56,16 +59,13 @@ public class VuePlateau extends Vue {
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        // =============
-        this.couleurs = couleurs;
 
-        // =============================================================
-        // Création du panel principal
+        //  MainPanel
         mainPanel = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
-        // =============================================================
+
         // Panel Aventuriers
         ImagePanel panelAventuriers =new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         panelAventuriers.setLayout(new GridBagLayout());
@@ -81,6 +81,8 @@ public class VuePlateau extends Vue {
         c.gridy = 0;
 
         mainPanel.add(panelAventuriers, c);
+
+        //  PanelTrésor
 
         GridBagConstraints cColonneAventurier = new GridBagConstraints();
         cColonneAventurier.gridy = 0;
@@ -121,10 +123,9 @@ public class VuePlateau extends Vue {
             panelTresor.add(tresor,cTresor);
             cTresor.gridx++;
         }
-
-
-
         cColonneAventurier.gridy++;
+
+        //  PanelAventurier
 
         Dimension sizeCarte = new Dimension(60,  84);
 
@@ -139,7 +140,7 @@ public class VuePlateau extends Vue {
             cAventurier.weightx = 2;
             cAventurier.weighty = 2;
 
-            // Role
+            // CartePersonnage
             cAventurier.gridy = 0;
             cAventurier.gridx = 0;
             cAventurier.gridheight = 2;
@@ -149,7 +150,7 @@ public class VuePlateau extends Vue {
             cartePersonnage.setPreferredSize(new Dimension(90,120));
             panelAventurier.add(cartePersonnage, cAventurier);
 
-            // Nom de l'aventurier
+            //  PanelNom
             cAventurier.gridy = 0;
             cAventurier.gridx = 1;
             cAventurier.gridheight = 1;
@@ -162,11 +163,10 @@ public class VuePlateau extends Vue {
 
             panelAventurier.add(panelNom, cAventurier);
 
-            // Cartes
+            //  PanelCarte
             cAventurier.gridy = 1;
             JPanel panelCarte = new JPanel(new GridBagLayout());
             GridBagConstraints cCarte = new GridBagConstraints();
-            //cCarte.gridy = 0;
             cCarte.gridx = 0;
             cCarte.gridy = 1;
             cCarte.insets = new Insets(3,3,3,3);
@@ -180,18 +180,16 @@ public class VuePlateau extends Vue {
 
                 cartes.add(carte);
             }
+
             cartesAventurier.add(cartes);
-
-            //
             panelAventurier.add(panelCarte, cAventurier);
-
             panelAventuriers.add(panelAventurier, cColonneAventurier);
             arrayPanelsAventurier.add(panelAventurier);
             cColonneAventurier.gridy++;
         }
 
 
-        //construction panelBouton
+        //  PanelBouton
         ImagePanel panelBoutons = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         panelBoutons.setLayout(new GridBagLayout());
         GridBagConstraints cBouton = new GridBagConstraints();
@@ -291,10 +289,8 @@ public class VuePlateau extends Vue {
         });
 
 
-
-
-        // =============================================================
         // Panel Grille
+
         JPanel panelPlateau = new ImagePanel(1920,1920,"images/backgrounds/bg_plateau.png");
         panelPlateau.setLayout(new GridBagLayout());
         c.fill = GridBagConstraints.BOTH;
@@ -304,17 +300,14 @@ public class VuePlateau extends Vue {
 
         mainPanel.add(panelPlateau, c);
 
-        // Contrainte pour le panel grille
-
         GridBagConstraints cGrille = new GridBagConstraints();
-
         cGrille.fill = GridBagConstraints.BOTH;
         cGrille.weightx = 1;
         cGrille.gridx = 0;
         cGrille.gridy = 0;
         cGrille.insets = new Insets(5,5,5,5);
-        // ===========================================
-        // Grille
+
+        //  Construction grille
         this.tableauTuile = new TuilePanel[6][6];
         Dimension size = new Dimension(150,150);
         int index = 0;
@@ -326,7 +319,7 @@ public class VuePlateau extends Vue {
                     this.tableauTuile[i][j] = null;
                     panelPlateau.add(new JLabel(),cGrille);
 
-                } else if((i == 0 || i == 5) && (j==0 || j == 5)){ // Trésors
+                } else if((i == 0 || i == 5) && (j==0 || j == 5)){ // Si on décide d'afficher les trésors
                     if (AFFICHERTRESOR) {
                         TuilePanel tresor = new TuilePanel(tresorsPath[indexTresor]);
                         this.tableauTuile[i][j] = tresor;
@@ -375,7 +368,7 @@ public class VuePlateau extends Vue {
             cGrille.gridy++;
         }
 
-        //Consction panel info (pioche et niveau)
+        // PanelInfo (pioches et niveau d'eau)
 
         c.gridx = 2;
         c.gridy = 0;
@@ -392,7 +385,7 @@ public class VuePlateau extends Vue {
         cInfo.weighty = 3;
         cInfo.anchor = GridBagConstraints.CENTER;
 
-        //Construction pioche/défausse carte trésor
+        //  Pioche / défausse carte trésor
         Dimension sizePioche = new Dimension(120,150);
         cInfo.gridx = 0;
         cInfo.gridy = 0;
@@ -405,7 +398,7 @@ public class VuePlateau extends Vue {
         tresorFace.setPreferredSize(sizePioche);
         panelInfo.add(tresorFace, cInfo);
 
-        //Construction niveau
+        // PanelNiveau
         JPanel niveau = new JPanel();
         niveau.setLayout(new BorderLayout());
         niveau.setBackground(Color.WHITE);
@@ -425,7 +418,6 @@ public class VuePlateau extends Vue {
         cNiveau.insets = new Insets(0, 0, 0, 0);
         cNiveau.fill = GridBagConstraints.VERTICAL;
 
-        // Insertion de la cellule gauche de niveauInitial 10
         for (int i = 0; i < 10; i++) {
             cNiveau.gridx = 0;
             cNiveau.gridy = i;
@@ -450,7 +442,6 @@ public class VuePlateau extends Vue {
             panelsGauches.put((10 - i), panelGauche);
         }
 
-        // Insertion de la cellule droite de niveauInitial 10
         for (int iPanel = 0; iPanel < 4; iPanel++) {
             cNiveau.gridx = 1;
             cNiveau.gridy = (iPanel == 0 ? 0 : (iPanel == 1 ? 3 : (iPanel == 2 ? 5 : 8)));
@@ -488,15 +479,13 @@ public class VuePlateau extends Vue {
 
         panelsGauches.get(getNiveau()).setBackground(Color.YELLOW);
 
-        //Ajout vueNiveau
-
         cInfo.gridx = 0;
         cInfo.gridy = 1;
         cInfo.gridwidth = 2;
 
         panelInfo.add(niveau,cInfo);
 
-        //Construction pioche/défausse carte inondation
+        // Pioche / défausse carte inondation
 
         cInfo.gridwidth = 1;
         cInfo.gridx = 0;
@@ -514,7 +503,6 @@ public class VuePlateau extends Vue {
 
         setNiveau(niveauDifficulte);
 
-        // ===
         window.setVisible(true);
     }
 
