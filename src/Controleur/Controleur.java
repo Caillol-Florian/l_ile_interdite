@@ -163,6 +163,10 @@ public class Controleur implements Observer {
 
         // Tirage des 6 premières tuiles inondées
         tirageInondation(6);
+
+        // Highlight du premier jouer
+        // Il n'y a pas d'ancien joueur mais on met ancienJoueur = 3 (celui avant 0 est 3).
+        vuePlateau.highlightAventurier(0, 3);
     }
 
     @Override
@@ -522,6 +526,7 @@ public class Controleur implements Observer {
                 aAsseché = false; // On reset l'assèchement bonus pour l'ingénieur
                 piloteSpecial = false; // Reset de l'action spéciale du pilote
 
+                vuePlateau.highlightAventurier(getJActif(), (joueurActif-1)%aventuriers.size());
             }
         }
 

@@ -28,7 +28,7 @@ public class VuePlateau extends Vue {
     // Array contenant chaque panel de chaque aventurier
     private final ArrayList<JPanel>arrayPanelsAventurier = new ArrayList<>();
     private ArrayList<Color> couleurs;
-    private ArrayList<JPanel> panelsNom;
+    private ArrayList<JPanel> panelsNom = new ArrayList<>();
     private Color grey = new Color(122,122,122);
     // Grille des tuiles
     private final TuilePanel[][] tableauTuile;
@@ -150,7 +150,6 @@ public class VuePlateau extends Vue {
             panelAventurier.add(cartePersonnage, cAventurier);
 
             // Nom de l'aventurier
-            panelsNom = new ArrayList<>();
             cAventurier.gridy = 0;
             cAventurier.gridx = 1;
             cAventurier.gridheight = 1;
@@ -529,10 +528,10 @@ public class VuePlateau extends Vue {
         return btn;
     }
 
-    public void highlightAventurier(int joueurActif){
-        panelsNom.get(joueurActif-1).setBackground(grey);
+    public void highlightAventurier(int joueurActif, int ancienJoueur){
+        panelsNom.get(ancienJoueur).setBackground(grey);
         panelsNom.get(joueurActif).setBackground(couleurs.get(joueurActif));
-        arrayPanelsAventurier.get(joueurActif-1).setBorder(new MatteBorder(2,2,2,2, grey));
+        arrayPanelsAventurier.get(ancienJoueur).setBorder(new MatteBorder(2,2,2,2, grey));
         arrayPanelsAventurier.get(joueurActif).setBorder(new MatteBorder(2,2,2,2, couleurs.get(joueurActif)));
     }
 
