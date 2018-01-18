@@ -91,26 +91,40 @@ public class VuePlateau extends Vue {
         cColonneAventurier.fill = GridBagConstraints.BOTH;
 
         JPanel panelMusique = new JPanel(new GridBagLayout());
+        panelMusique.setBorder(new MatteBorder(2,2,2,2, Color.BLACK));
+
         panelAventuriers.add(panelMusique,cColonneAventurier);
         GridBagConstraints cMusique = new GridBagConstraints();
-        cMusique.weightx = 6;
+        cMusique.weightx = 2;
         cMusique.weighty = 1;
         cMusique.gridx = 0;
         cMusique.gridy = 0;
-        cMusique.anchor = GridBagConstraints.PAGE_START;
+        cMusique.anchor = GridBagConstraints.CENTER;
+        cMusique.fill = GridBagConstraints.BOTH;
+        cMusique.gridwidth = 2;
+
+        JPanel textMusiquePanel = new JPanel();
+        textMusiquePanel.setBackground(Color.BLACK);
+        JLabel musiqueLabel = new JLabel("Lecteur de musique");
+        musiqueLabel.setForeground(Color.WHITE);
+        textMusiquePanel.add(musiqueLabel);
+        panelMusique.add(textMusiquePanel, cMusique);
 
         JButton Lecture = btnIcone("playButton.png","Lecture");
         JButton Pause = btnIcone("pause.png","Pause");
 
-        panelMusique.add(Lecture,cMusique);
-        cMusique.gridx++;
-        panelMusique.add(Pause,cMusique);
-        cMusique.gridx++;
+        cMusique.gridy = 1;
+        cMusique.gridwidth = 1;
+        cMusique.fill = GridBagConstraints.NONE;
+        cMusique.anchor = GridBagConstraints.FIRST_LINE_END;
+        cMusique.insets = new Insets(0,0,0,8);
 
-        for (int i =0; i<4; i++){
-            panelMusique.add(new JLabel(), cMusique);
-            cMusique.gridx++;
-        }
+        panelMusique.add(Lecture,cMusique);
+
+        cMusique.anchor = GridBagConstraints.FIRST_LINE_START;
+        cMusique.gridx++;
+        cMusique.insets = new Insets(0,8,0,0);
+        panelMusique.add(Pause,cMusique);
 
         cColonneAventurier.gridy++;
 
@@ -267,7 +281,7 @@ public class VuePlateau extends Vue {
         btnRecuperer = btnIcone("chest.png","Récupérer trésor");
         panelBoutons.add(btnRecuperer,cBouton);
 
-        btnAssecher.addActionListener(new ActionListener() {
+        btnRecuperer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setChanged();
