@@ -545,7 +545,7 @@ public class Controleur implements Observer {
                             vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
                         }
 
-                        System.out.println("Trésor récupéré !");
+                        vuePlateau.getTresors().get(tresorsRécupérés.size()-1).setCarte(tresorDeLaTuile.getTypeTresor().getPath());
 
                     } else {
                         Utils.afficherInformation("Vous n'avez pas assez de carte trésor " + tresorDeLaTuile.getTypeTresor().toString() + " !");

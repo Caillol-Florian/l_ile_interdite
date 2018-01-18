@@ -42,6 +42,8 @@ public class VuePlateau extends Vue {
     private String[] tresorsPath = {"images/tresors/calice.png", "images/tresors/pierre.png", "images/tresors/cristal.png", "images/tresors/zephyr.png"}; // Tableau path tresor
     private Integer niveau = 1; // Niveau de difficulté
 
+    private ArrayList<CartePanel>tresors;
+
     // Parametre vueNiveau
     HashMap<Integer, JPanel> panelsGauches = new HashMap<>();
     Integer cellWidth = 50;
@@ -149,7 +151,7 @@ public class VuePlateau extends Vue {
 
         JPanel textTresorPanel = new JPanel();
         textTresorPanel.setBackground(Color.BLACK);
-        JLabel tresorLabel = new JLabel("Trésor(s) à récupérer");
+        JLabel tresorLabel = new JLabel("Trésor(s) récupéré(s)");
         tresorLabel.setForeground(Color.WHITE);
         textTresorPanel.add(tresorLabel);
         panelTresor.add(textTresorPanel, cTresor);
@@ -157,11 +159,11 @@ public class VuePlateau extends Vue {
         cTresor.gridy = 1;
         cTresor.gridwidth = 1;
 
-        ArrayList<CartePanel>tresors = new ArrayList<>();
+        tresors = new ArrayList<>();
         for (int i =0; i<4; i++){
-            CartePanel tresor = new CartePanel(tresorsPath[i],90,90);
+            CartePanel tresor = new CartePanel("images/tresors/blank.png",90,90);
             tresor.setPreferredSize(new Dimension(90,90));
-            tresors.add(tresor);
+            getTresors().add(tresor);
             panelTresor.add(tresor,cTresor);
             cTresor.gridx++;
         }
@@ -656,4 +658,7 @@ public class VuePlateau extends Vue {
         window.setVisible(b);
     }
 
+    public ArrayList<CartePanel> getTresors() {
+        return tresors;
+    }
 }
