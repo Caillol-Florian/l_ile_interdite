@@ -457,6 +457,7 @@ public class Controleur implements Observer {
             }
             // On ferme la vue permettant de défausser une carte
             closeView(vueDefausse);
+            enableBoutons(true);
         }
     }
 

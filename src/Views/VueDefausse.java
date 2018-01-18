@@ -43,7 +43,7 @@ public class VueDefausse extends Vue {
         cCarte.insets = new Insets(3,3,3,3);
         Dimension sizeCarte = new Dimension(90,  120);
         for(int i = 0; i < 6; i++){
-            CartePanel carte = new CartePanel("images/cartes/Fond rouge.png");
+            CartePanel carte = new CartePanel("images/cartes/Fond rouge.png", 90, 120);
             carte.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {}
