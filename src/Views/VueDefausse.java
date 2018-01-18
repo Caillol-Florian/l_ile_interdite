@@ -26,7 +26,8 @@ public class VueDefausse extends Vue {
         window.setUndecorated(Parameters.UNDECORATED);
 
 
-        mainPanel = new JPanel(new GridBagLayout());
+        mainPanel = new ImagePanel(720, 180, "images/backgrounds/bg_inscriptionN.jpg");
+        mainPanel.setLayout(new GridBagLayout());
         this.window.add(mainPanel);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;

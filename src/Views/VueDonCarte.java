@@ -6,6 +6,7 @@ import Enums.Messages;
 import Modèles.Parameters;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,17 +20,22 @@ public class VueDonCarte extends Vue {
     private ArrayList<CartePanel> cartes;
     private ArrayList<CartePanel> cartesA;
     private int[] selection = {-1, -1};
+    private Integer lastCarteA;
+    private Integer lastCarteT;
+
     public VueDonCarte(){
         this.window = new JFrame();
-        window.setSize(520, 400);
+        window.setSize(520, 370);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         window.setLocation(700, 500);
         //le titre = nom du joueur
         window.setTitle("Donner une carte");
         window.setResizable(false);
+        window.setUndecorated(Parameters.UNDECORATED);
 
 
-        mainPanel = new JPanel(new GridBagLayout());
+        mainPanel = new ImagePanel(520, 370, "images/backgrounds/bg_inscriptionN.jpg");
+        mainPanel.setLayout(new GridBagLayout());
         this.window.add(mainPanel);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
@@ -58,6 +64,7 @@ public class VueDonCarte extends Vue {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     selection[0] = getCartes().indexOf(carte);
+                    highlightCarteTSelectionne(getCartes().indexOf(carte));
                 }
                 @Override
                 public void mouseEntered(MouseEvent e) {}
@@ -95,6 +102,7 @@ public class VueDonCarte extends Vue {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     selection[1] = getCartesA().indexOf(carte);
+                    highlightCarteASelectionne(getCartesA().indexOf(carte));
                 }
                 @Override
                 public void mouseEntered(MouseEvent e) {}
@@ -157,6 +165,22 @@ public class VueDonCarte extends Vue {
 
     public ArrayList<CartePanel> getCartesA(){
         return cartesA;
+    }
+
+    public void highlightCarteASelectionne(int carteAHighlight){
+        if(lastCarteA != null) {
+            getCartesA().get(lastCarteA).setBorder(null);
+        }
+        lastCarteA = carteAHighlight;
+        getCartesA().get(carteAHighlight).setBorder(new MatteBorder(2,2,2,2, Color.RED));
+    }
+
+    public void highlightCarteTSelectionne(int carteAHighlight){
+        if(lastCarteT != null) {
+            getCartes().get(lastCarteT).setBorder(null);
+        }
+        lastCarteT = carteAHighlight;
+        getCartes().get(carteAHighlight).setBorder(new MatteBorder(2,2,2,2, Color.RED));
     }
 }
 
