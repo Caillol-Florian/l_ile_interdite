@@ -535,17 +535,28 @@ public class Controleur implements Observer {
         // ---------------------------------- //
         if(arg instanceof Integer){
             int carteChoisie = (Integer)arg;
+
             // On ajoute la carte chosie à la pile défausse
             défausseCarteAction.add(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(carteChoisie));
+
             // Et on la supprimme de la liste des carte de l'aventurier
             aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().remove(carteChoisie);
+
             // On actualise la liste des carte dans la vue
-            for(int i = 0; i < aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().size(); i++){
+            for(int i = 0; i <  vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).size() ; i++){
                 vuePlateau.getCartesAventurier().get(((joueurActif-1)%aventuriers.size())).get(i).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(i).getPath());
             }
-            // On ferme la vue permettant de défausser une carte
-            closeView(vueDefausse);
-            enableBoutons(true);
+
+            // On vérifie une seconde fois si l'aventurier n'a plus que 5 cartes (cas où il a 5 cartes et en pioche 2 en plus).
+            if(aventuriers.get((joueurActif-1)%aventuriers.size()).getCartes().size() < 6) { // S'il a 5 ou moins
+                closeView(vueDefausse); // On ferme la vue permettant de défausser une carte
+                enableBoutons(true); // On ractive les boutons
+            } else { // Sinon il doit encore défausser, on actualise la vue défausse avec les 6 cartes qu'il lui reste.
+                for(int j = 0; j < vueDefausse.getCartes().size(); j++){
+                    vueDefausse.getCartes().get(j).setCarte(aventuriers.get(((joueurActif-1)%aventuriers.size())).getCartes().get(j).getPath());
+                    vueDefausse.setNomJoueur(aventuriers.get(((joueurActif-1)%aventuriers.size())).getNomJoueur());
+                }
+            }
         }
     }
 
@@ -558,13 +569,19 @@ public class Controleur implements Observer {
     }
 
     public void tirageInondation(int nbCarteAPiocher){
+
+        if(pileCartesInondations.isEmpty()) {
+            pileCartesInondations.addAll(défausseCarteInondations);
+            défausseCarteInondations.clear();
+            Collections.shuffle(pileCartesInondations);
+        }
+
         Tuile tuileInondée;
         int[] coordonneeTuile = new int[2];
         // Pioche du nombre de carte à piocher (6 pour le début de la partie, niveau de l'eau à chaque fin de tour)
         for(int i = 0; i < nbCarteAPiocher; i++){
-            if(!pileCartesInondations.isEmpty()) {
                 // Récupération de la tuile correspondante et ses coordonnées
-                tuileInondée = pileCartesInondations.get(0).getTuile();
+                tuileInondée = pileCartesInondations.get(0).getTuile(); // Cette ligne peut faire planter mais cela n'arrivera jamais, en effet, si toutes les cartes sont coulées la pile sera toujours vide ! (Mais le jeu sera finie avant !)
                 coordonneeTuile[0] = getGrille().getCordonneesTuiles(tuileInondée)[0];
                 coordonneeTuile[1] = getGrille().getCordonneesTuiles(tuileInondée)[1];
                 // Si la tuile est sèche on l'inonde, sinon on la coule et on la carte inondation du jeu.
@@ -583,43 +600,52 @@ public class Controleur implements Observer {
                     vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].update(vuePlateau.getTableauTuile()[coordonneeTuile[0]][coordonneeTuile[1]].getPions());
                     pileCartesInondations.remove(pileCartesInondations.get(0));
                 }
-            } else {
-                pileCartesInondations.addAll(défausseCarteInondations);
-                Collections.shuffle(pileCartesInondations);
-            }
         }
     }
 
     public void tirageCarteActions(){
-        CarteAction carteActionTirée;
+
+        if(pileCartesAction.isEmpty()) {
+            pileCartesAction.addAll(défausseCarteAction);
+            défausseCarteAction.clear();
+            Collections.shuffle(pileCartesAction);
+        }
+
+        CarteAction carteActionTirée = null;
         for(int i = 0; i < 2; i++){
             carteActionTirée = pileCartesAction.get(0);
-            System.out.println(carteActionTirée.getPath());
+            // S'il s'agit d'une carte montée des eaux.
             if (carteActionTirée instanceof CarteMonteeEaux){
-                difficulte++;
-                pileCartesInondations.addAll(défausseCarteInondations);
-                défausseCarteInondations.clear();
-                Collections.shuffle(pileCartesInondations);
-                pileCartesAction.remove(carteActionTirée);
-                vuePlateau.setNiveau(difficulte);
+                difficulte++; // Augmentation de la difficultée
+                pileCartesInondations.addAll(défausseCarteInondations); // On ajoute à la pile des cartes inondations la défausse inondation
+                défausseCarteInondations.clear(); // On remet à 0 la défausse inondations
+                Collections.shuffle(pileCartesInondations); // On remélange
+                pileCartesAction.remove(carteActionTirée); // On supprimme la carte montée des eaux de la pile des cartes actions
+                défausseCarteAction.add(carteActionTirée); // On l'ajoute à la défausse
+                vuePlateau.setNiveau(difficulte); // Et on actualise le niveau de l'eau sur la vue.
             } else {
-                if(aventuriers.get(getJActif()).getCartes().size() != 5) {
-                    aventuriers.get(getJActif()).addCarte((CarteStockable) carteActionTirée);
-                    vuePlateau.getCartesAventurier().get(getJActif()).get(aventuriers.get(getJActif()).getCartes().size() - 1).setCarte(carteActionTirée.getPath());
-                    défausseCarteAction.add(carteActionTirée);
-                    pileCartesAction.remove(carteActionTirée);
-                } else {
-                    aventuriers.get(getJActif()).addCarte((CarteStockable) carteActionTirée);
-                    enableBoutons(false);
-                    for(int j = 0; j < aventuriers.get(getJActif()).getCartes().size(); j++){
-                        vueDefausse.getCartes().get(j).setCarte(aventuriers.get(getJActif()).getCartes().get(j).getPath());
-                        vueDefausse.setNomJoueur(aventuriers.get(getJActif()).getNomJoueur());
-                        openView(vueDefausse);
-                    }
+                aventuriers.get(getJActif()).addCarte((CarteStockable) carteActionTirée); // On ajoute la carte à la liste des cartes que le joueur possède
+                pileCartesAction.remove(carteActionTirée); // Et on la retire de la pile
+                if(aventuriers.get(getJActif()).getCartes().size() < 6) {
+                    vuePlateau.getCartesAventurier().get(getJActif()).get(aventuriers.get(getJActif()).getCartes().size() - 1).setCarte(carteActionTirée.getPath()); // On l'affiche sur le plateau
                 }
             }
         }
+
+        // Si malgré l'ajout de la carte il a moins de 6 cartes
+        if(aventuriers.get(getJActif()).getCartes().size() < 6) {
+        } else { // SINON il doit défausser !
+            enableBoutons(false); // On désactive les boutons (il n'a plus le choix que de défausser)
+            for(int j = 0; j < vueDefausse.getCartes().size(); j++){ // On ouvre la vue défausse avec les cartes qu'il possède (6 premières).
+                vueDefausse.getCartes().get(j).setCarte(aventuriers.get(getJActif()).getCartes().get(j).getPath());
+                vueDefausse.setNomJoueur(aventuriers.get(getJActif()).getNomJoueur());
+                openView(vueDefausse);
+            }
+        }
+
+        System.out.println(pileCartesAction.size());
     }
+
 
     public int getJActif(){
         return joueurActif % aventuriers.size();
