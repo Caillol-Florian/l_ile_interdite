@@ -55,6 +55,8 @@ public class Controleur implements Observer {
     boolean defausseEnCours = false;
     private int joueurADefausser = 0;
 
+    private boolean partieGagnee = false;
+
     // =============================
     // Vues
     private VueMenu vueMenu = new VueMenu();
@@ -169,12 +171,6 @@ public class Controleur implements Observer {
         // Highlight du premier jouer
         // Il n'y a pas d'ancien joueur mais on met ancienJoueur = 3 (celui avant 0 est 3).
         vuePlateau.highlightAventurier(0, 3);
-
-        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
-        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
-        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
-        aventuriers.get(0).getCartes().add(new CarteTresor("images/cartes/Cristal.png", cristal));
-
     }
 
     @Override
@@ -366,8 +362,25 @@ public class Controleur implements Observer {
                     aventuriers.get(getJActif()).setPosition(getGrille().getTuile(tuileSelectionnee));
                     deplacementActif = false;
                     nbActions++;
-                }
 
+
+                    // ======================================
+                    // TEST DE LA CONDITION SI PARTIE GAGNÉE
+                    // Une partie est gagnée lorsque tout les trésors sont récupérés ainsi que tout les joueurs sont sur la case Heliport.
+                    // Ainsi la partie est potentiellement gagnée après un déplacement uniquement !
+                    if(tresorsRécupérés.size() == 4) {
+                        boolean aventurierSurHeliport = true;
+                        for (Aventurier aventurier : aventuriers) {
+                            if (aventurier.getPosition().getNom() != NOM_TUILE.HELIPORT) {
+                                aventurierSurHeliport = false;
+                            }
+                        }
+                        if(aventurierSurHeliport) {
+                            Utils.afficherInformation("Partie gagnée !");
+                            enableBoutons(false);
+                        }
+                    }
+                }
 
                 // ==========================================
                 // ASSECHEMENT
@@ -610,7 +623,6 @@ public class Controleur implements Observer {
                 }
             }
         }
-
     }
 
 

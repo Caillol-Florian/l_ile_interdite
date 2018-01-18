@@ -63,12 +63,10 @@ public class VuePlateau extends Vue {
         window.setResizable(false);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-
         //  MainPanel
         mainPanel = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
-
 
         // Panel Aventuriers
         ImagePanel panelAventuriers =new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
