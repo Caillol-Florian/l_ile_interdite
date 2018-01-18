@@ -54,13 +54,13 @@ public class VuePlateau extends Vue {
 
         // =============================================================
         // Création du panel principal
-        mainPanel = new PanelAvecImage(1920,1080,"images/backgrounds/bg_plateau.png");
+        mainPanel = new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         mainPanel.setLayout(new GridBagLayout());
         window.add(mainPanel);
 
         // =============================================================
         // Panel Aventuriers
-        PanelAvecImage panelAventuriers =new PanelAvecImage(1920,1080,"images/backgrounds/bg_plateau.png");
+        ImagePanel panelAventuriers =new ImagePanel(1920,1080,"images/backgrounds/bg_plateau.png");
         panelAventuriers.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -234,7 +234,7 @@ public class VuePlateau extends Vue {
 
         // =============================================================
         // Panel Grille
-        JPanel panelPlateau = new PanelAvecImage(1920,1920,"images/backgrounds/bg_plateau.png");
+        JPanel panelPlateau = new ImagePanel(1920,1920,"images/backgrounds/bg_plateau.png");
         panelPlateau.setLayout(new GridBagLayout());
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
@@ -317,7 +317,7 @@ public class VuePlateau extends Vue {
         c.fill = GridBagConstraints.BOTH;
 
 
-        JPanel panelInfo = new PanelAvecImage(1920,1920,"images/backgrounds/bg_plateau.png");
+        JPanel panelInfo = new ImagePanel(1920,1920,"images/backgrounds/bg_plateau.png");
         panelInfo.setLayout(new GridBagLayout());
         mainPanel.add(panelInfo,c);
 
@@ -450,32 +450,6 @@ public class VuePlateau extends Vue {
 
         // ===
         window.setVisible(true);
-    }
-
-
-    private class PanelAvecImage extends JPanel {
-
-        private Image image;
-        private final Integer width ;
-        private final Integer height ;
-
-        public PanelAvecImage(Integer width, Integer height, String imageFile) {
-            this.width = width ;
-            this.height = height ;
-            try {
-                this.image = ImageIO.read(new File(imageFile));
-            } catch (IOException ex) {
-                System.err.println("Erreur de lecture background");
-            }
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, this.width, this.height, null, this);
-            }
-        }
     }
 
     public TuilePanel[][] getTableauTuile() {
