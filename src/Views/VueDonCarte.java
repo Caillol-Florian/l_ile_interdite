@@ -1,6 +1,8 @@
 package Views;
 
 
+import Enums.Message_Coche;
+import Enums.Messages;
 import Modèles.Parameters;
 
 import javax.swing.*;
@@ -116,7 +118,9 @@ public class VueDonCarte extends Vue {
         btnQuitter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.setVisible(false);
+                setChanged();
+                notifyObservers(Messages.RETOUR);
+                clearChanged();
             }
         });
 
@@ -129,8 +133,6 @@ public class VueDonCarte extends Vue {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setChanged();
-                System.out.println(selection[0]);
-                System.out.println(selection[1]);
                 notifyObservers(selection);
                 clearChanged();
             }

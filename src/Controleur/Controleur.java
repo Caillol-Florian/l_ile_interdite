@@ -67,6 +67,7 @@ public class Controleur implements Observer {
         vueMenu.abonner(this);
         vueInscription.abonner(this);
         vueDefausse.abonner(this);
+        vueDonCarte.abonner(this);
         //Lancement du jeu
         openView(vueMenu);
 
@@ -386,10 +387,12 @@ public class Controleur implements Observer {
         // ==========================
         // OUVERTURE VUE DON CARTE
         if (arg == Messages.DONCARTE) {
+            // On récupère les cartes que possède l'aventurier courant et on les affiche dans le vue vueDonCarte
             for(int i = 0; i < aventuriers.get(getJActif()).getCartes().size(); i++){
                 vueDonCarte.getCartes().get(i).setCarte(aventuriers.get(getJActif()).getCartes().get(i).getPath());
             }
 
+            // On récupère les aventuriers qui sont sur la même case que l'aventurier courant et on les affiche dans la vue vueDonCarte
             int index = 0;
             for(int j = 0; j < aventuriers.size(); j++){
                 if(aventuriers.get(j).getPosition() == aventuriers.get(getJActif()).getPosition() && aventuriers.get(j) != aventuriers.get(getJActif())) {
@@ -397,7 +400,59 @@ public class Controleur implements Observer {
                     index++;
                 }
             }
+
             openView(vueDonCarte);
+        }
+
+        // ==========================
+        // DON D'UNE CARTE
+        if(arg instanceof int[]){
+            // On récupère la sélection de l'aventurier
+            int[] selection = (int[])arg; // selection[0] = carte que l'aventurier veut donner & selection[1] = aventurier choisi
+            if(selection[0] != -1){ // La valeur de base est à -1 si rien n'est sélectionné.
+                if(selection[1] != -1){
+                    // On parcourt la liste des aventuriers pour trouver l'aventurier qui correspond à celui sélectionner grâce à son nom de role
+                    int indexAventurierSelectionne = -1;
+                    for(int i = 0; i < aventuriers.size(); i++) {
+                        System.out.println(aventuriers.get(i).getNomRole().toString());
+                        System.out.println(vueDonCarte.getCartesA().get(selection[1]).getNomAventurier());
+                        if (Objects.equals(aventuriers.get(i).getNomRole().toString(), vueDonCarte.getCartesA().get(selection[1]).getNomAventurier())) {
+                            indexAventurierSelectionne = i;
+                        }
+                    }
+                    System.out.println(indexAventurierSelectionne);
+                    if(indexAventurierSelectionne != -1) {
+                        // Update Modèle
+                        aventuriers.get(indexAventurierSelectionne).getCartes().add(aventuriers.get(getJActif()).getCartes().get(selection[0]));
+                        aventuriers.get(getJActif()).getCartes().remove(aventuriers.get(getJActif()).getCartes().get(selection[0]));
+
+                        // Update Visuelle de l'aventurier qui a donné
+                        // Remise à 0 graphique de la liste des cartes des aventuriers
+                        for (int j = 0; j < 5; j++) {
+                            // Aventurier qui a donné
+                            vuePlateau.getCartesAventurier().get(getJActif()).get(j).setCarte("images/cartes/Fond rouge.png");
+                            // Aventurier qui reçoit
+                            vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(j).setCarte("images/cartes/Fond rouge.png");
+                        }
+                        // Et on remet les nouvelles cartes dans l'ordre...
+                        for (int k = 0; k < aventuriers.get(getJActif()).getCartes().size(); k++) {
+                            // Aventurier qui a donné
+                            vuePlateau.getCartesAventurier().get(getJActif()).get(k).setCarte(aventuriers.get(getJActif()).getCartes().get(k).getPath());
+                        }
+                        for(int q = 0; q < aventuriers.get(indexAventurierSelectionne).getCartes().size(); q++){
+                            // Aventurier qui reçoit
+                            vuePlateau.getCartesAventurier().get(indexAventurierSelectionne).get(q).setCarte(aventuriers.get(indexAventurierSelectionne).getCartes().get(q).getPath());
+                        }
+                        nbActions++;
+                    } else {
+                        Utils.afficherInformation("Vous devez sélectionner une carte et un aventurier !");
+                    }
+                } else {
+                    Utils.afficherInformation("Vous devez sélectionner un aventurier !");
+                }
+            } else {
+                Utils.afficherInformation("Vous devez sélectionner une carte !");
+            }
         }
 
         // Si on appuie sur le bouton Fin Tour pendant un tour, tourPassé = true (ce qui aura pour effet de passer le tour)

@@ -11,16 +11,9 @@ public class CartePanel extends JPanel {
     private BufferedImage imageCarte;
     private int W;
     private int H;
-
-    public CartePanel(String path){
-        try {
-          this.imageCarte = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            System.out.println("Impossible de récupérer l'image.");
-        }
-    }
-
+    private String path;
     public CartePanel(String path, int W, int H){
+        setPath(path);
         setH(H);
         setW(W);
         try {
@@ -29,7 +22,6 @@ public class CartePanel extends JPanel {
             System.out.println("Impossible de récupérer l'image.");
         }
     }
-
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -49,6 +41,7 @@ public class CartePanel extends JPanel {
     public void setCarte(String path){
         try {
             this.imageCarte = ImageIO.read(new File(path));
+            setPath(path);
             repaint();
         } catch (IOException e) {
             System.out.println("Impossible de récupérer l'image.");
@@ -69,5 +62,36 @@ public class CartePanel extends JPanel {
 
     public void setH(int h) {
         H = h;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    // Cas où on veut récupérer le rôle de l'aventurier de la carte
+    // On admet que la carte est une carte aventurier.
+    // Le 19 ème caractère est celui après le dernier / dans "images/personnages/---.png" soit le début du nom de l'aventurier
+    public String getNomAventurier(){
+        String pathC = "";
+        for(int i = 19; i < path.toCharArray().length; i++){
+            if(i == 19){
+                pathC += getPath().toUpperCase().charAt(i);
+            } else {
+                pathC += getPath().charAt(i);
+            }
+        }
+
+        String nomAventurier = "";
+        int j = 0;
+        while(pathC.charAt(j) != '.'){
+            nomAventurier += pathC.charAt(j);
+            j++;
+        }
+
+        return nomAventurier;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
