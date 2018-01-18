@@ -57,7 +57,6 @@ public class Controleur implements Observer {
     // Vues
     private VueMenu vueMenu = new VueMenu();
     private VueInscription vueInscription = new VueInscription();
-    private VueNiveau vueNiveau;
     private VuePlateau vuePlateau;
     private VueDefausse vueDefausse = new VueDefausse();
 
@@ -159,8 +158,6 @@ public class Controleur implements Observer {
         closeView(vueInscription);
         openView(vuePlateau);
         jeuLance = true;
-        //Création de la Vue niveau avec la difficulté
-        vueNiveau = new VueNiveau(difficulte);
 
         // Tirage des 6 premières tuiles inondées
         tirageInondation(6);
