@@ -73,8 +73,8 @@ public class CartePanel extends JPanel {
     // Le 19 ème caractère est celui après le dernier / dans "images/personnages/---.png" soit le début du nom de l'aventurier
     public String getNomAventurier(){
         String pathC = "";
-        for(int i = 19; i < path.toCharArray().length; i++){
-            if(i == 19){
+        for(int i = 23; i < path.toCharArray().length; i++){
+            if(i == 23){
                 pathC += getPath().toUpperCase().charAt(i);
             } else {
                 pathC += getPath().charAt(i);
